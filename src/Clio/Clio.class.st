@@ -28,10 +28,24 @@ Clio class >> for: aRepositoryName between: anOldCommitSha and: aNewCommitSha [
 
 { #category : #'as yet unclassified' }
 Clio >> addedMethods [
-	^ presentMoment methods select: [ :method |
+	^ presentMoment methods select: [ :newMethod |
 		pastMoment methods noneSatisfy: [ :oldMethod |
-			oldMethod className = method className and: [ 
-				oldMethod selector = method selector ] ] ]
+			oldMethod hasSameSignatureAs: newMethod ] ]
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> deletedMethods [
+	^ pastMoment methods select: [ :oldMethod |
+		presentMoment methods noneSatisfy: [ :newMethod |
+			newMethod hasSameSignatureAs: oldMethod ] ]
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> modifiedMethods [
+	^ presentMoment methods select: [ :newMethod |
+		pastMoment methods anySatisfy: [ :oldMethod |
+			(oldMethod hasSameSignatureAs: newMethod) and: [ 
+				(oldMethod hasSameSourceCodeAs: newMethod) not ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -58,4 +72,12 @@ Clio >> oldCommitSha: aCommitSha [
 Clio >> repositoryNamed: aString [
 	repository := IceRepository registry detect: [ :repo |
 		repo isValid and: [ repo name = aString ] ]
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> unchangedMethods [
+	^ presentMoment methods select: [ :newMethod |
+		pastMoment methods anySatisfy: [ :oldMethod |
+			(oldMethod hasSameSignatureAs: newMethod) and: [ 
+				oldMethod hasSameSourceCodeAs: newMethod ] ] ]
 ]
