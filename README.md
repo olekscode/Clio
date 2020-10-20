@@ -7,7 +7,7 @@
 
 **Clio** is a tool for exploring the history of a project (e.g. getting API entities that were available at a given commit)
 
-In Greek mythology, [_"Clio"_](https://en.wikipedia.org/wiki/Clio) is the muse of history.
+In Greek mythology, [Clio](https://en.wikipedia.org/wiki/Clio) is the muse of history.
 
 ## How to install it?
 
