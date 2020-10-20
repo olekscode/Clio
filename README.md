@@ -1,7 +1,7 @@
 # Clio
 
 [![Build Status](https://travis-ci.org/olekscode/Clio.svg?branch=master)](https://travis-ci.org/olekscode/Clio)
-[![Build status](https://ci.appveyor.com/api/projects/status/89vqb46105kxi3lb?svg=true)](https://ci.appveyor.com/project/olekscode/clio)
+[![Build status](https://ci.appveyor.com/api/projects/status/awwlnbjafr64b6kh?svg=true)](https://ci.appveyor.com/project/olekscode/clio)
 [![Coverage Status](https://coveralls.io/repos/github/olekscode/Clio/badge.svg?branch=master)](https://coveralls.io/github/olekscode/Clio?branch=master)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/olekscode/Clio/master/LICENSE)
 
