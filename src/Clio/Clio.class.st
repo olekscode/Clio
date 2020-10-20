@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'repository',
 		'oldCommit',
-		'newCommit'
+		'newCommit',
+		'presentMoment',
+		'pastMoment'
 	],
 	#category : #Clio
 }
@@ -25,18 +27,31 @@ Clio class >> for: aRepositoryName between: anOldCommitSha and: aNewCommitSha [
 ]
 
 { #category : #'as yet unclassified' }
-Clio >> commitFromSha: aCommitSha [
-	^ repository revparse: aCommitSha
+Clio >> addedMethods [
+	^ presentMoment methods select: [ :method |
+		pastMoment methods noneSatisfy: [ :oldMethod |
+			oldMethod className = method className and: [ 
+				oldMethod selector = method selector ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
 Clio >> newCommitSha: aCommitSha [
-	newCommit := self commitFromSha: aCommitSha
+	presentMoment := ClioMoment new
+		repository: repository;
+		commitSha: aCommitSha;
+		yourself.
+		
+	presentMoment collectDefinitions.
 ]
 
 { #category : #'as yet unclassified' }
 Clio >> oldCommitSha: aCommitSha [
-	oldCommit := self commitFromSha: aCommitSha
+	pastMoment := ClioMoment new
+		repository: repository;
+		commitSha: aCommitSha;
+		yourself.
+		
+	pastMoment collectDefinitions.
 ]
 
 { #category : #'as yet unclassified' }
