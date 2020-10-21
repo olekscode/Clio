@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'className',
 		'selector',
-		'sourceCode'
+		'sourceCode',
+		'deprecation'
 	],
 	#category : #Clio
 }
@@ -31,11 +32,21 @@ ClioMethod >> className: anObject [
 	className := anObject
 ]
 
+{ #category : #testing }
+ClioMethod >> hasTransformationRule [
+	^ deprecation hasTransformationRule
+]
+
 { #category : #comparing }
 ClioMethod >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
 	^ sourceCode withInternalLineEndings hash bitXor: (selector hash bitXor: className hash)
+]
+
+{ #category : #testing }
+ClioMethod >> isDeprecated [
+	^ deprecation isNotNil
 ]
 
 { #category : #printing }
@@ -66,4 +77,9 @@ ClioMethod >> sourceCode [
 { #category : #accessing }
 ClioMethod >> sourceCode: anObject [
 	sourceCode := anObject
+]
+
+{ #category : #'as yet unclassified' }
+ClioMethod >> transformationRule [
+	^ deprecation transformationRule
 ]
