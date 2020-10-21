@@ -33,22 +33,6 @@ Clio >> addedMethods [
 ]
 
 { #category : #'as yet unclassified' }
-Clio >> collectModifiedAndUnchangedMethods [
-	| oldMethod newMethod |
-	
-	modifiedMethods := Set new.
-	unchangedMethods := Set new.
-	
-	(pastMoment methodSignatures intersection: presentMoment methodSignatures) do: [ :signature |
-		oldMethod := pastMoment methodWithSignature: signature.
-		newMethod := presentMoment methodWithSignature: signature.
-		
-		(oldMethod hasSameSourceCodeAs: newMethod)
-			ifTrue: [ unchangedMethods add: oldMethod ]
-			ifFalse: [ modifiedMethods add: oldMethod -> newMethod ] ].
-]
-
-{ #category : #'as yet unclassified' }
 Clio >> deletedMethods [
 	^ pastMoment methodsWithSignatures:
 		(pastMoment methodSignatures difference: presentMoment methodSignatures)
@@ -56,7 +40,18 @@ Clio >> deletedMethods [
 
 { #category : #'as yet unclassified' }
 Clio >> modifiedMethods [
-	^ modifiedMethods
+	| oldMethod newMethod selectedMethods |
+	
+	selectedMethods := Set new.
+	
+	(pastMoment methodSignatures intersection: presentMoment methodSignatures) do: [ :signature |
+		oldMethod := pastMoment methodWithSignature: signature.
+		newMethod := presentMoment methodWithSignature: signature.
+			
+		(oldMethod sourceCode = newMethod sourceCode)
+			ifFalse: [ selectedMethods add: oldMethod -> newMethod ] ].
+		
+	^ selectedMethods
 ]
 
 { #category : #'as yet unclassified' }
@@ -70,6 +65,11 @@ Clio >> newCommitSha: aCommitSha [
 ]
 
 { #category : #'as yet unclassified' }
+Clio >> newMethods [
+	^ presentMoment methods
+]
+
+{ #category : #'as yet unclassified' }
 Clio >> oldCommitSha: aCommitSha [
 	pastMoment := ClioMoment new
 		repository: repository;
@@ -77,6 +77,11 @@ Clio >> oldCommitSha: aCommitSha [
 		yourself.
 		
 	pastMoment collectDefinitions.
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> oldMethods [
+	^ pastMoment methods
 ]
 
 { #category : #accessing }
@@ -97,5 +102,16 @@ Clio >> repositoryNamed: aString [
 
 { #category : #'as yet unclassified' }
 Clio >> unchangedMethods [
-	^ unchangedMethods
+	| oldMethod newMethod selectedMethods |
+	
+	selectedMethods := Set new.
+	
+	(pastMoment methodSignatures intersection: presentMoment methodSignatures) do: [ :signature |
+		oldMethod := pastMoment methodWithSignature: signature.
+		newMethod := presentMoment methodWithSignature: signature.
+			
+		(oldMethod sourceCode = newMethod sourceCode)
+			ifTrue: [ selectedMethods add: oldMethod ] ].
+		
+	^ selectedMethods
 ]

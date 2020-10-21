@@ -5,16 +5,10 @@ Class {
 		'repository',
 		'packages',
 		'commit',
-		'classes',
 		'methodDictionary'
 	],
 	#category : #Clio
 }
-
-{ #category : #'as yet unclassified' }
-ClioMoment >> classes [
-	^ classes
-]
 
 { #category : #'as yet unclassified' }
 ClioMoment >> collectDefinitions [
@@ -23,8 +17,9 @@ ClioMoment >> collectDefinitions [
 	definitions := (packages flatCollect: [ :packageName |
 		(commit snapshotFor: packageName) definitions ]) asSet.
 	
-	classes := definitions select: [ :each | each isClassDefinition ].
-	methods := definitions select: [ :each | each isMethodDefinition ].
+	methods := definitions
+		select: [ :definition | definition isMethodDefinition ]
+		thenCollect: [ :methodDefinition | methodDefinition asClioMethod ].
 	
 	methodDictionary := Dictionary newFromAssociations:
 		(methods collect: [ :method | method signature -> method ]).
