@@ -40,7 +40,7 @@ ClioMethod >> className: anObject [
 
 { #category : #testing }
 ClioMethod >> hasTransformationRule [
-	^ deprecation hasTransformationRule
+	^ deprecation isTransforming
 ]
 
 { #category : #comparing }
