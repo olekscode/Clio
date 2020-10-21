@@ -5,6 +5,7 @@ Class {
 		'className',
 		'selector',
 		'sourceCode',
+		'ast',
 		'deprecation'
 	],
 	#category : #Clio
@@ -20,6 +21,11 @@ ClioMethod >> = anObject [
 	^ sourceCode withInternalLineEndings = anObject sourceCode withInternalLineEndings and: [ 
 		  selector = anObject selector and: [ 
 			  className = anObject className ] ]
+]
+
+{ #category : #accessing }
+ClioMethod >> ast [
+	^ ast
 ]
 
 { #category : #introspection }
@@ -54,6 +60,19 @@ ClioMethod >> printOn: aStream [
 	aStream nextPutAll: self signature
 ]
 
+{ #category : #'as yet unclassified' }
+ClioMethod >> scanAstForDeprecations [
+	| visitor |
+	visitor := PDDeprecationsCollectingVisitor new.
+	ast acceptVisitor: visitor.
+	
+	"There should never be more than one deprecation in a method.
+	In the unlikely event that a method has multiple deprecations, we only consider the first one"
+	visitor deprecations ifNotEmpty: [ 
+		deprecation := visitor deprecations first ]
+	
+]
+
 { #category : #accessing }
 ClioMethod >> selector [
 	^ selector
@@ -76,7 +95,9 @@ ClioMethod >> sourceCode [
 
 { #category : #accessing }
 ClioMethod >> sourceCode: anObject [
-	sourceCode := anObject
+	sourceCode := anObject.
+	ast := RBParser parseMethod: sourceCode.
+	self scanAstForDeprecations.
 ]
 
 { #category : #'as yet unclassified' }
