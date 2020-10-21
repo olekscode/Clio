@@ -3,10 +3,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'repository',
-		'oldCommit',
-		'newCommit',
 		'presentMoment',
-		'pastMoment'
+		'pastMoment',
+		'modifiedMethods',
+		'unchangedMethods'
 	],
 	#category : #Clio
 }
@@ -28,24 +28,35 @@ Clio class >> for: aRepositoryName between: anOldCommitSha and: aNewCommitSha [
 
 { #category : #'as yet unclassified' }
 Clio >> addedMethods [
-	^ presentMoment methods select: [ :newMethod |
-		pastMoment methods noneSatisfy: [ :oldMethod |
-			oldMethod hasSameSignatureAs: newMethod ] ]
+	^ presentMoment methodsWithSignatures:
+		(presentMoment methodSignatures difference: pastMoment methodSignatures)
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> collectModifiedAndUnchangedMethods [
+	| oldMethod newMethod |
+	
+	modifiedMethods := Set new.
+	unchangedMethods := Set new.
+	
+	(pastMoment methodSignatures intersection: presentMoment methodSignatures) do: [ :signature |
+		oldMethod := pastMoment methodWithSignature: signature.
+		newMethod := presentMoment methodWithSignature: signature.
+		
+		(oldMethod hasSameSourceCodeAs: newMethod)
+			ifTrue: [ unchangedMethods add: oldMethod ]
+			ifFalse: [ modifiedMethods add: oldMethod -> newMethod ] ].
 ]
 
 { #category : #'as yet unclassified' }
 Clio >> deletedMethods [
-	^ pastMoment methods select: [ :oldMethod |
-		presentMoment methods noneSatisfy: [ :newMethod |
-			newMethod hasSameSignatureAs: oldMethod ] ]
+	^ pastMoment methodsWithSignatures:
+		(pastMoment methodSignatures difference: presentMoment methodSignatures)
 ]
 
 { #category : #'as yet unclassified' }
 Clio >> modifiedMethods [
-	^ presentMoment methods select: [ :newMethod |
-		pastMoment methods anySatisfy: [ :oldMethod |
-			(oldMethod hasSameSignatureAs: newMethod) and: [ 
-				(oldMethod hasSameSourceCodeAs: newMethod) not ] ] ]
+	^ modifiedMethods
 ]
 
 { #category : #'as yet unclassified' }
@@ -68,6 +79,16 @@ Clio >> oldCommitSha: aCommitSha [
 	pastMoment collectDefinitions.
 ]
 
+{ #category : #accessing }
+Clio >> pastMoment [
+	^ pastMoment
+]
+
+{ #category : #accessing }
+Clio >> presentMoment [
+	^ presentMoment
+]
+
 { #category : #'as yet unclassified' }
 Clio >> repositoryNamed: aString [
 	repository := IceRepository registry detect: [ :repo |
@@ -76,8 +97,5 @@ Clio >> repositoryNamed: aString [
 
 { #category : #'as yet unclassified' }
 Clio >> unchangedMethods [
-	^ presentMoment methods select: [ :newMethod |
-		pastMoment methods anySatisfy: [ :oldMethod |
-			(oldMethod hasSameSignatureAs: newMethod) and: [ 
-				oldMethod hasSameSourceCodeAs: newMethod ] ] ]
+	^ unchangedMethods
 ]

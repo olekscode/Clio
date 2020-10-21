@@ -6,20 +6,28 @@ Class {
 		'packages',
 		'commit',
 		'classes',
-		'methods'
+		'methodDictionary'
 	],
 	#category : #Clio
 }
 
 { #category : #'as yet unclassified' }
+ClioMoment >> classes [
+	^ classes
+]
+
+{ #category : #'as yet unclassified' }
 ClioMoment >> collectDefinitions [
-	| definitions |
+	| definitions methods |
 	
 	definitions := (packages flatCollect: [ :packageName |
 		(commit snapshotFor: packageName) definitions ]) asSet.
 	
 	classes := definitions select: [ :each | each isClassDefinition ].
 	methods := definitions select: [ :each | each isMethodDefinition ].
+	
+	methodDictionary := Dictionary newFromAssociations:
+		(methods collect: [ :method | method signature -> method ]).
 ]
 
 { #category : #accessing }
@@ -29,8 +37,24 @@ ClioMoment >> commitSha: aCommitSha [
 ]
 
 { #category : #'as yet unclassified' }
+ClioMoment >> methodSignatures [
+	^ methodDictionary keys asSet
+]
+
+{ #category : #'as yet unclassified' }
+ClioMoment >> methodWithSignature: aSignature [
+	^ methodDictionary at: aSignature
+]
+
+{ #category : #'as yet unclassified' }
 ClioMoment >> methods [
-	^ methods
+	^ methodDictionary values asSet
+]
+
+{ #category : #'as yet unclassified' }
+ClioMoment >> methodsWithSignatures: aCollectionOfSignatures [
+	^ aCollectionOfSignatures collect: [ :signature |
+		self methodWithSignature: signature ]
 ]
 
 { #category : #accessing }

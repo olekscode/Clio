@@ -10,3 +10,8 @@ MCMethodDefinition >> hasSameSignatureAs: aMethodDefinition [
 MCMethodDefinition >> hasSameSourceCodeAs: aMethodDefinition [
 	^ aMethodDefinition source withInternalLineEndings = source withInternalLineEndings
 ]
+
+{ #category : #'*Clio' }
+MCMethodDefinition >> signature [
+	^ className, '>>', selector
+]
