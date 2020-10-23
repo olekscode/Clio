@@ -4,9 +4,7 @@ Class {
 	#instVars : [
 		'repository',
 		'presentMoment',
-		'pastMoment',
-		'modifiedMethods',
-		'unchangedMethods'
+		'pastMoment'
 	],
 	#category : #Clio
 }
