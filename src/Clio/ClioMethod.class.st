@@ -2,13 +2,14 @@ Class {
 	#name : #ClioMethod,
 	#superclass : #Object,
 	#instVars : [
+		'packageName',
 		'className',
 		'selector',
 		'sourceCode',
 		'ast',
 		'deprecation'
 	],
-	#category : #Clio
+	#category : #'Clio-Models'
 }
 
 { #category : #comparing }
@@ -18,9 +19,11 @@ ClioMethod >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
 	
-	^ sourceCode withInternalLineEndings = anObject sourceCode withInternalLineEndings and: [ 
+	^ sourceCode = anObject sourceCode and: [ 
 		  selector = anObject selector and: [ 
-			  className = anObject className ] ]
+			  packageName = anObject packageName and: [ 
+				  deprecation = anObject deprecation and: [ 
+					  className = anObject className ] ] ] ]
 ]
 
 { #category : #accessing }
@@ -28,7 +31,7 @@ ClioMethod >> ast [
 	^ ast
 ]
 
-{ #category : #introspection }
+{ #category : #accessing }
 ClioMethod >> className [
 	^ className
 ]
@@ -36,6 +39,11 @@ ClioMethod >> className [
 { #category : #accessing }
 ClioMethod >> className: anObject [
 	className := anObject
+]
+
+{ #category : #accessing }
+ClioMethod >> deprecation [
+	^ deprecation
 ]
 
 { #category : #testing }
@@ -47,12 +55,24 @@ ClioMethod >> hasTransformationRule [
 ClioMethod >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
-	^ sourceCode withInternalLineEndings hash bitXor: (selector hash bitXor: className hash)
+	^ sourceCode hash bitXor: (selector hash bitXor:
+			   (packageName hash bitXor:
+				    (deprecation hash bitXor: className hash)))
 ]
 
 { #category : #testing }
 ClioMethod >> isDeprecated [
 	^ deprecation isNotNil
+]
+
+{ #category : #accessing }
+ClioMethod >> packageName [
+	^ packageName
+]
+
+{ #category : #accessing }
+ClioMethod >> packageName: anObject [
+	packageName := anObject
 ]
 
 { #category : #printing }
@@ -83,7 +103,7 @@ ClioMethod >> selector: anObject [
 	selector := anObject
 ]
 
-{ #category : #'*Clio' }
+{ #category : #'as yet unclassified' }
 ClioMethod >> signature [
 	^ className, '>>', selector
 ]

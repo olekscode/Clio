@@ -6,7 +6,7 @@ Class {
 		'presentMoment',
 		'pastMoment'
 	],
-	#category : #Clio
+	#category : #'Clio-Controllers'
 }
 
 { #category : #'as yet unclassified' }

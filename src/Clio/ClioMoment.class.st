@@ -7,15 +7,18 @@ Class {
 		'commit',
 		'methodDictionary'
 	],
-	#category : #Clio
+	#category : #'Clio-Controllers'
 }
 
 { #category : #'as yet unclassified' }
 ClioMoment >> collectDefinitions [
-	| definitions methods |
+	| definitions classDefinitions methods |
 	
 	definitions := (packages flatCollect: [ :packageName |
 		(commit snapshotFor: packageName) definitions ]) asSet.
+	
+	classDefinitions := definitions
+		select: [ :definition | definition isClassDefinition ].
 	
 	methods := definitions
 		select: [ :definition | definition isMethodDefinition ]
