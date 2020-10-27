@@ -22,7 +22,12 @@ ClioMoment >> collectDefinitions [
 	
 	methods := definitions
 		select: [ :definition | definition isMethodDefinition ]
-		thenCollect: [ :methodDefinition | methodDefinition asClioMethod ].
+		thenCollect: [ :methodDefinition |
+			methodDefinition asClioMethod
+				packageName: (classDefinitions
+					detect: [ :classDefinition | classDefinition className = methodDefinition className ]
+					ifFound: [ :classDefinition | classDefinition classCategory ]
+					ifNone: [ methodDefinition classCategory ] ) ].
 	
 	methodDictionary := Dictionary newFromAssociations:
 		(methods collect: [ :method | method signature -> method ]).
