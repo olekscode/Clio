@@ -25,6 +25,21 @@ Clio class >> for: aRepositoryName between: anOldCommitSha and: aNewCommitSha [
 ]
 
 { #category : #'as yet unclassified' }
+Clio class >> forRepository: aRepository [
+	^ self new
+		repository: aRepository;
+		yourself.
+]
+
+{ #category : #'as yet unclassified' }
+Clio class >> forRepository: aRepository between: anOldCommitSha and: aNewCommitSha [
+	^ (self forRepository: aRepository)
+		oldCommitSha: anOldCommitSha;
+		newCommitSha: aNewCommitSha;
+		yourself.
+]
+
+{ #category : #'as yet unclassified' }
 Clio >> addedMethods [
 	^ presentMoment methodsWithSignatures:
 		(presentMoment methodSignatures difference: pastMoment methodSignatures)
@@ -93,9 +108,14 @@ Clio >> presentMoment [
 ]
 
 { #category : #'as yet unclassified' }
+Clio >> repository: aRepository [
+	repository := aRepository
+]
+
+{ #category : #'as yet unclassified' }
 Clio >> repositoryNamed: aString [
-	repository := IceRepository registry detect: [ :repo |
-		repo isValid and: [ repo name = aString ] ]
+	self repository: (IceRepository registry detect: [ :repo |
+		repo isValid and: [ repo name = aString ] ])
 ]
 
 { #category : #'as yet unclassified' }
