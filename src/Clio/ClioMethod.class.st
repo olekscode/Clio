@@ -26,6 +26,18 @@ ClioMethod >> = anObject [
 					  className = anObject className ] ] ] ]
 ]
 
+{ #category : #converting }
+ClioMethod >> asDepMethod [
+	^ DepMethod new
+		packageName: packageName;
+		className: className;
+		selector: selector;
+		sourceCode: sourceCode;
+		ast: ast;
+		deprecation: deprecation;
+		yourself.
+]
+
 { #category : #accessing }
 ClioMethod >> ast [
 	^ ast
