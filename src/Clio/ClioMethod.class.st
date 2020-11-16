@@ -75,6 +75,12 @@ ClioMethod >> packageName: anObject [
 	packageName := anObject
 ]
 
+{ #category : #parsing }
+ClioMethod >> parseSourceCode [
+	sourceCode ifNotNil: [
+		ast := RBParser parseMethod: sourceCode ]
+]
+
 { #category : #printing }
 ClioMethod >> printOn: aStream [
 	aStream nextPutAll: self signature
@@ -116,7 +122,7 @@ ClioMethod >> sourceCode [
 { #category : #accessing }
 ClioMethod >> sourceCode: anObject [
 	sourceCode := anObject.
-	ast := RBParser parseMethod: sourceCode.
+	self parseSourceCode.
 	self scanAstForDeprecations.
 ]
 
