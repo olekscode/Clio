@@ -6,7 +6,6 @@ Class {
 		'className',
 		'selector',
 		'sourceCode',
-		'ast',
 		'deprecation'
 	],
 	#category : #'Clio-Models'
@@ -28,7 +27,7 @@ ClioMethod >> = anObject [
 
 { #category : #accessing }
 ClioMethod >> ast [
-	^ ast
+	^ RBParser parseMethod: sourceCode
 ]
 
 { #category : #accessing }
@@ -44,6 +43,19 @@ ClioMethod >> className: anObject [
 { #category : #accessing }
 ClioMethod >> deprecation [
 	^ deprecation
+]
+
+{ #category : #'as yet unclassified' }
+ClioMethod >> extractDeprecationsFromAst [
+	| visitor |
+	visitor := PDDeprecationsCollectingVisitor new.
+	self ast acceptVisitor: visitor.
+	
+	"There should never be more than one deprecation in a method.
+	In the unlikely event that a method has multiple deprecations, we only consider the first one"
+	visitor deprecations ifNotEmpty: [ 
+		deprecation := visitor deprecations first ]
+	
 ]
 
 { #category : #testing }
@@ -75,28 +87,9 @@ ClioMethod >> packageName: anObject [
 	packageName := anObject
 ]
 
-{ #category : #parsing }
-ClioMethod >> parseSourceCode [
-	sourceCode ifNotNil: [
-		ast := RBParser parseMethod: sourceCode ]
-]
-
 { #category : #printing }
 ClioMethod >> printOn: aStream [
 	aStream nextPutAll: self signature
-]
-
-{ #category : #'as yet unclassified' }
-ClioMethod >> scanAstForDeprecations [
-	| visitor |
-	visitor := PDDeprecationsCollectingVisitor new.
-	ast acceptVisitor: visitor.
-	
-	"There should never be more than one deprecation in a method.
-	In the unlikely event that a method has multiple deprecations, we only consider the first one"
-	visitor deprecations ifNotEmpty: [ 
-		deprecation := visitor deprecations first ]
-	
 ]
 
 { #category : #accessing }
@@ -121,9 +114,7 @@ ClioMethod >> sourceCode [
 
 { #category : #accessing }
 ClioMethod >> sourceCode: anObject [
-	sourceCode := anObject.
-	self parseSourceCode.
-	self scanAstForDeprecations.
+	sourceCode := anObject
 ]
 
 { #category : #'as yet unclassified' }

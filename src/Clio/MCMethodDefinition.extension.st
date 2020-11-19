@@ -6,5 +6,6 @@ MCMethodDefinition >> asClioMethod [
 		className: className;
 		selector: selector;
 		sourceCode: source withInternalLineEndings;
+		extractDeprecationsFromAst;
 		yourself.
 ]
