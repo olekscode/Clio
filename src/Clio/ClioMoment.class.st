@@ -12,25 +12,22 @@ Class {
 
 { #category : #'as yet unclassified' }
 ClioMoment >> collectDefinitions [
-	| definitions classDefinitions methods |
+	| definitions classDefinitions method |
 	
-	definitions := (packages flatCollect: [ :packageName |
-		(commit snapshotFor: packageName) definitions ]) asSet.
+	methodDictionary := Dictionary new.
 	
-	classDefinitions := definitions
-		select: [ :definition | definition isClassDefinition ].
+	packages do: [ :package |
+		definitions := (commit snapshotFor: package) definitions asSet.
 	
-	methods := definitions
-		select: [ :definition | definition isMethodDefinition ]
-		thenCollect: [ :methodDefinition |
-			methodDefinition asClioMethod
-				packageName: (classDefinitions
-					detect: [ :classDefinition | classDefinition className = methodDefinition className ]
-					ifFound: [ :classDefinition | classDefinition classCategory ]
-					ifNone: [ methodDefinition classCategory ] ) ].
+		classDefinitions := definitions
+			select: [ :definition | definition isClassDefinition ].
 	
-	methodDictionary := Dictionary newFromAssociations:
-		(methods collect: [ :method | method signature -> method ]).
+		definitions
+			select: [ :definition | definition isMethodDefinition ]
+			thenDo: [ :methodDefinition |
+				method := methodDefinition asClioMethod.
+				method packageName: package name.
+				methodDictionary at: method signature put: method ] ].
 ]
 
 { #category : #accessing }
