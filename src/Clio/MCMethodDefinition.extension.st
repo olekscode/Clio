@@ -3,7 +3,7 @@ Extension { #name : #MCMethodDefinition }
 { #category : #'*Clio' }
 MCMethodDefinition >> asClioMethod [
 	^ ClioMethod new
-		className: className;
+		className: self fullClassName;
 		selector: selector;
 		sourceCode: source withInternalLineEndings;
 		extractDeprecationsFromAst;
