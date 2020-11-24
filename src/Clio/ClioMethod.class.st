@@ -6,7 +6,8 @@ Class {
 		'className',
 		'selector',
 		'sourceCode',
-		'deprecation'
+		'deprecation',
+		'isExtension'
 	],
 	#category : #'Clio-Models'
 }
@@ -75,6 +76,16 @@ ClioMethod >> hash [
 { #category : #testing }
 ClioMethod >> isDeprecated [
 	^ deprecation isNotNil
+]
+
+{ #category : #accessing }
+ClioMethod >> isExtension [
+	^ isExtension
+]
+
+{ #category : #accessing }
+ClioMethod >> isExtension: anObject [
+	isExtension := anObject
 ]
 
 { #category : #accessing }

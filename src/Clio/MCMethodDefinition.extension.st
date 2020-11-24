@@ -13,5 +13,6 @@ MCMethodDefinition >> asClioMethod [
 		selector: selector;
 		sourceCode: source withInternalLineEndings;
 		extractDeprecationsFromAst;
+		isExtension: (self protocol beginsWith: '*');
 		yourself.
 ]
