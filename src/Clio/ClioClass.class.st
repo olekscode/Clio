@@ -5,7 +5,8 @@ Class {
 		'name',
 		'package',
 		'methods',
-		'superclassName'
+		'superclassName',
+		'isTrait'
 	],
 	#category : #Clio
 }
@@ -36,6 +37,18 @@ ClioClass >> isPrivate [
 { #category : #testing }
 ClioClass >> isPublic [
 	^ VisibilityDeductor new isClassPublic: self
+]
+
+{ #category : #accessing }
+ClioClass >> isTrait [
+	
+	^ isTrait
+]
+
+{ #category : #accessing }
+ClioClass >> isTrait: anObject [
+
+	isTrait := anObject
 ]
 
 { #category : #'accessing - methods' }

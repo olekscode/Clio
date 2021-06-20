@@ -63,6 +63,10 @@ ClioCommit >> loadPackages [
 				aClass := ClioClass new
 					name: definition className;
 					package: package;
+					superclassName: (definition class = MCClassTraitDefinition
+						ifTrue: [ definition baseTrait ]
+						ifFalse: [ definition superclassName ]);
+					isTrait: definition isTrait;
 					yourself.
 					
 				package classes add: aClass.
@@ -80,6 +84,7 @@ ClioCommit >> loadPackages [
 				method := ClioMethod new
 					methodClass: aClass;
 					selector: methodDefinition selector;
+					protocol: methodDefinition protocol;
 					sourceCode: methodDefinition source withInternalLineEndings;
 					isExtension: (methodDefinition protocol beginsWith: '*');
 					yourself.
