@@ -22,6 +22,12 @@ ClioCommit class >> fromIceGitCommit: anIceGitCommit [
 		yourself.
 ]
 
+{ #category : #accessing }
+ClioCommit >> classes [
+	^ self packages flatCollect: [ :package |
+		package classes ]
+]
+
 { #category : #'as yet unclassified' }
 ClioCommit >> collectChanges [
 	| visitor |

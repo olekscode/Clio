@@ -40,6 +40,29 @@ Clio class >> forRepository: aRepository between: anOldCommitSha and: aNewCommit
 		yourself.
 ]
 
+{ #category : #'accessing - classes' }
+Clio >> addedClasses [
+	| classDictionary oldNames newNames addedNames |
+	
+	classDictionary := Dictionary new.
+	oldNames := Set new.
+	newNames := Set new.
+	
+	oldNames := (self oldClasses collect: [ :aClass |
+		aClass name ]) asSet.
+	
+	newNames := (self newClasses collect: [ :aClass |
+		classDictionary at: aClass name put: aClass.
+		aClass name ]) asSet.
+	
+	addedNames := newNames difference: oldNames.
+	
+	^ addedNames collect: [ :name |
+		classDictionary at: name ].
+	
+	
+]
+
 { #category : #'accessing - methods' }
 Clio >> addedMethods [
 	| methodDictionary oldSignatures newSignatures addedSignatures |
@@ -48,10 +71,10 @@ Clio >> addedMethods [
 	oldSignatures := Set new.
 	newSignatures := Set new.
 	
-	oldSignatures := (oldCommit methods collect: [ :method |
+	oldSignatures := (self oldMethods collect: [ :method |
 		method signature ]) asSet.
 	
-	newSignatures := (newCommit methods collect: [ :method |
+	newSignatures := (self newMethods collect: [ :method |
 		methodDictionary at: method signature put: method.
 		method signature ]) asSet.
 	
@@ -61,6 +84,11 @@ Clio >> addedMethods [
 		methodDictionary at: signature ].
 	
 	
+]
+
+{ #category : #'accessing - classes' }
+Clio >> addedPublicClasses [
+	^ self addedClasses select: [ :aClass | aClass isPublic ]
 ]
 
 { #category : #'accessing - methods' }
@@ -73,6 +101,29 @@ Clio >> commits [
 	^ commits ifNil: [ commits := self extractCommitsBetweenTwoVersions ]
 ]
 
+{ #category : #'accessing - classes' }
+Clio >> deletedClasses [
+	| classDictionary oldNames newNames deletedNames |
+	
+	classDictionary := Dictionary new.
+	oldNames := Set new.
+	newNames := Set new.
+	
+	oldNames := (self oldClasses collect: [ :aClass |
+		classDictionary at: aClass name put: aClass.
+		aClass name ]) asSet.
+	
+	newNames := (self newClasses collect: [ :aClass |
+		aClass name ]) asSet.
+	
+	deletedNames := oldNames difference: newNames.
+	
+	^ deletedNames collect: [ :name |
+		classDictionary at: name ].
+	
+	
+]
+
 { #category : #'accessing - methods' }
 Clio >> deletedMethods [
 	| methodDictionary oldSignatures newSignatures deletedSignatures |
@@ -81,11 +132,11 @@ Clio >> deletedMethods [
 	oldSignatures := Set new.
 	newSignatures := Set new.
 	
-	oldSignatures := (oldCommit methods collect: [ :method |
+	oldSignatures := (self oldMethods collect: [ :method |
 		methodDictionary at: method signature put: method.
 		method signature ]) asSet.
 	
-	newSignatures := (newCommit methods collect: [ :method |
+	newSignatures := (self newMethods collect: [ :method |
 		method signature ]) asSet.
 	
 	deletedSignatures := oldSignatures difference: newSignatures.
@@ -94,6 +145,11 @@ Clio >> deletedMethods [
 		methodDictionary at: signature ].
 	
 	
+]
+
+{ #category : #'accessing - classes' }
+Clio >> deletedPublicClasses [
+	^ self deletedClasses select: [ :aClass | aClass isPublic ]
 ]
 
 { #category : #'accessing - methods' }
@@ -120,6 +176,11 @@ Clio >> extractCommitsBetweenTwoVersions [
 	^ collectionOfCommits reversed.
 ]
 
+{ #category : #'accessing - classes' }
+Clio >> newClasses [
+	^ newCommit classes
+]
+
 { #category : #'accessing - commits' }
 Clio >> newCommit [
 
@@ -139,6 +200,11 @@ Clio >> newCommitSha: aCommitSha [
 { #category : #'accessing - methods' }
 Clio >> newMethods [
 	^ newCommit methods
+]
+
+{ #category : #'accessing - classes' }
+Clio >> oldClasses [
+	^ oldCommit classes
 ]
 
 { #category : #'accessing - commits' }
