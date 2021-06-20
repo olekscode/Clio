@@ -1,6 +1,6 @@
 # Clio
 
-![Build status](https://github.com/olekscode/Clio/workflows/CI/badge.svg)
+[![Build status](https://github.com/olekscode/Clio/workflows/CI/badge.svg)](https://github.com/olekscode/Clio/actions/workflows/test.yml)
 [![Coverage Status](https://coveralls.io/repos/github/olekscode/Clio/badge.svg?branch=master)](https://coveralls.io/github/olekscode/Clio?branch=master)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/olekscode/Clio/master/LICENSE)
 
