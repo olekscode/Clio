@@ -10,10 +10,6 @@ BaselineOfClio >> baseline: spec [
 	spec for: #common do: [	
 		"External dependencies"
 		spec
-			baseline: 'PharoDeprecationsCollector'
-			with: [ spec repository: 'github://olekscode/PharoDeprecationsCollector/src' ].
-			
-		spec
 			baseline: 'VisibilityDeductor'
 			with: [ spec repository: 'github://olekscode/VisibilityDeductor/src' ].
 			
