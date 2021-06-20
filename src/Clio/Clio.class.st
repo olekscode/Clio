@@ -40,7 +40,7 @@ Clio class >> forRepository: aRepository between: anOldCommitSha and: aNewCommit
 		yourself.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - methods' }
 Clio >> addedMethods [
 	| methodDictionary oldSignatures newSignatures addedSignatures |
 	
@@ -63,17 +63,17 @@ Clio >> addedMethods [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - methods' }
 Clio >> addedPublicMethods [
 	^ self addedMethods select: [ :method | method isPublic ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - commits' }
 Clio >> commits [
 	^ commits ifNil: [ commits := self extractCommitsBetweenTwoVersions ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - methods' }
 Clio >> deletedMethods [
 	| methodDictionary oldSignatures newSignatures deletedSignatures |
 	
@@ -96,12 +96,12 @@ Clio >> deletedMethods [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - methods' }
 Clio >> deletedPublicMethods [
 	^ self deletedMethods select: [ :method | method isPublic ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 Clio >> extractCommitsBetweenTwoVersions [
 	| commitWalk collectionOfCommits |
 	
@@ -120,103 +120,61 @@ Clio >> extractCommitsBetweenTwoVersions [
 	^ collectionOfCommits reversed.
 ]
 
-{ #category : #'as yet unclassified' }
-Clio >> modifiedMethods [
-	| oldMethod newMethod selectedMethods |
-	
-	selectedMethods := Set new.
-	
-	(pastMoment methodSignatures intersection: presentMoment methodSignatures) do: [ :signature |
-		oldMethod := pastMoment methodWithSignature: signature.
-		newMethod := presentMoment methodWithSignature: signature.
-			
-		(oldMethod sourceCode = newMethod sourceCode)
-			ifFalse: [ selectedMethods add: oldMethod -> newMethod ] ].
-		
-	^ selectedMethods
-]
-
-{ #category : #accessing }
+{ #category : #'accessing - commits' }
 Clio >> newCommit [
 
 	^ newCommit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - commits' }
 Clio >> newCommit: aCommit [
 	newCommit := aCommit asClioCommit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - commits' }
 Clio >> newCommitSha: aCommitSha [
 	self newCommit: (repository revparse: aCommitSha).
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - methods' }
 Clio >> newMethods [
 	^ newCommit methods
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - commits' }
 Clio >> oldCommit [
 
 	^ oldCommit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - commits' }
 Clio >> oldCommit: aCommit [
 	oldCommit := aCommit asClioCommit
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - commits' }
 Clio >> oldCommitSha: aCommitSha [
 	self oldCommit: (repository revparse: aCommitSha).
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - methods' }
 Clio >> oldMethods [
 	^ oldCommit methods
 ]
 
-{ #category : #accessing }
-Clio >> pastMoment [
-	^ pastMoment
-]
-
-{ #category : #accessing }
-Clio >> presentMoment [
-	^ presentMoment
-]
-
-{ #category : #accessing }
+{ #category : #'accessing - repository' }
 Clio >> repository [
 
 	^ repository
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - repository' }
 Clio >> repository: aRepository [
 	repository := aRepository
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'accessing - repository' }
 Clio >> repositoryNamed: aString [
 	self repository: (IceRepository registry detect: [ :repo |
 		repo isValid and: [ repo name = aString ] ])
-]
-
-{ #category : #'as yet unclassified' }
-Clio >> unchangedMethods [
-	| oldMethod newMethod selectedMethods |
-	
-	selectedMethods := Set new.
-	
-	(pastMoment methodSignatures intersection: presentMoment methodSignatures) do: [ :signature |
-		oldMethod := pastMoment methodWithSignature: signature.
-		newMethod := presentMoment methodWithSignature: signature.
-			
-		(oldMethod sourceCode = newMethod sourceCode)
-			ifTrue: [ selectedMethods add: oldMethod ] ].
-		
-	^ selectedMethods
 ]
