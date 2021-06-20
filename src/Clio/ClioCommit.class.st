@@ -81,7 +81,6 @@ ClioCommit >> loadPackages [
 					methodClass: aClass;
 					selector: methodDefinition selector;
 					sourceCode: methodDefinition source withInternalLineEndings;
-					extractDeprecationsFromAst;
 					isExtension: (methodDefinition protocol beginsWith: '*');
 					yourself.
 				
