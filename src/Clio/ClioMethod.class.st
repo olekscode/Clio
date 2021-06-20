@@ -2,14 +2,14 @@ Class {
 	#name : #ClioMethod,
 	#superclass : #Object,
 	#instVars : [
-		'packageName',
-		'className',
+		'methodClass',
 		'selector',
+		'protocol',
 		'sourceCode',
 		'deprecation',
 		'isExtension'
 	],
-	#category : #'Clio-Models'
+	#category : #Clio
 }
 
 { #category : #comparing }
@@ -88,9 +88,31 @@ ClioMethod >> isExtension: anObject [
 	isExtension := anObject
 ]
 
+{ #category : #testing }
+ClioMethod >> isPrivate [
+	^ VisibilityDeductor new isMethodPrivate: self
+]
+
+{ #category : #testing }
+ClioMethod >> isPublic [
+	^ VisibilityDeductor new isMethodPublic: self
+]
+
+{ #category : #accessing }
+ClioMethod >> methodClass [
+
+	^ methodClass
+]
+
+{ #category : #accessing }
+ClioMethod >> methodClass: anObject [
+
+	methodClass := anObject
+]
+
 { #category : #accessing }
 ClioMethod >> packageName [
-	^ packageName
+	^ methodClass package name
 ]
 
 { #category : #accessing }
@@ -100,7 +122,19 @@ ClioMethod >> packageName: anObject [
 
 { #category : #printing }
 ClioMethod >> printOn: aStream [
-	aStream nextPutAll: self signature
+	aStream nextPutAll: self signature.
+]
+
+{ #category : #accessing }
+ClioMethod >> protocol [
+
+	^ protocol
+]
+
+{ #category : #accessing }
+ClioMethod >> protocol: anObject [
+
+	protocol := anObject
 ]
 
 { #category : #accessing }
@@ -115,7 +149,7 @@ ClioMethod >> selector: anObject [
 
 { #category : #'as yet unclassified' }
 ClioMethod >> signature [
-	^ className, '>>', selector
+	^ methodClass name, '>>', selector
 ]
 
 { #category : #accessing }

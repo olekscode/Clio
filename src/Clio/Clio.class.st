@@ -3,10 +3,11 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'repository',
-		'presentMoment',
-		'pastMoment'
+		'newCommit',
+		'oldCommit',
+		'commits'
 	],
-	#category : #'Clio-Controllers'
+	#category : #Clio
 }
 
 { #category : #'as yet unclassified' }
@@ -41,14 +42,82 @@ Clio class >> forRepository: aRepository between: anOldCommitSha and: aNewCommit
 
 { #category : #'as yet unclassified' }
 Clio >> addedMethods [
-	^ presentMoment methodsWithSignatures:
-		(presentMoment methodSignatures difference: pastMoment methodSignatures)
+	| methodDictionary oldSignatures newSignatures addedSignatures |
+	
+	methodDictionary := Dictionary new.
+	oldSignatures := Set new.
+	newSignatures := Set new.
+	
+	oldSignatures := (oldCommit methods collect: [ :method |
+		method signature ]) asSet.
+	
+	newSignatures := (newCommit methods collect: [ :method |
+		methodDictionary at: method signature put: method.
+		method signature ]) asSet.
+	
+	addedSignatures := newSignatures difference: oldSignatures.
+	
+	^ addedSignatures collect: [ :signature |
+		methodDictionary at: signature ].
+	
+	
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> addedPublicMethods [
+	^ self addedMethods select: [ :method | method isPublic ]
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> commits [
+	^ commits ifNil: [ commits := self extractCommitsBetweenTwoVersions ]
 ]
 
 { #category : #'as yet unclassified' }
 Clio >> deletedMethods [
-	^ pastMoment methodsWithSignatures:
-		(pastMoment methodSignatures difference: presentMoment methodSignatures)
+	| methodDictionary oldSignatures newSignatures deletedSignatures |
+	
+	methodDictionary := Dictionary new.
+	oldSignatures := Set new.
+	newSignatures := Set new.
+	
+	oldSignatures := (oldCommit methods collect: [ :method |
+		methodDictionary at: method signature put: method.
+		method signature ]) asSet.
+	
+	newSignatures := (newCommit methods collect: [ :method |
+		method signature ]) asSet.
+	
+	deletedSignatures := oldSignatures difference: newSignatures.
+	
+	^ deletedSignatures collect: [ :signature |
+		methodDictionary at: signature ].
+	
+	
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> deletedPublicMethods [
+	^ self deletedMethods select: [ :method | method isPublic ]
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> extractCommitsBetweenTwoVersions [
+	| commitWalk collectionOfCommits |
+	
+	commitWalk := (IceLibgitCommitWalk forRepository: repository)
+		fromCommit: newCommit;
+		uptoCommit: oldCommit;
+		yourself.
+		
+	collectionOfCommits := OrderedCollection new.
+	
+	commitWalk commitsDo: [ :commit |
+		collectionOfCommits add: commit asClioCommit ].
+	
+	collectionOfCommits add: oldCommit.
+
+	^ collectionOfCommits reversed.
 ]
 
 { #category : #'as yet unclassified' }
@@ -67,34 +136,46 @@ Clio >> modifiedMethods [
 	^ selectedMethods
 ]
 
+{ #category : #accessing }
+Clio >> newCommit [
+
+	^ newCommit
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> newCommit: aCommit [
+	newCommit := aCommit asClioCommit
+]
+
 { #category : #'as yet unclassified' }
 Clio >> newCommitSha: aCommitSha [
-	presentMoment := ClioMoment new
-		repository: repository;
-		commitSha: aCommitSha;
-		yourself.
-		
-	presentMoment collectDefinitions.
+	self newCommit: (repository revparse: aCommitSha).
 ]
 
 { #category : #'as yet unclassified' }
 Clio >> newMethods [
-	^ presentMoment methods
+	^ newCommit methods
+]
+
+{ #category : #accessing }
+Clio >> oldCommit [
+
+	^ oldCommit
+]
+
+{ #category : #'as yet unclassified' }
+Clio >> oldCommit: aCommit [
+	oldCommit := aCommit asClioCommit
 ]
 
 { #category : #'as yet unclassified' }
 Clio >> oldCommitSha: aCommitSha [
-	pastMoment := ClioMoment new
-		repository: repository;
-		commitSha: aCommitSha;
-		yourself.
-		
-	pastMoment collectDefinitions.
+	self oldCommit: (repository revparse: aCommitSha).
 ]
 
 { #category : #'as yet unclassified' }
 Clio >> oldMethods [
-	^ pastMoment methods
+	^ oldCommit methods
 ]
 
 { #category : #accessing }
@@ -105,6 +186,12 @@ Clio >> pastMoment [
 { #category : #accessing }
 Clio >> presentMoment [
 	^ presentMoment
+]
+
+{ #category : #accessing }
+Clio >> repository [
+
+	^ repository
 ]
 
 { #category : #'as yet unclassified' }

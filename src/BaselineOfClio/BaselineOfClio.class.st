@@ -13,8 +13,12 @@ BaselineOfClio >> baseline: spec [
 			baseline: 'PharoDeprecationsCollector'
 			with: [ spec repository: 'github://olekscode/PharoDeprecationsCollector/src' ].
 			
+		spec
+			baseline: 'VisibilityDeductor'
+			with: [ spec repository: 'github://olekscode/VisibilityDeductor/src' ].
+			
 		"Packages"
 		spec 
-			package: 'Clio' with: [ spec requires: #('PharoDeprecationsCollector') ];
-			package: 'Clio-Tests' with: [ spec requires: #('Clio') ] ]
+			package: 'Clio' with: [ spec requires: #(PharoDeprecationsCollector VisibilityDeductor) ];
+			package: 'Clio-Tests' with: [ spec requires: #(Clio) ] ]
 ]
