@@ -1,7 +1,6 @@
 # Clio
 
-[![Build Status](https://travis-ci.org/olekscode/Clio.svg?branch=master)](https://travis-ci.org/olekscode/Clio)
-[![Build status](https://ci.appveyor.com/api/projects/status/awwlnbjafr64b6kh?svg=true)](https://ci.appveyor.com/project/olekscode/clio)
+![Build status](https://github.com/olekscode/Clio/workflows/CI/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/olekscode/Clio/badge.svg?branch=master)](https://coveralls.io/github/olekscode/Clio?branch=master)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/olekscode/Clio/master/LICENSE)
 
@@ -11,7 +10,7 @@ In Greek mythology, [Clio](https://en.wikipedia.org/wiki/Clio) is the muse of hi
 
 ## How to install it?
 
-To install Clio, go to the Playground (Ctrl+OW) in your [Pharo](https://pharo.org/) image and execute the following Metacello script (select it and press Do-it button or Ctrl+D):
+To install `Clio`, go to the Playground (`Ctrl+OW`) in your [Pharo](https://pharo.org/) image and execute the following Metacello script (select it and press `Do-it` button or `Ctrl+D`):
 
 ```Smalltalk
 Metacello new
@@ -22,7 +21,7 @@ Metacello new
 
 ## How to depend on it?
 
-If you want to add a dependency on Clio to your project, include the following lines into your baseline method:
+If you want to add a dependency on `Clio` to your project, include the following lines into your baseline method:
 
 ```Smalltalk
 spec
