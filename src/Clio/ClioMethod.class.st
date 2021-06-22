@@ -6,6 +6,7 @@ Class {
 		'className',
 		'protocol',
 		'sourceCode',
+		'isClassSide',
 		'isExtension',
 		'methodCalls',
 		'deprecation'
@@ -22,6 +23,7 @@ ClioMethod class >> fromDictionary: aDictionary [
 		selector: (aDictionary at: 'selector');
 		protocol: (aDictionary at: 'protocol');
 		className: (aDictionary at: 'className');
+		isClassSide: (aDictionary at: 'isClassSide');
 		isExtension: (aDictionary at: 'isExtension');
 		sourceCode: (aDictionary at: 'sourceCode');
 		yourself.
@@ -44,6 +46,7 @@ ClioMethod >> asDictionary [
 		'protocol' -> protocol .
 		'className' -> className .
 		'isExtension' -> isExtension .
+		'isClassSide' -> isClassSide .
 		'sourceCode' -> sourceCode .
 		'methodCalls' -> (methodCalls collect: [ :call | call asDictionary ]) asArray .
 		'deprecation' -> (deprecation ifNotNil: [ deprecation asDictionary ])
@@ -82,6 +85,18 @@ ClioMethod >> deprecation: anObject [
 ClioMethod >> initialize [
 	super initialize.
 	methodCalls := OrderedCollection new.
+]
+
+{ #category : #accessing }
+ClioMethod >> isClassSide [
+
+	^ isClassSide
+]
+
+{ #category : #accessing }
+ClioMethod >> isClassSide: anObject [
+
+	isClassSide := anObject
 ]
 
 { #category : #accessing }

@@ -6,10 +6,11 @@ IceMethodDefinition >> asClioMethod [
 	
 	method := ClioMethod new
 		className: className;
-		selector: self selector;
-		protocol: self protocol;
-		sourceCode: self sourceCode withInternalLineEndings;
-		isExtension: (self protocol beginsWith: '*');
+		selector: name;
+		protocol: protocol;
+		sourceCode: sourceCode withInternalLineEndings;
+		isClassSide: classIsMeta;
+		isExtension: (protocol beginsWith: '*');
 		yourself.
 		
 	method deprecation: (ClioDataCollector new extractDeprecationFromMethod: method).

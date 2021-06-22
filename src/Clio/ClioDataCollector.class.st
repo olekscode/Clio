@@ -103,7 +103,7 @@ ClioDataCollector >> loadCommitHistoryFromRepositoryNamed: aRepositoryName fromC
 
 { #category : #accessing }
 ClioDataCollector >> loadSnapshotAt: aCommit [
-	| snapshot classDictionary package aClass definitions classDefinitions fullClassName method |
+	| snapshot classDictionary package aClass definitions classDefinitions method |
 	
 	snapshot := ClioSnapshot new
 		repositoryName: aCommit repositoryName;
@@ -122,28 +122,16 @@ ClioDataCollector >> loadSnapshotAt: aCommit [
 		classDefinitions := definitions
 			select: [ :definition | definition isClassDefinition ]
 			thenDo: [ :definition | 
-				aClass := ClioClass new
-					name: definition className;
-					package: package;
-					superclassName: (definition class = MCClassTraitDefinition
-						ifTrue: [ definition baseTrait ]
-						ifFalse: [ definition superclassName ]);
-					isTrait: definition isTrait;
-					yourself.
-					
+				aClass := definition asClioClass.
 				package classes add: aClass.
 				classDictionary at: aClass name put: aClass ].
 	
 		definitions
 			select: [ :definition | definition isMethodDefinition ]
-			thenDo: [ :methodDefinition |
-				fullClassName := methodDefinition classIsMeta
-					ifFalse: [ methodDefinition className ]
-					ifTrue: [ methodDefinition className, ' class' ].
-					
-				aClass := classDictionary at: fullClassName ifAbsent: [ nil ].
+			thenDo: [ :definition |
+				aClass := classDictionary at: definition className ifAbsent: [ nil ].
 				
-				method := methodDefinition asClioMethod
+				method := definition asClioMethod
 					methodClass: aClass;
 					yourself.
 				

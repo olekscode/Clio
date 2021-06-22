@@ -9,6 +9,7 @@ MCMethodDefinition >> asClioMethod [
 		selector: selector;
 		protocol: self protocol;
 		sourceCode: source withInternalLineEndings;
+		isClassSide: classIsMeta;
 		isExtension: (self protocol beginsWith: '*');
 		yourself.
 		
