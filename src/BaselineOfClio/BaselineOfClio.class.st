@@ -20,5 +20,5 @@ BaselineOfClio >> baseline: spec [
 		"Packages"
 		spec 
 			package: 'Clio' with: [ spec requires: #(VisibilityDeductor TransformationRule) ];
-			package: 'Clio-Tests' with: [ spec requires: #(#ClioDataCollector) ] ]
+			package: 'Clio-Tests' with: [ spec requires: #(#Clio) ] ]
 ]
