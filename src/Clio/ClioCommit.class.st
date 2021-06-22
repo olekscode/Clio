@@ -281,3 +281,8 @@ ClioCommit >> repositoryName: anObject [
 
 	repositoryName := anObject
 ]
+
+{ #category : #accessing }
+ClioCommit >> snapshot [
+	^ ClioDataCollector new loadSnapshotAt: self
+]
