@@ -44,16 +44,6 @@ ClioPackage >> initialize [
 	classes := OrderedCollection new.
 ]
 
-{ #category : #testing }
-ClioPackage >> isPrivate [
-	^ VisibilityDeductor new isPackagePrivate: self
-]
-
-{ #category : #testing }
-ClioPackage >> isPublic [
-	^ VisibilityDeductor new isPackagePublic: self
-]
-
 { #category : #printing }
 ClioPackage >> printOn: aStream [
 	aStream nextPutAll: name.

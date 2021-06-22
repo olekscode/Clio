@@ -10,15 +10,11 @@ BaselineOfClio >> baseline: spec [
 	spec for: #common do: [	
 		"External dependencies"
 		spec
-			baseline: 'VisibilityDeductor'
-			with: [ spec repository: 'github://olekscode/VisibilityDeductor/src' ].
-			
-		spec
 			baseline: 'TransformationRule'
 			with: [ spec repository: 'github://olekscode/TransformationRule/src' ].
 			
 		"Packages"
 		spec 
-			package: 'Clio' with: [ spec requires: #(VisibilityDeductor TransformationRule) ];
+			package: 'Clio' with: [ spec requires: #(TransformationRule) ];
 			package: 'Clio-Tests' with: [ spec requires: #(#Clio) ] ]
 ]

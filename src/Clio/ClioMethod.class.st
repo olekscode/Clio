@@ -109,16 +109,6 @@ ClioMethod >> isExtension: anObject [
 	isExtension := anObject
 ]
 
-{ #category : #testing }
-ClioMethod >> isPrivate [
-	^ VisibilityDeductor new isMethodPrivate: self
-]
-
-{ #category : #testing }
-ClioMethod >> isPublic [
-	^ VisibilityDeductor new isMethodPublic: self
-]
-
 { #category : #accessing }
 ClioMethod >> methodCalls [
 

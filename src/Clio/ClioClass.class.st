@@ -70,16 +70,6 @@ ClioClass >> isExtension: anObject [
 	isExtension := anObject
 ]
 
-{ #category : #testing }
-ClioClass >> isPrivate [
-	^ VisibilityDeductor new isClassPrivate: self
-]
-
-{ #category : #testing }
-ClioClass >> isPublic [
-	^ VisibilityDeductor new isClassPublic: self
-]
-
 { #category : #accessing }
 ClioClass >> isTrait [
 	
