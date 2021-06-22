@@ -6,31 +6,47 @@ Class {
 		'className',
 		'protocol',
 		'sourceCode',
-		'isExtension'
+		'isExtension',
+		'methodCalls',
+		'deprecation'
 	],
-	#category : #Clio
+	#category : #'Clio-Models'
 }
 
 { #category : #'instance creation' }
 ClioMethod class >> fromDictionary: aDictionary [
 
-	^ self new
+	| method deprecation |
+
+	method := self new
 		selector: (aDictionary at: 'selector');
 		protocol: (aDictionary at: 'protocol');
 		className: (aDictionary at: 'className');
 		isExtension: (aDictionary at: 'isExtension');
 		sourceCode: (aDictionary at: 'sourceCode');
-		yourself
+		yourself.
+		
+	method methodCalls addAll: ((aDictionary at: 'methodCalls') collect: [ :callDictionary |
+		ClioMethodCall fromDictionary: callDictionary ]).
+	
+	deprecation := aDictionary at: 'deprecation'.
+	
+	deprecation ifNotNil: [ 
+		method deprecation: (ClioDeprecation fromDictionary: deprecation) ].
+		
+	^ method
 ]
 
 { #category : #converting }
 ClioMethod >> asDictionary [
 	^ { 
-		'selector' -> self selector .
-		'protocol' -> self protocol .
-		'className' -> self className .
-		'isExtension' -> self isExtension .
-		'sourceCode' -> self sourceCode
+		'selector' -> name .
+		'protocol' -> protocol .
+		'className' -> className .
+		'isExtension' -> isExtension .
+		'sourceCode' -> sourceCode .
+		'methodCalls' -> (methodCalls collect: [ :call | call asDictionary ]) asArray .
+		'deprecation' -> (deprecation ifNotNil: [ deprecation asDictionary ])
 	} asDictionary
 ]
 
@@ -51,6 +67,24 @@ ClioMethod >> className: anObject [
 ]
 
 { #category : #accessing }
+ClioMethod >> deprecation [
+
+	^ deprecation
+]
+
+{ #category : #accessing }
+ClioMethod >> deprecation: anObject [
+
+	deprecation := anObject
+]
+
+{ #category : #initialization }
+ClioMethod >> initialize [
+	super initialize.
+	methodCalls := OrderedCollection new.
+]
+
+{ #category : #accessing }
 ClioMethod >> isExtension [
 	^ isExtension
 ]
@@ -68,6 +102,18 @@ ClioMethod >> isPrivate [
 { #category : #testing }
 ClioMethod >> isPublic [
 	^ VisibilityDeductor new isMethodPublic: self
+]
+
+{ #category : #accessing }
+ClioMethod >> methodCalls [
+
+	^ methodCalls
+]
+
+{ #category : #accessing }
+ClioMethod >> methodCalls: anObject [
+
+	methodCalls := anObject
 ]
 
 { #category : #accessing }

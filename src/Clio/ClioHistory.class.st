@@ -5,7 +5,7 @@ Class {
 		'repositoryName',
 		'commits'
 	],
-	#category : #Clio
+	#category : #'Clio-Models'
 }
 
 { #category : #'instance creation' }

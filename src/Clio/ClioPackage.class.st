@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'classes'
 	],
-	#category : #Clio
+	#category : #'Clio-Models'
 }
 
 { #category : #'instance creation' }

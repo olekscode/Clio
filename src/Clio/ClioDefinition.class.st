@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'name'
 	],
-	#category : #Clio
+	#category : #'Clio-Models'
 }
 
 { #category : #accessing }

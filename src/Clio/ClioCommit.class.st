@@ -16,7 +16,7 @@ Class {
 		'addedPackages',
 		'removedPackages'
 	],
-	#category : #Clio
+	#category : #'Clio-Models'
 }
 
 { #category : #'instance creation' }

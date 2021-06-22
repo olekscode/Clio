@@ -8,7 +8,7 @@ Class {
 		'isTrait',
 		'isExtension'
 	],
-	#category : #Clio
+	#category : #'Clio-Models'
 }
 
 { #category : #'instance creation' }

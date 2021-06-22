@@ -6,7 +6,7 @@ Class {
 		'commitId',
 		'packages'
 	],
-	#category : #Clio
+	#category : #'Clio-Models'
 }
 
 { #category : #'instance creation' }

@@ -4,19 +4,6 @@ Class {
 	#category : #Clio
 }
 
-{ #category : #converting }
-ClioDataCollector >> asDictionary [
-	^ { 
-		'repositoryName' -> self repository name .
-		'commits' -> (self commits collect: [ :commit | commit asDictionary ]) asArray
-	} asDictionary.
-]
-
-{ #category : #converting }
-ClioDataCollector >> asJsonString [
-	^ STONJSON toStringPretty: self asDictionary
-]
-
 { #category : #private }
 ClioDataCollector >> extractCommitsFromRepository: aRepository between: oldCommitId and: newCommitId [
 	| oldCommit newCommit commitWalk collectionOfCommits |
