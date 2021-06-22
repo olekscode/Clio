@@ -56,12 +56,20 @@ ClioDataCollector >> extractDataFromDiffsInCommits: aCollectionOfCommits [
 { #category : #'as yet unclassified' }
 ClioDataCollector >> extractDeprecationFromMethod: aMethod [
 	| visitor |
-	visitor := ClioDeprecationCollectingVisitor new.
+	visitor := ClioDeprecationVisitor new.
 	aMethod ast acceptVisitor: visitor.
 	
 	^ visitor deprecations
 		ifEmpty: [ nil ]
 		ifNotEmpty: [ visitor deprecations first ]
+]
+
+{ #category : #'as yet unclassified' }
+ClioDataCollector >> extractMethodCallsFromMethod: aMethod [
+	| visitor |
+	visitor := ClioMethodCallVisitor new.
+	aMethod ast acceptVisitor: visitor.
+	^ visitor methodCalls
 ]
 
 { #category : #'as yet unclassified' }

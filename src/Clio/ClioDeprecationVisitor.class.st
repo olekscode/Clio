@@ -1,5 +1,5 @@
 Class {
-	#name : #ClioDeprecationCollectingVisitor,
+	#name : #ClioDeprecationVisitor,
 	#superclass : #RBProgramNodeVisitor,
 	#instVars : [
 		'deprecations'
@@ -8,12 +8,12 @@ Class {
 }
 
 { #category : #accessing }
-ClioDeprecationCollectingVisitor >> deprecations [
+ClioDeprecationVisitor >> deprecations [
 	^ deprecations
 ]
 
 { #category : #accessing }
-ClioDeprecationCollectingVisitor >> extractTransformationRuleFrom: aNode [
+ClioDeprecationVisitor >> extractTransformationRuleFrom: aNode [
 	| antecedent consequent |
 	(aNode isMessage and: [ aNode selector = #-> ])
 		ifFalse: [ ^ nil ].
@@ -30,20 +30,20 @@ ClioDeprecationCollectingVisitor >> extractTransformationRuleFrom: aNode [
 ]
 
 { #category : #accessing }
-ClioDeprecationCollectingVisitor >> initialize [
+ClioDeprecationVisitor >> initialize [
 	super initialize.
 	deprecations := OrderedCollection new.
 ]
 
 { #category : #accessing }
-ClioDeprecationCollectingVisitor >> visitDeprecated: aMessageNode [
+ClioDeprecationVisitor >> visitDeprecated: aMessageNode [
 	deprecations add: (ClioDeprecation new
 		message: aMessageNode arguments first value;
 		yourself).
 ]
 
 { #category : #accessing }
-ClioDeprecationCollectingVisitor >> visitDeprecatedOnIn: aMessageNode [
+ClioDeprecationVisitor >> visitDeprecatedOnIn: aMessageNode [
 	deprecations add: (ClioDeprecation new
 		message: aMessageNode arguments first value;
 "		date: aMessageNode arguments second evaluate;
@@ -52,7 +52,7 @@ ClioDeprecationCollectingVisitor >> visitDeprecatedOnIn: aMessageNode [
 ]
 
 { #category : #accessing }
-ClioDeprecationCollectingVisitor >> visitDeprecatedOnInTransformWith: aMessageNode [
+ClioDeprecationVisitor >> visitDeprecatedOnInTransformWith: aMessageNode [
 	| ruleNode |
 	ruleNode := aMessageNode arguments fourth.
 
@@ -65,7 +65,7 @@ ClioDeprecationCollectingVisitor >> visitDeprecatedOnInTransformWith: aMessageNo
 ]
 
 { #category : #accessing }
-ClioDeprecationCollectingVisitor >> visitDeprecatedOnInTransformWithWhen: aMessageNode [
+ClioDeprecationVisitor >> visitDeprecatedOnInTransformWithWhen: aMessageNode [
 	| ruleNode |
 	ruleNode := aMessageNode arguments fourth.
 
@@ -79,7 +79,7 @@ ClioDeprecationCollectingVisitor >> visitDeprecatedOnInTransformWithWhen: aMessa
 ]
 
 { #category : #accessing }
-ClioDeprecationCollectingVisitor >> visitDeprecatedTransformWith: aMessageNode [
+ClioDeprecationVisitor >> visitDeprecatedTransformWith: aMessageNode [
 	| ruleNode |
 	ruleNode := aMessageNode arguments second.
 
@@ -90,7 +90,7 @@ ClioDeprecationCollectingVisitor >> visitDeprecatedTransformWith: aMessageNode [
 ]
 
 { #category : #accessing }
-ClioDeprecationCollectingVisitor >> visitDeprecatedTransformWithWhen: aMessageNode [
+ClioDeprecationVisitor >> visitDeprecatedTransformWithWhen: aMessageNode [
 	| ruleNode |
 	ruleNode := aMessageNode arguments second.
 
@@ -102,7 +102,7 @@ ClioDeprecationCollectingVisitor >> visitDeprecatedTransformWithWhen: aMessageNo
 ]
 
 { #category : #accessing }
-ClioDeprecationCollectingVisitor >> visitMessageNode: aMessageNode [
+ClioDeprecationVisitor >> visitMessageNode: aMessageNode [
 	| options |
 	
 	options := { 

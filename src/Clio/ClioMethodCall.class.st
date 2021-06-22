@@ -51,6 +51,15 @@ ClioMethodCall >> initialize [
 	arguments := OrderedCollection new.
 ]
 
+{ #category : #printing }
+ClioMethodCall >> printOn: aStream [
+	aStream
+		nextPutAll: self class name;
+		nextPut: $(;
+		nextPutAll: selector;
+		nextPut: $)
+]
+
 { #category : #accessing }
 ClioMethodCall >> receiver [
 

@@ -13,5 +13,6 @@ IceMethodDefinition >> asClioMethod [
 		yourself.
 		
 	method deprecation: (ClioDataCollector new extractDeprecationFromMethod: method).
+	method methodCalls: (ClioDataCollector new extractMethodCallsFromMethod: method).
 	^ method
 ]
