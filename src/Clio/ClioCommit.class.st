@@ -2,18 +2,62 @@ Class {
 	#name : #ClioCommit,
 	#superclass : #Object,
 	#instVars : [
-		'owner',
+		'repositoryName',
 		'id',
 		'datetime',
 		'author',
 		'comment',
-		'packages',
-		'additions',
-		'removals',
-		'modifications'
+		'addedMethods',
+		'removedMethods',
+		'modifiedMethods',
+		'addedClasses',
+		'removedClasses',
+		'modifiedClasses',
+		'addedPackages',
+		'removedPackages'
 	],
 	#category : #Clio
 }
+
+{ #category : #'instance creation' }
+ClioCommit class >> fromDictionary: aDictionary [
+
+	| commit |
+	
+	commit := self new 
+		id: (aDictionary at: 'id');
+		author: (aDictionary at: 'author');
+		comment: (aDictionary at: 'comment');
+		datetime: (aDictionary at: 'datetime') asDateAndTime;
+		repositoryName: (aDictionary at: 'repositoryName');
+		yourself.
+		
+	commit addedMethods addAll: ((aDictionary at: 'addedMethods') collect: [ :methodDictionary |
+		ClioMethod fromDictionary: methodDictionary ]).
+	
+	commit removedMethods addAll: ((aDictionary at: 'removedMethods') collect: [ :methodDictionary |
+		ClioMethod fromDictionary: methodDictionary ]).
+	
+	commit modifiedMethods addAll: ((aDictionary at: 'modifiedMethods') collect: [ :methodDictionary |
+		ClioModification methodModificationFromDictionary: methodDictionary ]).
+	
+	commit addedClasses addAll: ((aDictionary at: 'addedClasses') collect: [ :classDictionary |
+		ClioClass fromDictionary: classDictionary ]).
+	
+	commit removedClasses addAll: ((aDictionary at: 'removedClasses') collect: [ :classDictionary |
+		ClioClass fromDictionary: classDictionary ]).
+	
+	commit modifiedClasses addAll: ((aDictionary at: 'modifiedClasses') collect: [ :classDictionary |
+		ClioModification classModificationFromDictionary: classDictionary ]).
+	
+	commit addedPackages addAll: ((aDictionary at: 'addedPackages') collect: [ :packageDictionary |
+		ClioPackage fromDictionary: packageDictionary ]).
+	
+	commit removedPackages addAll: ((aDictionary at: 'removedPackages') collect: [ :packageDictionary |
+		ClioPackage fromDictionary: packageDictionary ]).
+	
+	^ commit
+]
 
 { #category : #'instance creation' }
 ClioCommit class >> fromIceGitCommit: anIceGitCommit [
@@ -22,13 +66,63 @@ ClioCommit class >> fromIceGitCommit: anIceGitCommit [
 		author: anIceGitCommit author;
 		datetime: anIceGitCommit datetime;
 		comment: anIceGitCommit comment;
+		repositoryName: anIceGitCommit repository name;
 		yourself.
 ]
 
 { #category : #accessing }
-ClioCommit >> additions [
+ClioCommit >> addedClasses [
 
-	^ additions
+	^ addedClasses
+]
+
+{ #category : #accessing }
+ClioCommit >> addedClasses: anObject [
+
+	addedClasses := anObject
+]
+
+{ #category : #accessing }
+ClioCommit >> addedMethods [
+
+	^ addedMethods
+]
+
+{ #category : #accessing }
+ClioCommit >> addedMethods: anObject [
+
+	addedMethods := anObject
+]
+
+{ #category : #accessing }
+ClioCommit >> addedPackages [
+
+	^ addedPackages
+]
+
+{ #category : #accessing }
+ClioCommit >> addedPackages: anObject [
+
+	addedPackages := anObject
+]
+
+{ #category : #converting }
+ClioCommit >> asDictionary [
+	^ { 
+		'id' -> id .
+		'author' -> author .
+		'comment' -> comment .
+		'datetime' -> datetime asString .
+		'repositoryName' -> repositoryName .
+		'addedMethods' -> (addedMethods collect: [ :method | method asDictionary ]) asArray .
+		'removedMethods' -> (removedMethods collect: [ :method | method asDictionary ]) asArray .
+		'modifiedMethods' -> (modifiedMethods collect: [ :method | method asDictionary ]) asArray .
+		'addedClasses' -> (addedClasses collect: [ :method | method asDictionary ]) asArray .
+		'removedClasses' -> (removedClasses collect: [ :method | method asDictionary ]) asArray .
+		'modifiedClasses' -> (modifiedClasses collect: [ :method | method asDictionary ]) asArray .
+		'addedPackages' -> (addedPackages collect: [ :method | method asDictionary ]) asArray .
+		'removedPackages' -> (removedPackages collect: [ :method | method asDictionary ]) asArray .
+	} asDictionary.
 ]
 
 { #category : #accessing }
@@ -41,23 +135,6 @@ ClioCommit >> author [
 ClioCommit >> author: anObject [
 
 	author := anObject
-]
-
-{ #category : #'as yet unclassified' }
-ClioCommit >> calculateChanges [
-	| visitor |
-	visitor := ClioIceTreeVisitor new.
-	self iceCommit diffToParent tree accept: visitor.
-	
-	additions := visitor additions.
-	removals := visitor removals.
-	modifications := visitor modifications.
-]
-
-{ #category : #accessing }
-ClioCommit >> classes [
-	^ self packages flatCollect: [ :package |
-		package classes ]
 ]
 
 { #category : #accessing }
@@ -84,119 +161,9 @@ ClioCommit >> datetime: anObject [
 	datetime := anObject
 ]
 
-{ #category : #testing }
-ClioCommit >> hasAddedClasses [
-	^ (additions at: 'classes') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasAddedDirectories [
-	^ (additions at: 'directories') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasAddedExtensions [
-	^ (additions at: 'extensions') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasAddedFiles [
-	^ (additions at: 'files') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasAddedMethods [
-	^ (additions at: 'methods') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasAddedPackages [
-	^ (additions at: 'packages') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasAddedTraits [
-	^ (additions at: 'traits') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasModifiedClasses [
-	^ (modifications at: 'classes') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasModifiedDirectories [
-	^ (modifications at: 'directories') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasModifiedExtensions [
-	^ (modifications at: 'extensions') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasModifiedFiles [
-	^ (modifications at: 'files') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasModifiedMethods [
-	^ (modifications at: 'methods') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasModifiedPackages [
-	^ (modifications at: 'packages') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasModifiedTraits [
-	^ (modifications at: 'traits') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasRemovedClasses [
-	^ (removals at: 'classes') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasRemovedDirectories [
-	^ (removals at: 'directories') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasRemovedExtensions [
-	^ (removals at: 'extensions') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasRemovedFiles [
-	^ (removals at: 'files') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasRemovedMethods [
-	^ (removals at: 'methods') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasRemovedPackages [
-	^ (removals at: 'packages') isNotEmpty
-]
-
-{ #category : #testing }
-ClioCommit >> hasRemovedTraits [
-	^ (removals at: 'traits') isNotEmpty
-]
-
 { #category : #accessing }
 ClioCommit >> iceCommit [
 	^ self repository revparse: id
-]
-
-{ #category : #accessing }
-ClioCommit >> icePackages [
-	^ self iceCommit packages
 ]
 
 { #category : #accessing }
@@ -211,99 +178,106 @@ ClioCommit >> id: anObject [
 	id := anObject
 ]
 
-{ #category : #'as yet unclassified' }
-ClioCommit >> loadPackages [
-	| classDictionary package aClass definitions classDefinitions fullClassName method |
+{ #category : #initialization }
+ClioCommit >> initialize [
+	super initialize.
 	
-	packages := OrderedCollection new.
-	classDictionary := Dictionary new.
+	addedPackages := OrderedCollection new.
+	removedPackages := OrderedCollection new.
 	
-	self icePackages do: [ :icePackage |
-		package := ClioPackage new
-			name: icePackage name;
-			yourself.
-		
-		packages add: package.
-		definitions := (self iceCommit snapshotFor: icePackage) definitions asSet.
+	addedClasses := OrderedCollection new.
+	removedClasses := OrderedCollection new.
+	modifiedClasses := OrderedCollection new.
 	
-		classDefinitions := definitions
-			select: [ :definition | definition isClassDefinition ]
-			thenDo: [ :definition | 
-				aClass := ClioClass new
-					name: definition className;
-					package: package;
-					superclassName: (definition class = MCClassTraitDefinition
-						ifTrue: [ definition baseTrait ]
-						ifFalse: [ definition superclassName ]);
-					isTrait: definition isTrait;
-					yourself.
-					
-				package classes add: aClass.
-				classDictionary at: aClass name put: aClass ].
+	addedMethods := OrderedCollection new.
+	removedMethods := OrderedCollection new.
+	modifiedMethods := OrderedCollection new.
+]
+
+{ #category : #accessing }
+ClioCommit >> modifiedClasses [
+
+	^ modifiedClasses
+]
+
+{ #category : #accessing }
+ClioCommit >> modifiedClasses: anObject [
+
+	modifiedClasses := anObject
+]
+
+{ #category : #accessing }
+ClioCommit >> modifiedMethods [
+
+	^ modifiedMethods
+]
+
+{ #category : #accessing }
+ClioCommit >> modifiedMethods: anObject [
+
+	modifiedMethods := anObject
+]
+
+{ #category : #printing }
+ClioCommit >> printOn: aStream [
 	
-		definitions
-			select: [ :definition | definition isMethodDefinition ]
-			thenDo: [ :methodDefinition |
-				fullClassName := methodDefinition classIsMeta
-					ifFalse: [ methodDefinition className ]
-					ifTrue: [ methodDefinition className, ' class' ].
-					
-				aClass := classDictionary at: fullClassName ifAbsent: [ nil ].
-				
-				method := ClioMethod new
-					methodClass: aClass;
-					selector: methodDefinition selector;
-					protocol: methodDefinition protocol;
-					sourceCode: methodDefinition source withInternalLineEndings;
-					isExtension: (methodDefinition protocol beginsWith: '*');
-					yourself.
-				
-				aClass ifNotNil: [ aClass methods add: method ] ] ].
+	aStream
+		nextPutAll: self class name;
+		nextPut: $(;
+		nextPutAll: id;
+		nextPut: $)
 ]
 
 { #category : #accessing }
-ClioCommit >> methods [
-	^ self packages flatCollect: [ :package |
-		package classes flatCollect: [ :aClass |
-			aClass methods ] ]
+ClioCommit >> removedClasses [
+
+	^ removedClasses
 ]
 
 { #category : #accessing }
-ClioCommit >> modifications [
+ClioCommit >> removedClasses: anObject [
 
-	^ modifications
+	removedClasses := anObject
 ]
 
 { #category : #accessing }
-ClioCommit >> owner: anObject [
-	
-	owner := anObject
+ClioCommit >> removedMethods [
+
+	^ removedMethods
 ]
 
 { #category : #accessing }
-ClioCommit >> packages [
-	packages ifNil: [ self loadPackages ].
-	^ packages
+ClioCommit >> removedMethods: anObject [
+
+	removedMethods := anObject
 ]
 
 { #category : #accessing }
-ClioCommit >> privateMethods [
-	^ self methods select: [ :method | method isPrivate ]
+ClioCommit >> removedPackages [
+
+	^ removedPackages
 ]
 
 { #category : #accessing }
-ClioCommit >> publicMethods [
-	^ self methods select: [ :method | method isPublic ]
-]
+ClioCommit >> removedPackages: anObject [
 
-{ #category : #accessing }
-ClioCommit >> removals [
-
-	^ removals
+	removedPackages := anObject
 ]
 
 { #category : #accessing }
 ClioCommit >> repository [
+	^ IceRepository registry detect: [ :repo |
+		repo isValid and: [ repo name = repositoryName ] ]
+]
 
-	^ owner repository
+{ #category : #accessing }
+ClioCommit >> repositoryName [
+
+	^ repositoryName
+]
+
+{ #category : #accessing }
+ClioCommit >> repositoryName: anObject [
+
+	repositoryName := anObject
 ]

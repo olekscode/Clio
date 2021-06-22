@@ -1,15 +1,44 @@
 Class {
 	#name : #ClioClass,
-	#superclass : #Object,
+	#superclass : #ClioDefinition,
 	#instVars : [
-		'name',
 		'package',
 		'methods',
 		'superclassName',
-		'isTrait'
+		'isTrait',
+		'isExtension'
 	],
 	#category : #Clio
 }
+
+{ #category : #'instance creation' }
+ClioClass class >> fromDictionary: aDictionary [
+	
+	| aClass |
+	
+	aClass := self new
+		name: (aDictionary at: 'name');
+		superclassName: (aDictionary at: 'superclassName');
+		isTrait: (aDictionary at: 'isTrait');
+		yourself.
+		
+	aClass methods addAll: ((aDictionary at: 'methods') collect: [ :methodDictionary |
+		(ClioMethod fromDictionary: methodDictionary)
+			methodClass: aClass;
+			yourself ]).
+			
+	^ aClass
+]
+
+{ #category : #converting }
+ClioClass >> asDictionary [
+	^ { 
+		'name' -> self name .
+		'superclassName' -> self superclassName .
+		'isTrait' -> self isTrait .
+		'methods' -> (self methods collect: [ :method | method asDictionary ]) asArray
+	} asDictionary
+]
 
 { #category : #accessing }
 ClioClass >> inheritsFrom: aClass [
@@ -27,6 +56,18 @@ ClioClass >> inheritsFrom: aClass [
 ClioClass >> initialize [
 	super initialize.
 	methods := OrderedCollection new.
+]
+
+{ #category : #accessing }
+ClioClass >> isExtension [
+
+	^ isExtension
+]
+
+{ #category : #accessing }
+ClioClass >> isExtension: anObject [
+
+	isExtension := anObject
 ]
 
 { #category : #testing }
@@ -60,18 +101,6 @@ ClioClass >> methodNamed: aSelector [
 ClioClass >> methods [
 
 	^ methods
-]
-
-{ #category : #accessing }
-ClioClass >> name [
-
-	^ name
-]
-
-{ #category : #accessing }
-ClioClass >> name: anObject [
-
-	name := anObject
 ]
 
 { #category : #accessing }

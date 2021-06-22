@@ -1,9 +1,9 @@
 Class {
 	#name : #ClioMethod,
-	#superclass : #Object,
+	#superclass : #ClioDefinition,
 	#instVars : [
 		'methodClass',
-		'selector',
+		'className',
 		'protocol',
 		'sourceCode',
 		'isExtension'
@@ -11,9 +11,43 @@ Class {
 	#category : #Clio
 }
 
+{ #category : #'instance creation' }
+ClioMethod class >> fromDictionary: aDictionary [
+
+	^ self new
+		selector: (aDictionary at: 'selector');
+		protocol: (aDictionary at: 'protocol');
+		className: (aDictionary at: 'className');
+		isExtension: (aDictionary at: 'isExtension');
+		sourceCode: (aDictionary at: 'sourceCode');
+		yourself
+]
+
+{ #category : #converting }
+ClioMethod >> asDictionary [
+	^ { 
+		'selector' -> self selector .
+		'protocol' -> self protocol .
+		'className' -> self className .
+		'isExtension' -> self isExtension .
+		'sourceCode' -> self sourceCode
+	} asDictionary
+]
+
 { #category : #accessing }
 ClioMethod >> ast [
 	^ RBParser parseMethod: sourceCode
+]
+
+{ #category : #accessing }
+ClioMethod >> className [
+	^ className
+]
+
+{ #category : #accessing }
+ClioMethod >> className: anObject [
+
+	className := anObject
 ]
 
 { #category : #accessing }
@@ -72,17 +106,19 @@ ClioMethod >> protocol: anObject [
 
 { #category : #accessing }
 ClioMethod >> selector [
-	^ selector
+
+	^ name
 ]
 
 { #category : #accessing }
 ClioMethod >> selector: anObject [
-	selector := anObject
+	
+	self name: anObject
 ]
 
 { #category : #'as yet unclassified' }
 ClioMethod >> signature [
-	^ methodClass name, '>>', selector
+	^ className, '>>', name
 ]
 
 { #category : #accessing }

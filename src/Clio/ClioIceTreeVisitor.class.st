@@ -2,82 +2,122 @@ Class {
 	#name : #ClioIceTreeVisitor,
 	#superclass : #IceTreeVisitor,
 	#instVars : [
-		'additions',
-		'removals',
-		'modifications'
+		'addedPackages',
+		'removedPackages',
+		'addedClasses',
+		'removedClasses',
+		'modifiedClasses',
+		'addedMethods',
+		'removedMethods',
+		'modifiedMethods'
 	],
 	#category : #Clio
 }
 
 { #category : #accessing }
-ClioIceTreeVisitor >> additions [
+ClioIceTreeVisitor >> addedClasses [
 
-	^ additions
+	^ addedClasses
+]
+
+{ #category : #accessing }
+ClioIceTreeVisitor >> addedMethods [
+
+	^ addedMethods
+]
+
+{ #category : #accessing }
+ClioIceTreeVisitor >> addedPackages [
+
+	^ addedPackages
 ]
 
 { #category : #initialization }
 ClioIceTreeVisitor >> initialize [
 	super initialize.
 	
-	additions := self initializeChangeDictionary.
-	removals := self initializeChangeDictionary.
-	modifications := self initializeChangeDictionary.
+	addedPackages := OrderedCollection new.
+	removedPackages := OrderedCollection new.
 	
+	addedClasses := OrderedCollection new.
+	removedClasses := OrderedCollection new.
+	modifiedClasses := OrderedCollection new.
 	
-]
-
-{ #category : #initialization }
-ClioIceTreeVisitor >> initializeChangeDictionary [
+	addedMethods := OrderedCollection new.
+	removedMethods := OrderedCollection new.
+	modifiedMethods := OrderedCollection new.
 	
-	^ { 
-		'methods' -> OrderedCollection new .
-		'classes' -> OrderedCollection new .
-		'packages' -> OrderedCollection new .
-		'traits' -> OrderedCollection new .
-		'extensions' -> OrderedCollection new .
-		'directories' -> OrderedCollection new .
-		'files' -> OrderedCollection new
-	} asDictionary.
 ]
 
 { #category : #accessing }
-ClioIceTreeVisitor >> modifications [
+ClioIceTreeVisitor >> modifiedClasses [
 
-	^ modifications
+	^ modifiedClasses
 ]
 
 { #category : #accessing }
-ClioIceTreeVisitor >> removals [
+ClioIceTreeVisitor >> modifiedMethods [
 
-	^ removals
+	^ modifiedMethods
 ]
 
-{ #category : #'as yet unclassified' }
-ClioIceTreeVisitor >> saveDefinition: aDefinition into: aDictionary [
-	| definitionType |
-	
-	definitionType := ({
-		aDefinition isMethodDefinition -> 'methods' .
-		aDefinition isClassDefinition -> 'classes' .
-		aDefinition isPackageDefinition -> 'packages' .
-		aDefinition isTraitDefinition -> 'traits' .
-		aDefinition isExtensionDefinition -> 'extensions' .
-		aDefinition isDirectoryDefinition -> 'directories' .
-		aDefinition isFileDefinition -> 'files'
-	} detect: [ :assoc | assoc key ]) value.
-	
-	(aDictionary at: definitionType) add: aDefinition
+{ #category : #accessing }
+ClioIceTreeVisitor >> removedClasses [
+
+	^ removedClasses
+]
+
+{ #category : #accessing }
+ClioIceTreeVisitor >> removedMethods [
+
+	^ removedMethods
+]
+
+{ #category : #accessing }
+ClioIceTreeVisitor >> removedPackages [
+
+	^ removedPackages
 ]
 
 { #category : #visiting }
 ClioIceTreeVisitor >> visitAddition: aNode [
-	self saveDefinition: aNode definition into: additions.
+	| definition |
+	definition := aNode definition.
+	
+	definition isMethodDefinition ifTrue: [ addedMethods add: definition asClioMethod ].
+	
+	(definition isClassDefinition or: [
+		definition isTraitDefinition or: [
+			definition isExtensionDefinition ] ])
+		ifTrue: [ addedClasses add: definition asClioClass ].
+		
+	definition isPackageDefinition ifTrue: [ addedPackages add: definition asClioPackage ].
+	
 	self visitChildrenOf: currentNode.
 ]
 
 { #category : #visiting }
 ClioIceTreeVisitor >> visitModification: aNode [
-	self saveDefinition: aNode definition into: modifications.
+	| oldDefinition newDefinition |
+	
+	oldDefinition := aNode oldDefinition.
+	newDefinition := aNode definition.
+	
+	newDefinition isMethodDefinition ifTrue: [ modifiedMethods add:
+		(ClioModification new
+			oldDefinition: oldDefinition asClioMethod;
+			newDefinition: newDefinition asClioMethod;
+			yourself) ].
+	
+	(newDefinition isClassDefinition or: [
+		newDefinition isTraitDefinition or: [
+			newDefinition isExtensionDefinition ] ])
+		ifTrue: [ modifiedClasses add: 
+			(ClioModification new
+				oldDefinition: oldDefinition asClioClass;
+				newDefinition: newDefinition asClioClass;
+				yourself) ].
+	
 	self visitChildrenOf: currentNode.
 ]
 
@@ -88,6 +128,17 @@ ClioIceTreeVisitor >> visitNoModification: aNode [
 
 { #category : #visiting }
 ClioIceTreeVisitor >> visitRemoval: aNode [
-	self saveDefinition: aNode definition into: removals.
+	| definition |
+	definition := aNode definition.
+	
+	definition isMethodDefinition ifTrue: [ removedMethods add: definition asClioMethod ].
+	
+	(definition isClassDefinition or: [
+		definition isTraitDefinition or: [
+			definition isExtensionDefinition ] ])
+		ifTrue: [ removedClasses add: definition asClioClass ].
+		
+	definition isPackageDefinition ifTrue: [ removedPackages add: definition asClioPackage ].
+	
 	self visitChildrenOf: currentNode.
 ]

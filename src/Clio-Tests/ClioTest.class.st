@@ -11,7 +11,7 @@ Class {
 ClioTest >> setUp [
 	super setUp.
 	
-	clio := Clio
+	clio := ClioDataCollector
 		for: 'Clio'
 		between: 'a843b6606faea4dabd3183a017e3931ad24c6c16'
 		and: 'b5367b8cd9efa07c30a11fb1d8b6a9299e7155db'.

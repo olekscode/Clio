@@ -1,12 +1,36 @@
 Class {
 	#name : #ClioPackage,
-	#superclass : #Object,
+	#superclass : #ClioDefinition,
 	#instVars : [
-		'name',
 		'classes'
 	],
 	#category : #Clio
 }
+
+{ #category : #'instance creation' }
+ClioPackage class >> fromDictionary: aDictionary [
+	
+	| package |
+	
+	package := self new
+		name: (aDictionary at: 'name');
+		yourself.
+		
+	package classes addAll: ((aDictionary at: 'classes') collect: [ :classDictionary |
+		(ClioClass fromDictionary: classDictionary)
+			package: package;
+			yourself ]).
+			
+	^ package
+]
+
+{ #category : #converting }
+ClioPackage >> asDictionary [
+	^ { 
+		'name' -> self name .
+		'classes' -> (self classes collect: [ :aClass | aClass asDictionary ]) asArray
+	} asDictionary
+]
 
 { #category : #accessing }
 ClioPackage >> classes [
@@ -28,18 +52,6 @@ ClioPackage >> isPrivate [
 { #category : #testing }
 ClioPackage >> isPublic [
 	^ VisibilityDeductor new isPackagePublic: self
-]
-
-{ #category : #accessing }
-ClioPackage >> name [
-
-	^ name
-]
-
-{ #category : #accessing }
-ClioPackage >> name: anObject [
-
-	name := anObject
 ]
 
 { #category : #printing }
