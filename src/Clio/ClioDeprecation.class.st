@@ -30,8 +30,8 @@ ClioDeprecation >> asDictionary [
 	
 	^ { 
 		'message' -> message .
-		'transformationRule' -> transformationRule
-			ifNotNil: [ transformationRule asString ]
+		'transformationRule' -> (transformationRule
+			ifNotNil: [ transformationRule asString ])
 	} asDictionary.
 ]
 
