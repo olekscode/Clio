@@ -11,7 +11,7 @@ Class {
 		'removedMethods',
 		'modifiedMethods'
 	],
-	#category : #Clio
+	#category : #'Clio-Visitors'
 }
 
 { #category : #accessing }

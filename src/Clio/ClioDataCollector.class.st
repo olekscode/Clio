@@ -54,6 +54,17 @@ ClioDataCollector >> extractDataFromDiffsInCommits: aCollectionOfCommits [
 ]
 
 { #category : #'as yet unclassified' }
+ClioDataCollector >> extractDeprecationFromMethod: aMethod [
+	| visitor |
+	visitor := ClioDeprecationCollectingVisitor new.
+	aMethod ast acceptVisitor: visitor.
+	
+	^ visitor deprecations
+		ifEmpty: [ nil ]
+		ifNotEmpty: [ visitor deprecations first ]
+]
+
+{ #category : #'as yet unclassified' }
 ClioDataCollector >> loadCommitHistoryFromRepository: aRepository fromCommit: anOldCommitId toCommit: aNewCommitId [
 	| history |
 	
