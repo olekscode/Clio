@@ -1,11 +1,16 @@
 Class {
 	#name : #ClioCommit,
-	#superclass : #IceGitCommit,
+	#superclass : #Object,
 	#instVars : [
+		'owner',
+		'id',
+		'datetime',
+		'author',
+		'comment',
 		'packages',
-		'diff',
-		'deletedMethods',
-		'addedMethods'
+		'additions',
+		'removals',
+		'modifications'
 	],
 	#category : #Clio
 }
@@ -16,10 +21,37 @@ ClioCommit class >> fromIceGitCommit: anIceGitCommit [
 		id: anIceGitCommit id;
 		author: anIceGitCommit author;
 		datetime: anIceGitCommit datetime;
-		ancestorIds: anIceGitCommit ancestorIds;
 		comment: anIceGitCommit comment;
-		repository: anIceGitCommit repository;
 		yourself.
+]
+
+{ #category : #accessing }
+ClioCommit >> additions [
+
+	^ additions
+]
+
+{ #category : #accessing }
+ClioCommit >> author [
+
+	^ author
+]
+
+{ #category : #accessing }
+ClioCommit >> author: anObject [
+
+	author := anObject
+]
+
+{ #category : #'as yet unclassified' }
+ClioCommit >> calculateChanges [
+	| visitor |
+	visitor := ClioIceTreeVisitor new.
+	self iceCommit diffToParent tree accept: visitor.
+	
+	additions := visitor additions.
+	removals := visitor removals.
+	modifications := visitor modifications.
 ]
 
 { #category : #accessing }
@@ -28,24 +60,155 @@ ClioCommit >> classes [
 		package classes ]
 ]
 
-{ #category : #'as yet unclassified' }
-ClioCommit >> collectChanges [
-	| visitor |
-	visitor := ClioIceTreeVisitor new.
-	self diffToParent tree accept: visitor.
-	
-	deletedMethods := visitor methodRemovals.
-	addedMethods := visitor methodAdditions.
+{ #category : #accessing }
+ClioCommit >> comment [
+
+	^ comment
 ]
 
-{ #category : #'API-changes' }
-ClioCommit >> diffToParent [
-	^ diff ifNil: [ diff := super diffToParent ]
+{ #category : #accessing }
+ClioCommit >> comment: anObject [
+
+	comment := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+ClioCommit >> datetime [
+
+	^ datetime
+]
+
+{ #category : #accessing }
+ClioCommit >> datetime: anObject [
+
+	datetime := anObject
+]
+
+{ #category : #testing }
+ClioCommit >> hasAddedClasses [
+	^ (additions at: 'classes') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasAddedDirectories [
+	^ (additions at: 'directories') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasAddedExtensions [
+	^ (additions at: 'extensions') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasAddedFiles [
+	^ (additions at: 'files') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasAddedMethods [
+	^ (additions at: 'methods') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasAddedPackages [
+	^ (additions at: 'packages') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasAddedTraits [
+	^ (additions at: 'traits') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasModifiedClasses [
+	^ (modifications at: 'classes') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasModifiedDirectories [
+	^ (modifications at: 'directories') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasModifiedExtensions [
+	^ (modifications at: 'extensions') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasModifiedFiles [
+	^ (modifications at: 'files') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasModifiedMethods [
+	^ (modifications at: 'methods') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasModifiedPackages [
+	^ (modifications at: 'packages') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasModifiedTraits [
+	^ (modifications at: 'traits') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasRemovedClasses [
+	^ (removals at: 'classes') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasRemovedDirectories [
+	^ (removals at: 'directories') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasRemovedExtensions [
+	^ (removals at: 'extensions') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasRemovedFiles [
+	^ (removals at: 'files') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasRemovedMethods [
+	^ (removals at: 'methods') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasRemovedPackages [
+	^ (removals at: 'packages') isNotEmpty
+]
+
+{ #category : #testing }
+ClioCommit >> hasRemovedTraits [
+	^ (removals at: 'traits') isNotEmpty
+]
+
+{ #category : #accessing }
+ClioCommit >> iceCommit [
+	^ self repository revparse: id
+]
+
+{ #category : #accessing }
 ClioCommit >> icePackages [
-	^ super packages
+	^ self iceCommit packages
+]
+
+{ #category : #accessing }
+ClioCommit >> id [
+
+	^ id
+]
+
+{ #category : #accessing }
+ClioCommit >> id: anObject [
+
+	id := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -61,7 +224,7 @@ ClioCommit >> loadPackages [
 			yourself.
 		
 		packages add: package.
-		definitions := (self snapshotFor: icePackage) definitions asSet.
+		definitions := (self iceCommit snapshotFor: icePackage) definitions asSet.
 	
 		classDefinitions := definitions
 			select: [ :definition | definition isClassDefinition ]
@@ -106,6 +269,18 @@ ClioCommit >> methods [
 ]
 
 { #category : #accessing }
+ClioCommit >> modifications [
+
+	^ modifications
+]
+
+{ #category : #accessing }
+ClioCommit >> owner: anObject [
+	
+	owner := anObject
+]
+
+{ #category : #accessing }
 ClioCommit >> packages [
 	packages ifNil: [ self loadPackages ].
 	^ packages
@@ -119,4 +294,16 @@ ClioCommit >> privateMethods [
 { #category : #accessing }
 ClioCommit >> publicMethods [
 	^ self methods select: [ :method | method isPublic ]
+]
+
+{ #category : #accessing }
+ClioCommit >> removals [
+
+	^ removals
+]
+
+{ #category : #accessing }
+ClioCommit >> repository [
+
+	^ owner repository
 ]

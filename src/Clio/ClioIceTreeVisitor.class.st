@@ -2,116 +2,82 @@ Class {
 	#name : #ClioIceTreeVisitor,
 	#superclass : #IceTreeVisitor,
 	#instVars : [
-		'methodAdditions',
-		'methodRemovals',
-		'methodChanges',
-		'classAdditions',
-		'classRemovals',
-		'classChanges',
-		'packageAdditions',
-		'packageRemovals',
-		'packageChanges'
+		'additions',
+		'removals',
+		'modifications'
 	],
 	#category : #Clio
 }
 
 { #category : #accessing }
-ClioIceTreeVisitor >> classAdditions [
+ClioIceTreeVisitor >> additions [
 
-	^ classAdditions
-]
-
-{ #category : #accessing }
-ClioIceTreeVisitor >> classChanges [
-
-	^ classChanges
-]
-
-{ #category : #accessing }
-ClioIceTreeVisitor >> classRemovals [
-
-	^ classRemovals
+	^ additions
 ]
 
 { #category : #initialization }
 ClioIceTreeVisitor >> initialize [
 	super initialize.
 	
-	methodAdditions := OrderedCollection new.
-	methodRemovals := OrderedCollection new.
-	methodChanges := OrderedCollection new.
+	additions := self initializeChangeDictionary.
+	removals := self initializeChangeDictionary.
+	modifications := self initializeChangeDictionary.
 	
-	classAdditions := OrderedCollection new.
-	classRemovals := OrderedCollection new.
-	classChanges := OrderedCollection new.
-	
-	packageAdditions := OrderedCollection new.
-	packageRemovals := OrderedCollection new.
-	packageChanges := OrderedCollection new.
 	
 ]
 
-{ #category : #accessing }
-ClioIceTreeVisitor >> methodAdditions [
-
-	^ methodAdditions
+{ #category : #initialization }
+ClioIceTreeVisitor >> initializeChangeDictionary [
+	
+	^ { 
+		'methods' -> OrderedCollection new .
+		'classes' -> OrderedCollection new .
+		'packages' -> OrderedCollection new .
+		'traits' -> OrderedCollection new .
+		'extensions' -> OrderedCollection new .
+		'directories' -> OrderedCollection new .
+		'files' -> OrderedCollection new
+	} asDictionary.
 ]
 
 { #category : #accessing }
-ClioIceTreeVisitor >> methodChanges [
+ClioIceTreeVisitor >> modifications [
 
-	^ methodChanges
+	^ modifications
 ]
 
 { #category : #accessing }
-ClioIceTreeVisitor >> methodRemovals [
+ClioIceTreeVisitor >> removals [
 
-	^ methodRemovals
+	^ removals
 ]
 
-{ #category : #accessing }
-ClioIceTreeVisitor >> packageAdditions [
-
-	^ packageAdditions
-]
-
-{ #category : #accessing }
-ClioIceTreeVisitor >> packageChanges [
-
-	^ packageChanges
-]
-
-{ #category : #accessing }
-ClioIceTreeVisitor >> packageRemovals [
-
-	^ packageRemovals
+{ #category : #'as yet unclassified' }
+ClioIceTreeVisitor >> saveDefinition: aDefinition into: aDictionary [
+	| definitionType |
+	
+	definitionType := ({
+		aDefinition isMethodDefinition -> 'methods' .
+		aDefinition isClassDefinition -> 'classes' .
+		aDefinition isPackageDefinition -> 'packages' .
+		aDefinition isTraitDefinition -> 'traits' .
+		aDefinition isExtensionDefinition -> 'extensions' .
+		aDefinition isDirectoryDefinition -> 'directories' .
+		aDefinition isFileDefinition -> 'files'
+	} detect: [ :assoc | assoc key ]) value.
+	
+	(aDictionary at: definitionType) add: aDefinition
 ]
 
 { #category : #visiting }
 ClioIceTreeVisitor >> visitAddition: aNode [
-	aNode definition isMethodDefinition
-		ifTrue: [ methodAdditions add: aNode ].
-		
-	aNode definition isClassDefinition
-		ifTrue: [ classAdditions add: aNode ].
-		
-	aNode definition isPackageDefinition
-		ifTrue: [ packageAdditions add: aNode ].
-	
+	self saveDefinition: aNode definition into: additions.
 	self visitChildrenOf: currentNode.
 ]
 
 { #category : #visiting }
 ClioIceTreeVisitor >> visitModification: aNode [
-	aNode definition isMethodDefinition
-		ifTrue: [ methodChanges add: aNode ].
-		
-	aNode definition isClassDefinition
-		ifTrue: [ classChanges add: aNode ].
-		
-	aNode definition isPackageDefinition
-		ifTrue: [ packageChanges add: aNode ].
-	
+	self saveDefinition: aNode definition into: modifications.
 	self visitChildrenOf: currentNode.
 ]
 
@@ -122,14 +88,6 @@ ClioIceTreeVisitor >> visitNoModification: aNode [
 
 { #category : #visiting }
 ClioIceTreeVisitor >> visitRemoval: aNode [
-	aNode definition isMethodDefinition
-		ifTrue: [ methodRemovals add: aNode ].
-		
-	aNode definition isClassDefinition
-		ifTrue: [ classRemovals add: aNode ].
-		
-	aNode definition isPackageDefinition
-		ifTrue: [ packageRemovals add: aNode ].
-	
+	self saveDefinition: aNode definition into: removals.
 	self visitChildrenOf: currentNode.
 ]

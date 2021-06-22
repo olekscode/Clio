@@ -40,6 +40,12 @@ Clio class >> forRepository: aRepository between: anOldCommitSha and: aNewCommit
 		yourself.
 ]
 
+{ #category : #'as yet unclassified' }
+Clio class >> readFromFile: aFileReference [
+	^ aFileReference readStreamDo: [ :readStream |
+		STON fromStream: readStream ].
+]
+
 { #category : #'accessing - classes' }
 Clio >> addedClasses [
 	| classDictionary oldNames newNames addedNames |
@@ -94,6 +100,13 @@ Clio >> addedPublicClasses [
 { #category : #'accessing - methods' }
 Clio >> addedPublicMethods [
 	^ self addedMethods select: [ :method | method isPublic ]
+]
+
+{ #category : #executing }
+Clio >> calculateChanges [
+	(1 to: self commits size)
+		do: [ :i | (self commits at: i) calculateChanges ]
+		displayingProgress: [ :i | i asString, ' / ', commits size asString ].
 ]
 
 { #category : #'accessing - commits' }
@@ -169,7 +182,10 @@ Clio >> extractCommitsBetweenTwoVersions [
 	collectionOfCommits := OrderedCollection new.
 	
 	commitWalk commitsDo: [ :commit |
-		collectionOfCommits add: commit asClioCommit ].
+		collectionOfCommits add:
+			(commit asClioCommit
+				owner: self;
+				yourself) ].
 	
 	collectionOfCommits add: oldCommit.
 
@@ -190,6 +206,8 @@ Clio >> newCommit [
 { #category : #'accessing - commits' }
 Clio >> newCommit: aCommit [
 	newCommit := aCommit asClioCommit
+		owner: self;
+		yourself.
 ]
 
 { #category : #'accessing - commits' }
@@ -216,6 +234,8 @@ Clio >> oldCommit [
 { #category : #'accessing - commits' }
 Clio >> oldCommit: aCommit [
 	oldCommit := aCommit asClioCommit
+		owner: self;
+		yourself.
 ]
 
 { #category : #'accessing - commits' }
@@ -243,4 +263,17 @@ Clio >> repository: aRepository [
 Clio >> repositoryNamed: aString [
 	self repository: (IceRepository registry detect: [ :repo |
 		repo isValid and: [ repo name = aString ] ])
+]
+
+{ #category : #files }
+Clio >> saveToFile: aFileReference [
+	| model |
+	
+	model := {
+		'repositoryName' -> repository name .
+		'commits' -> commits
+	} asDictionary.
+	
+	aFileReference writeStreamDo: [ :writeStream |
+		STON put: model onStream: writeStream  ].
 ]
