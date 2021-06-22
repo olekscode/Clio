@@ -47,6 +47,11 @@ ClioSnapshot >> asDictionary [
 ]
 
 { #category : #accessing }
+ClioSnapshot >> classes [
+	^ packages flatCollect: [ :each | each classes ]
+]
+
+{ #category : #accessing }
 ClioSnapshot >> commitId [
 
 	^ commitId
@@ -62,6 +67,11 @@ ClioSnapshot >> commitId: anObject [
 ClioSnapshot >> initialize [
 	super initialize.
 	packages := OrderedCollection new.
+]
+
+{ #category : #accessing }
+ClioSnapshot >> methods [
+	^ self classes flatCollect: [ :each | each methods ]
 ]
 
 { #category : #accessing }
