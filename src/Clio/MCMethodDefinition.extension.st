@@ -13,7 +13,9 @@ MCMethodDefinition >> asClioMethod [
 		isExtension: (self protocol beginsWith: '*');
 		yourself.
 		
-	method deprecation: (ClioDataCollector new extractDeprecationFromMethod: method).
-	method methodCalls: (ClioDataCollector new extractMethodCallsFromMethod: method).
+	method sourceCode ifNotNil: [
+		method deprecation: (ClioDataCollector new extractDeprecationFromMethod: method).
+		method methodCalls: (ClioDataCollector new extractMethodCallsFromMethod: method) ].
+	
 	^ method
 ]

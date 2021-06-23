@@ -46,7 +46,13 @@ ClioDataCollector >> extractDataFromDiffToParentOf: aCommit [
 
 { #category : #executing }
 ClioDataCollector >> extractDataFromDiffsInCommits: aCollectionOfCommits [
-	aCollectionOfCommits do: [ :commit | self extractDataFromDiffToParentOf: commit ]
+	aCollectionOfCommits do: [ :commit |
+			[
+				self extractDataFromDiffToParentOf: commit.
+				Transcript show: commit id; cr.
+			]
+				on: Exception
+				do: [ Transcript show: 'Error in commit ', commit id; cr ] ]
 		displayingProgress: [ :commit |
 			'Calculating diffs from ',
 			aCollectionOfCommits size asString,

@@ -26,12 +26,12 @@ ClioHistory class >> fromDictionary: aDictionary [
 { #category : #'as yet unclassified' }
 ClioHistory class >> readFromJsonFile: aFileReference [
 
-	| jsonString |
+	| historyDictionary |
 	
-	jsonString := aFileReference readStreamDo: [ :stream |
-		stream contents ].
+	historyDictionary := aFileReference readStreamDo: [ :stream |
+		STONJSON fromStream: stream ].
 	
-	^ self fromDictionary: (STONJSON fromString: jsonString).
+	^ self fromDictionary: historyDictionary.
 ]
 
 { #category : #converting }
@@ -76,5 +76,5 @@ ClioHistory >> repositoryName: anObject [
 { #category : #'as yet unclassified' }
 ClioHistory >> saveToJsonFile: aFileReference [
 	aFileReference writeStreamDo: [ :stream |
-		stream nextPutAll: (STONJSON toStringPretty: self asDictionary) ].
+		STONJSON put: self asDictionary onStreamPretty: stream ].
 ]

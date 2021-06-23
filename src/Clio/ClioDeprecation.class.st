@@ -29,7 +29,7 @@ ClioDeprecation class >> fromDictionary: aDictionary [
 ClioDeprecation >> asDictionary [
 	
 	^ { 
-		'message' -> message .
+		'message' -> message asString .
 		'transformationRule' -> (transformationRule
 			ifNotNil: [ transformationRule asString ])
 	} asDictionary.

@@ -4,8 +4,7 @@ Extension { #name : #IceTraitDefinition }
 IceTraitDefinition >> asClioClass [
 	^ ClioClass new
 		name: name;
-		package: mcDefinition category;
-		superclassName: mcDefinition superclassName;
+		package: (mcDefinition ifNotNil: [ mcDefinition category ]);
 		isTrait: true;
 		isExtension: false;
 		yourself.
