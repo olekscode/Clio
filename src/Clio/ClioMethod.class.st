@@ -81,6 +81,13 @@ ClioMethod >> deprecation: anObject [
 	deprecation := anObject
 ]
 
+{ #category : #accessing }
+ClioMethod >> fullClassName [
+	^ isClassSide
+		ifTrue: [ className, ' class' ]
+		ifFalse: [ className ]
+]
+
 { #category : #initialization }
 ClioMethod >> initialize [
 	super initialize.
@@ -169,7 +176,7 @@ ClioMethod >> selector: anObject [
 
 { #category : #'as yet unclassified' }
 ClioMethod >> signature [
-	^ className, '>>', name
+	^ self fullClassName, '>>', name
 ]
 
 { #category : #accessing }
