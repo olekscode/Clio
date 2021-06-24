@@ -128,7 +128,10 @@ ClioDataCollector >> loadSnapshotAt: aCommit [
 		classDefinitions := definitions
 			select: [ :definition | definition isClassDefinition ]
 			thenDo: [ :definition | 
-				aClass := definition asClioClass.
+				aClass := definition asClioClass
+					package: package;
+					yourself.
+					
 				package classes add: aClass.
 				classDictionary at: aClass name put: aClass ].
 	
