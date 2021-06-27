@@ -142,7 +142,7 @@ ClioMethod >> methodClass: anObject [
 
 { #category : #accessing }
 ClioMethod >> packageName [
-	^ methodClass package name
+	^ self methodClass package name
 ]
 
 { #category : #printing }
