@@ -107,6 +107,12 @@ ClioMethod >> isClassSide: anObject [
 ]
 
 { #category : #accessing }
+ClioMethod >> isDeprecated [
+
+	^ deprecation isNotNil
+]
+
+{ #category : #accessing }
 ClioMethod >> isExtension [
 	^ isExtension
 ]
