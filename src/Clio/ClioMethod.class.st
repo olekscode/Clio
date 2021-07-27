@@ -94,6 +94,11 @@ ClioMethod >> initialize [
 	methodCalls := OrderedCollection new.
 ]
 
+{ #category : #testing }
+ClioMethod >> isAbstract [
+	^ methodCalls anySatisfy: [ :methodCall | methodCall selector = 'subclassResponsibility' ]
+]
+
 { #category : #accessing }
 ClioMethod >> isClassSide [
 
@@ -110,6 +115,11 @@ ClioMethod >> isClassSide: anObject [
 ClioMethod >> isDeprecated [
 
 	^ deprecation isNotNil
+]
+
+{ #category : #testing }
+ClioMethod >> isEmpty [
+	^ sourceCode trimBoth lines size < 2
 ]
 
 { #category : #accessing }
