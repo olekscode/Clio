@@ -156,6 +156,14 @@ ClioMethod >> methodClass: anObject [
 	methodClass := anObject
 ]
 
+{ #category : #private }
+ClioMethod >> numberOfArguments [
+	
+	^ (name anySatisfy: [ :char | char isAlphaNumeric or: [ char = $: ] ])
+		ifFalse: [ 1 ] "an operator"
+		ifTrue: [ name occurrencesOf: $: ]. "not an operator"
+]
+
 { #category : #accessing }
 ClioMethod >> packageName [
 	^ self methodClass package name
