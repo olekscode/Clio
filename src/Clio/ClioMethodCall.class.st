@@ -23,6 +23,17 @@ ClioMethodCall class >> fromDictionary: aDictionary [
 	^ methodCall
 ]
 
+{ #category : #comparing }
+ClioMethodCall >> = anObject [
+	
+	self class = anObject class
+		ifFalse: [ ^ false ].
+		
+	^ self selector = anObject selector and: [ 
+		self receiver = anObject receiver and: [ 
+			self arguments = anObject arguments ] ]
+]
+
 { #category : #accessing }
 ClioMethodCall >> arguments [
 
@@ -43,6 +54,12 @@ ClioMethodCall >> asDictionary [
 		'receiver' -> receiver .
 		'arguments' -> arguments asArray
 	} asDictionary
+]
+
+{ #category : #comparing }
+ClioMethodCall >> hash [
+
+	^ selector hash bitXor: (receiver hash bitXor: arguments hash)
 ]
 
 { #category : #initialization }
