@@ -103,3 +103,9 @@ ClioSnapshot >> saveToJsonFile: aFileReference [
 	aFileReference writeStreamDo: [ :stream |
 		STONJSON put: self asDictionary onStreamPretty: stream ].
 ]
+
+{ #category : #accessing }
+ClioSnapshot >> selectors [
+
+	^ (self methods collect: [ :each | each selector ]) asSet
+]
