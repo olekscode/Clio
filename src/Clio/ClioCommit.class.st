@@ -194,6 +194,37 @@ ClioCommit >> initialize [
 	modifiedMethods := OrderedCollection new.
 ]
 
+{ #category : #'as yet unclassified' }
+ClioCommit >> loadBaseline: aBaselineName [
+	"Load a specified baseline of the project on this commit"
+	
+	| repository repositoryUrl |
+	
+	repository := self repository.
+	
+	repositoryUrl := 'github://{1}/{2}:{3}/{4}' format: {
+		repository origin owner .
+		repository name .
+		self id .
+		repository subdirectory }.
+		
+	self iceCommit packages do: [ :package |
+		(package name asPackageIfAbsent: [ nil ])
+			ifNotNil: [ :p |p  removeFromSystem ] ].
+		
+	repository unload.
+	
+	Metacello new
+		baseline: aBaselineName;
+		repository: repositoryUrl;
+		onConflict: [ :ex | ex useIncoming ];
+		onUpgrade: [ :ex | ex useIncoming ];
+		onDowngrade: [ :ex | ex useIncoming ];
+		ignoreImage;
+		onWarningLog;
+		load.
+]
+
 { #category : #accessing }
 ClioCommit >> modifiedClasses [
 
