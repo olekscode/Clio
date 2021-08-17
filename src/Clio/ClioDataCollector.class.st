@@ -88,7 +88,7 @@ ClioDataCollector >> extractDataFromDiffs [
 						show: 'Error in commit ' , commit id;
 						cr ] ]
 		displayingProgress: [ :commit | 
-			'Calculating diffs from ' , data commits size asString
+			'Calculating diffs between ' , data commits size asString
 			, ' commits' ]
 ]
 
@@ -120,22 +120,31 @@ ClioDataCollector >> initialize [
 { #category : #'repository loading' }
 ClioDataCollector >> installBaselineOnCommit: aCommitId [
 
-	ClioRepositoryLoader
-		installBaseline: data baselineName
-		forRepository: repository
-		onCommit: aCommitId.
+	UIManager default 
+		informUser: ('Installing baseline of {1} on {2}' format: { data repositoryName . aCommitId })
+		during: [
+			ClioRepositoryLoader
+				installBaseline: data baselineName
+				forRepository: repository
+				onCommit: aCommitId ].
 ]
 
 { #category : #executing }
 ClioDataCollector >> loadNewPackages [
 	
-	data newPackages: (self loadPackagesAtCommit: newIceCommit).
+	UIManager default 
+		informUser: 'Loading packages from the new version'
+		during: [
+			data newPackages: (self loadPackagesAtCommit: newIceCommit) ].
 ]
 
 { #category : #executing }
 ClioDataCollector >> loadOldPackages [
 	
-	data oldPackages: (self loadPackagesAtCommit: oldIceCommit).
+	UIManager default 
+		informUser: 'Loading packages from the new version'
+		during: [
+			data oldPackages: (self loadPackagesAtCommit: oldIceCommit) ].
 ]
 
 { #category : #executing }
@@ -183,7 +192,8 @@ ClioDataCollector >> loadPackagesAtCommit: anIceCommit [
 					methodClass: aClass;
 					yourself.
 				
-				aClass ifNotNil: [ aClass methods add: method ] ] ].
+				aClass ifNotNil: [ aClass methods add: method ] ] ]
+		displayingProgress: [ :icePackage | icePackage name ].
 		
 	^ packages
 ]
