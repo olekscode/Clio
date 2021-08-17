@@ -22,6 +22,8 @@ ClioClass class >> fromJsonDictionary: aDictionary [
 		name: (aDictionary at: 'name');
 		superclassName: (aDictionary at: 'superclassName');
 		isTrait: (aDictionary at: 'isTrait');
+		allInstanceSideSelectors: (aDictionary at: 'allInstanceSideSelectors') asOrderedCollection;
+		allClassSideSelectors: (aDictionary at: 'allClassSideSelectors') asOrderedCollection;
 		yourself.
 		
 	aClass methods addAll: ((aDictionary at: 'methods') collect: [ :methodDictionary |
@@ -64,7 +66,9 @@ ClioClass >> asJsonDictionary [
 		'name' -> self name .
 		'superclassName' -> self superclassName .
 		'isTrait' -> self isTrait .
-		'methods' -> (self methods collect: [ :method | method asJsonDictionary ]) asArray
+		'methods' -> (self methods collect: [ :method | method asJsonDictionary ]) asArray .
+		'allInstanceSideSelectors' -> self allInstanceSideSelectors asArray .
+		'allClassSideSelectors' -> self allClassSideSelectors asArray
 	} asDictionary
 ]
 
@@ -84,6 +88,8 @@ ClioClass >> inheritsFrom: aClass [
 ClioClass >> initialize [
 	super initialize.
 	methods := OrderedCollection new.
+	allInstanceSideSelectors := OrderedCollection new.
+	allClassSideSelectors := OrderedCollection new.
 ]
 
 { #category : #accessing }
