@@ -142,7 +142,7 @@ ClioDataCollector >> loadNewPackages [
 ClioDataCollector >> loadOldPackages [
 	
 	UIManager default 
-		informUser: 'Loading packages from the new version'
+		informUser: 'Loading packages from the old version'
 		during: [
 			data oldPackages: (self loadPackagesAtCommit: oldIceCommit) ].
 ]
