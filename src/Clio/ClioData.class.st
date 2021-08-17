@@ -131,7 +131,8 @@ ClioData >> newClasses [
 ]
 
 { #category : #'as yet unclassified' }
-ClioData >> newMethods [
+ClioData >> newImplementedMethods [
+	"Methods that are implemented in the packages of the new version of the project"
 	
 	^ self newClasses flatCollect: [ :each | each methods ]
 ]
@@ -149,13 +150,21 @@ ClioData >> newPackages: anObject [
 ]
 
 { #category : #'as yet unclassified' }
+ClioData >> newSupportedSelectors [
+	"Method selectors that are understood by the classes in the new version of the project"
+	
+	^ self newClasses flatCollect: [ :each | each understoodSelectors ]
+]
+
+{ #category : #'as yet unclassified' }
 ClioData >> oldClasses [
 	
 	^ oldPackages flatCollect: [ :each | each classes ]
 ]
 
 { #category : #'as yet unclassified' }
-ClioData >> oldMethods [
+ClioData >> oldImplementedMethods [
+	"Methods that were implemented in the packages of the old version of the project"
 	
 	^ self oldClasses flatCollect: [ :each | each methods ]
 ]
@@ -170,6 +179,13 @@ ClioData >> oldPackages [
 ClioData >> oldPackages: anObject [
 
 	oldPackages := anObject
+]
+
+{ #category : #'as yet unclassified' }
+ClioData >> oldSupportedSelectors [
+	"Method selectors that were understood by the classes in the old version of the project"
+	
+	^ self oldClasses flatCollect: [ :each | each understoodSelectors ]
 ]
 
 { #category : #accessing }

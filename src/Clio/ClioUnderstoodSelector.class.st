@@ -68,6 +68,24 @@ ClioUnderstoodSelector >> name: anObject [
 	name := anObject
 ]
 
+{ #category : #printing }
+ClioUnderstoodSelector >> printOn: aStream [
+
+	aStream nextPutAll: self signature
+]
+
+{ #category : #accessing }
+ClioUnderstoodSelector >> signature [
+	"We define a signature of a supported selector as a class name that understands (not implements!) it and a method name. To emphasize the difference with the standard signature that includes the implementor class name, we use '.' instead of '>>'"
+
+	^ String streamContents: [ :stream |
+		stream
+			nextPutAll: understoodByClassName;
+			nextPutAll: (isClassSide ifTrue: [ ' class' ] ifFalse: [ '' ]);
+			nextPut: $.;
+			nextPutAll: name ]
+]
+
 { #category : #accessing }
 ClioUnderstoodSelector >> understoodByClassName [
 
