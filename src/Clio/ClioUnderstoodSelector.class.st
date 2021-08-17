@@ -44,6 +44,13 @@ ClioUnderstoodSelector >> implementorClassName: anObject [
 	implementorClassName := anObject
 ]
 
+{ #category : #initialization }
+ClioUnderstoodSelector >> initialize [
+
+	super initialize.
+	isClassSide := false.
+]
+
 { #category : #accessing }
 ClioUnderstoodSelector >> isClassSide [
 
