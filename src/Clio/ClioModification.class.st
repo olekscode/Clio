@@ -12,8 +12,8 @@ Class {
 ClioModification class >> classModificationFromDictionary: aDictionary [
 	
 	^ self new
-		oldDefinition: (ClioClass fromDictionary: (aDictionary at: 'oldDefinition'));
-		newDefinition: (ClioClass fromDictionary: (aDictionary at: 'newDefinition'));
+		oldDefinition: (ClioClass fromJsonDictionary: (aDictionary at: 'oldDefinition'));
+		newDefinition: (ClioClass fromJsonDictionary: (aDictionary at: 'newDefinition'));
 		yourself.
 ]
 
@@ -21,17 +21,17 @@ ClioModification class >> classModificationFromDictionary: aDictionary [
 ClioModification class >> methodModificationFromDictionary: aDictionary [
 	
 	^ self new
-		oldDefinition: (ClioMethod fromDictionary: (aDictionary at: 'oldDefinition'));
-		newDefinition: (ClioMethod fromDictionary: (aDictionary at: 'newDefinition'));
+		oldDefinition: (ClioMethod fromJsonDictionary: (aDictionary at: 'oldDefinition'));
+		newDefinition: (ClioMethod fromJsonDictionary: (aDictionary at: 'newDefinition'));
 		yourself.
 ]
 
 { #category : #converting }
-ClioModification >> asDictionary [
+ClioModification >> asJsonDictionary [
 	
 	^ { 
-		'oldDefinition' -> oldDefinition asDictionary .
-		'newDefinition' -> newDefinition asDictionary
+		'oldDefinition' -> oldDefinition asJsonDictionary .
+		'newDefinition' -> newDefinition asJsonDictionary
 	} asDictionary.
 ]
 

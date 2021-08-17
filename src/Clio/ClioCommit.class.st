@@ -20,7 +20,18 @@ Class {
 }
 
 { #category : #'instance creation' }
-ClioCommit class >> fromDictionary: aDictionary [
+ClioCommit class >> fromIceGitCommit: anIceGitCommit [
+	^ self new
+		id: anIceGitCommit id;
+		author: anIceGitCommit author;
+		datetime: anIceGitCommit datetime;
+		comment: anIceGitCommit comment;
+		repositoryName: anIceGitCommit repository name;
+		yourself.
+]
+
+{ #category : #'instance creation' }
+ClioCommit class >> fromJsonDictionary: aDictionary [
 
 	| commit |
 	
@@ -33,41 +44,30 @@ ClioCommit class >> fromDictionary: aDictionary [
 		yourself.
 		
 	commit addedMethods addAll: ((aDictionary at: 'addedMethods') collect: [ :methodDictionary |
-		ClioMethod fromDictionary: methodDictionary ]).
+		ClioMethod fromJsonDictionary: methodDictionary ]).
 	
 	commit removedMethods addAll: ((aDictionary at: 'removedMethods') collect: [ :methodDictionary |
-		ClioMethod fromDictionary: methodDictionary ]).
+		ClioMethod fromJsonDictionary: methodDictionary ]).
 	
 	commit modifiedMethods addAll: ((aDictionary at: 'modifiedMethods') collect: [ :methodDictionary |
 		ClioModification methodModificationFromDictionary: methodDictionary ]).
 	
 	commit addedClasses addAll: ((aDictionary at: 'addedClasses') collect: [ :classDictionary |
-		ClioClass fromDictionary: classDictionary ]).
+		ClioClass fromJsonDictionary: classDictionary ]).
 	
 	commit removedClasses addAll: ((aDictionary at: 'removedClasses') collect: [ :classDictionary |
-		ClioClass fromDictionary: classDictionary ]).
+		ClioClass fromJsonDictionary: classDictionary ]).
 	
 	commit modifiedClasses addAll: ((aDictionary at: 'modifiedClasses') collect: [ :classDictionary |
 		ClioModification classModificationFromDictionary: classDictionary ]).
 	
 	commit addedPackages addAll: ((aDictionary at: 'addedPackages') collect: [ :packageDictionary |
-		ClioPackage fromDictionary: packageDictionary ]).
+		ClioPackage fromJsonDictionary: packageDictionary ]).
 	
 	commit removedPackages addAll: ((aDictionary at: 'removedPackages') collect: [ :packageDictionary |
-		ClioPackage fromDictionary: packageDictionary ]).
+		ClioPackage fromJsonDictionary: packageDictionary ]).
 	
 	^ commit
-]
-
-{ #category : #'instance creation' }
-ClioCommit class >> fromIceGitCommit: anIceGitCommit [
-	^ self new
-		id: anIceGitCommit id;
-		author: anIceGitCommit author;
-		datetime: anIceGitCommit datetime;
-		comment: anIceGitCommit comment;
-		repositoryName: anIceGitCommit repository name;
-		yourself.
 ]
 
 { #category : #accessing }
@@ -107,21 +107,21 @@ ClioCommit >> addedPackages: anObject [
 ]
 
 { #category : #converting }
-ClioCommit >> asDictionary [
+ClioCommit >> asJsonDictionary [
 	^ { 
 		'id' -> id .
 		'author' -> author .
 		'comment' -> comment .
 		'datetime' -> datetime asString .
 		'repositoryName' -> repositoryName .
-		'addedMethods' -> (addedMethods collect: [ :method | method asDictionary ]) asArray .
-		'removedMethods' -> (removedMethods collect: [ :method | method asDictionary ]) asArray .
-		'modifiedMethods' -> (modifiedMethods collect: [ :method | method asDictionary ]) asArray .
-		'addedClasses' -> (addedClasses collect: [ :method | method asDictionary ]) asArray .
-		'removedClasses' -> (removedClasses collect: [ :method | method asDictionary ]) asArray .
-		'modifiedClasses' -> (modifiedClasses collect: [ :method | method asDictionary ]) asArray .
-		'addedPackages' -> (addedPackages collect: [ :method | method asDictionary ]) asArray .
-		'removedPackages' -> (removedPackages collect: [ :method | method asDictionary ]) asArray .
+		'addedMethods' -> (addedMethods collect: [ :method | method asJsonDictionary ]) asArray .
+		'removedMethods' -> (removedMethods collect: [ :method | method asJsonDictionary ]) asArray .
+		'modifiedMethods' -> (modifiedMethods collect: [ :method | method asJsonDictionary ]) asArray .
+		'addedClasses' -> (addedClasses collect: [ :aClass | aClass asJsonDictionary ]) asArray .
+		'removedClasses' -> (removedClasses collect: [ :aClass | aClass asJsonDictionary ]) asArray .
+		'modifiedClasses' -> (modifiedClasses collect: [ :aClass | aClass asJsonDictionary ]) asArray .
+		'addedPackages' -> (addedPackages collect: [ :package | package asJsonDictionary ]) asArray .
+		'removedPackages' -> (removedPackages collect: [ :package | package asJsonDictionary ]) asArray .
 	} asDictionary.
 ]
 
@@ -315,5 +315,5 @@ ClioCommit >> repositoryName: anObject [
 
 { #category : #accessing }
 ClioCommit >> snapshot [
-	^ ClioDataCollector new loadSnapshotAtCommit: self
+	^ ClioDataCollector new loadPackagesAtCommit: self
 ]

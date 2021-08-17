@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-ClioDeprecation class >> fromDictionary: aDictionary [
+ClioDeprecation class >> fromJsonDictionary: aDictionary [
 
 	| deprecation transformationRule |
 	
@@ -26,7 +26,7 @@ ClioDeprecation class >> fromDictionary: aDictionary [
 ]
 
 { #category : #converting }
-ClioDeprecation >> asDictionary [
+ClioDeprecation >> asJsonDictionary [
 	
 	^ { 
 		'message' -> message asString .

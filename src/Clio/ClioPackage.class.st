@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-ClioPackage class >> fromDictionary: aDictionary [
+ClioPackage class >> fromJsonDictionary: aDictionary [
 	
 	| package |
 	
@@ -17,7 +17,7 @@ ClioPackage class >> fromDictionary: aDictionary [
 		yourself.
 		
 	package classes addAll: ((aDictionary at: 'classes') collect: [ :classDictionary |
-		(ClioClass fromDictionary: classDictionary)
+		(ClioClass fromJsonDictionary: classDictionary)
 			package: package;
 			yourself ]).
 			
@@ -25,10 +25,10 @@ ClioPackage class >> fromDictionary: aDictionary [
 ]
 
 { #category : #converting }
-ClioPackage >> asDictionary [
+ClioPackage >> asJsonDictionary [
 	^ { 
 		'name' -> self name .
-		'classes' -> (self classes collect: [ :aClass | aClass asDictionary ]) asArray
+		'classes' -> (self classes collect: [ :aClass | aClass asJsonDictionary ]) asArray
 	} asDictionary
 ]
 

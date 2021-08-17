@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-ClioMethodCall class >> fromDictionary: aDictionary [
+ClioMethodCall class >> fromJsonDictionary: aDictionary [
 
 	| methodCall |
 
@@ -47,7 +47,7 @@ ClioMethodCall >> arguments: anObject [
 ]
 
 { #category : #converting }
-ClioMethodCall >> asDictionary [
+ClioMethodCall >> asJsonDictionary [
 
 	^ { 
 		'selector' -> selector .

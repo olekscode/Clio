@@ -2,41 +2,36 @@ Class {
 	#name : #ClioDataCollector,
 	#superclass : #Object,
 	#instVars : [
-		'repositoryName',
-		'repositoryOwner',
-		'baselineName',
 		'oldVersion',
 		'newVersion',
 		'oldIceCommit',
 		'newIceCommit',
 		'repository',
-		'commits',
-		'oldVersionSnapshot',
-		'newVersionSnapshot'
+		'data'
 	],
 	#category : #'Clio-Controllers'
 }
 
 { #category : #accessing }
-ClioDataCollector >> baselineName: anObject [
+ClioDataCollector >> baselineName: aString [
 
-	baselineName := anObject
+	data baselineName: aString
 ]
 
 { #category : #'repository loading' }
 ClioDataCollector >> cloneRepository [
 
 	repository := ClioRepositoryLoader
-		detectOrCloneRepositoryNamed: repositoryName
-		owner: repositoryOwner.
+		detectOrCloneRepositoryNamed: data repositoryName
+		owner: data repositoryOwner.
 		
 	self revparseVersions.
 ]
 
 { #category : #accessing }
-ClioDataCollector >> commits [
+ClioDataCollector >> data [
 
-	^ commits
+	^ data
 ]
 
 { #category : #executing }
@@ -55,7 +50,7 @@ ClioDataCollector >> extractCommits [
 	
 	collectionOfCommits add: oldIceCommit asClioCommit.
 
-	commits := collectionOfCommits reversed.
+	data commits: collectionOfCommits reversed.
 	self extractDataFromDiffs.
 ]
 
@@ -80,7 +75,7 @@ ClioDataCollector >> extractDataFromDiffToParentOf: aCommit [
 { #category : #private }
 ClioDataCollector >> extractDataFromDiffs [
 
-	commits
+	data commits
 		do: [ :commit | 
 			[ 
 			self extractDataFromDiffToParentOf: commit.
@@ -93,7 +88,7 @@ ClioDataCollector >> extractDataFromDiffs [
 						show: 'Error in commit ' , commit id;
 						cr ] ]
 		displayingProgress: [ :commit | 
-			'Calculating diffs from ' , commits size asString
+			'Calculating diffs from ' , data commits size asString
 			, ' commits' ]
 ]
 
@@ -116,45 +111,53 @@ ClioDataCollector >> extractMethodCallsFromMethod: aMethod [
 	^ visitor methodCalls
 ]
 
+{ #category : #initialization }
+ClioDataCollector >> initialize [ 
+	super initialize.
+	data := ClioData new.
+]
+
 { #category : #'repository loading' }
 ClioDataCollector >> installBaselineOnCommit: aCommitId [
 
 	ClioRepositoryLoader
-		installBaseline: baselineName
+		installBaseline: data baselineName
 		forRepository: repository
 		onCommit: aCommitId.
 ]
 
 { #category : #executing }
-ClioDataCollector >> loadNewSnapshot [
+ClioDataCollector >> loadNewPackages [
 	
-	newVersionSnapshot := self loadSnapshotAtCommit: newIceCommit.
+	data newPackages: (self loadPackagesAtCommit: newIceCommit).
 ]
 
 { #category : #executing }
-ClioDataCollector >> loadOldSnapshot [
+ClioDataCollector >> loadOldPackages [
 	
-	oldVersionSnapshot := self loadSnapshotAtCommit: oldIceCommit.
+	data oldPackages: (self loadPackagesAtCommit: oldIceCommit).
 ]
 
 { #category : #executing }
-ClioDataCollector >> loadSnapshotAtCommit: anIceCommit [
-	| snapshot classDictionary package aClass definitions classDefinitions method |
+ClioDataCollector >> loadPackages [
+	
+	self loadOldPackages.
+	self loadNewPackages.
+]
+
+{ #category : #executing }
+ClioDataCollector >> loadPackagesAtCommit: anIceCommit [
+	| packages classDictionary package aClass definitions classDefinitions method |
 	
 	self installBaselineOnCommit: anIceCommit id.
 	
-	snapshot := ClioSnapshot new
-		repositoryName: repositoryName;
-		commitId: anIceCommit id;
-		packages: OrderedCollection new;
-		yourself.
-		
+	packages := OrderedCollection new.
 	classDictionary := Dictionary new.
 	
 	anIceCommit packages do: [ :icePackage |
 		package := icePackage asClioPackage.
 		
-		snapshot packages add: package.
+		packages add: package.
 		definitions := (anIceCommit snapshotFor: icePackage) definitions asSet.
 	
 		classDefinitions := definitions
@@ -182,14 +185,7 @@ ClioDataCollector >> loadSnapshotAtCommit: anIceCommit [
 				
 				aClass ifNotNil: [ aClass methods add: method ] ] ].
 		
-	^ snapshot
-]
-
-{ #category : #executing }
-ClioDataCollector >> loadSnapshots [
-	
-	self loadOldSnapshot.
-	self loadNewSnapshot.
+	^ packages
 ]
 
 { #category : #accessing }
@@ -207,15 +203,15 @@ ClioDataCollector >> oldVersion: aVersionString [
 ]
 
 { #category : #accessing }
-ClioDataCollector >> repositoryName: anObject [
+ClioDataCollector >> repositoryName: aString [
 
-	repositoryName := anObject
+	data repositoryName: aString.
 ]
 
 { #category : #accessing }
-ClioDataCollector >> repositoryOwner: anObject [
+ClioDataCollector >> repositoryOwner: aString [
 
-	repositoryOwner := anObject
+	data repositoryOwner: aString.
 ]
 
 { #category : #'repository loading' }

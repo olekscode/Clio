@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-ClioClass class >> fromDictionary: aDictionary [
+ClioClass class >> fromJsonDictionary: aDictionary [
 	
 	| aClass |
 	
@@ -25,7 +25,7 @@ ClioClass class >> fromDictionary: aDictionary [
 		yourself.
 		
 	aClass methods addAll: ((aDictionary at: 'methods') collect: [ :methodDictionary |
-		(ClioMethod fromDictionary: methodDictionary)
+		(ClioMethod fromJsonDictionary: methodDictionary)
 			methodClass: aClass;
 			yourself ]).
 			
@@ -59,12 +59,12 @@ ClioClass >> allInstanceSideSelectors: anObject [
 ]
 
 { #category : #converting }
-ClioClass >> asDictionary [
+ClioClass >> asJsonDictionary [
 	^ { 
 		'name' -> self name .
 		'superclassName' -> self superclassName .
 		'isTrait' -> self isTrait .
-		'methods' -> (self methods collect: [ :method | method asDictionary ]) asArray
+		'methods' -> (self methods collect: [ :method | method asJsonDictionary ]) asArray
 	} asDictionary
 ]
 

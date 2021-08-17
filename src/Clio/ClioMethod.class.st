@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-ClioMethod class >> fromDictionary: aDictionary [
+ClioMethod class >> fromJsonDictionary: aDictionary [
 
 	| method deprecation |
 
@@ -29,18 +29,18 @@ ClioMethod class >> fromDictionary: aDictionary [
 		yourself.
 		
 	method methodCalls addAll: ((aDictionary at: 'methodCalls') collect: [ :callDictionary |
-		ClioMethodCall fromDictionary: callDictionary ]).
+		ClioMethodCall fromJsonDictionary: callDictionary ]).
 	
 	deprecation := aDictionary at: 'deprecation'.
 	
 	deprecation ifNotNil: [ 
-		method deprecation: (ClioDeprecation fromDictionary: deprecation) ].
+		method deprecation: (ClioDeprecation fromJsonDictionary: deprecation) ].
 		
 	^ method
 ]
 
 { #category : #converting }
-ClioMethod >> asDictionary [
+ClioMethod >> asJsonDictionary [
 	^ { 
 		'selector' -> name .
 		'protocol' -> protocol .
@@ -48,8 +48,8 @@ ClioMethod >> asDictionary [
 		'isExtension' -> isExtension .
 		'isClassSide' -> isClassSide .
 		'sourceCode' -> sourceCode .
-		'methodCalls' -> (methodCalls collect: [ :call | call asDictionary ]) asArray .
-		'deprecation' -> (deprecation ifNotNil: [ deprecation asDictionary ])
+		'methodCalls' -> (methodCalls collect: [ :call | call asJsonDictionary ]) asArray .
+		'deprecation' -> (deprecation ifNotNil: [ deprecation asJsonDictionary ])
 	} asDictionary
 ]
 
