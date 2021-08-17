@@ -128,34 +128,34 @@ ClioDataCollector >> installBaselineOnCommit: aCommitId [
 { #category : #executing }
 ClioDataCollector >> loadNewSnapshot [
 	
-	newVersionSnapshot := self loadSnapshotAtCommit: commits last.
+	newVersionSnapshot := self loadSnapshotAtCommit: newIceCommit.
 ]
 
 { #category : #executing }
 ClioDataCollector >> loadOldSnapshot [
 	
-	oldVersionSnapshot := self loadSnapshotAtCommit: commits first.
+	oldVersionSnapshot := self loadSnapshotAtCommit: oldIceCommit.
 ]
 
 { #category : #executing }
-ClioDataCollector >> loadSnapshotAtCommit: aCommit [
+ClioDataCollector >> loadSnapshotAtCommit: anIceCommit [
 	| snapshot classDictionary package aClass definitions classDefinitions method |
 	
-	self installBaselineOnCommit: aCommit id.
+	self installBaselineOnCommit: anIceCommit id.
 	
 	snapshot := ClioSnapshot new
-		repositoryName: aCommit repositoryName;
-		commitId: aCommit id;
+		repositoryName: repositoryName;
+		commitId: anIceCommit id;
 		packages: OrderedCollection new;
 		yourself.
 		
 	classDictionary := Dictionary new.
 	
-	aCommit iceCommit packages do: [ :icePackage |
+	anIceCommit packages do: [ :icePackage |
 		package := icePackage asClioPackage.
 		
 		snapshot packages add: package.
-		definitions := (aCommit iceCommit snapshotFor: icePackage) definitions asSet.
+		definitions := (anIceCommit snapshotFor: icePackage) definitions asSet.
 	
 		classDefinitions := definitions
 			select: [ :definition | definition isClassDefinition ]
