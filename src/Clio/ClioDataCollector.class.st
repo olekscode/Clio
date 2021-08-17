@@ -164,8 +164,9 @@ ClioDataCollector >> loadSnapshotAtCommit: anIceCommit [
 					package: package;
 					yourself.
 					
-				aClass allInstanceSideSelectors: (self class environment at: aClass name) allSelectors.
-				aClass allClassSideSelectors: (self class environment at: aClass name) class allSelectors.
+				self class environment at: aClass name ifPresent: [ :aSystemClass |
+					aClass allInstanceSideSelectors: aSystemClass allSelectors.
+					aClass allClassSideSelectors: aSystemClass class allSelectors ].
 					
 				package classes add: aClass.
 				classDictionary at: aClass name put: aClass ].
