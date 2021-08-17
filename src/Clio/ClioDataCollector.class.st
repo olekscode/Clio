@@ -1,19 +1,51 @@
 Class {
 	#name : #ClioDataCollector,
 	#superclass : #Object,
-	#category : #Clio
+	#instVars : [
+		'repositoryName',
+		'repositoryOwner',
+		'baselineName',
+		'oldVersion',
+		'newVersion',
+		'oldIceCommit',
+		'newIceCommit',
+		'repository',
+		'commits',
+		'oldVersionSnapshot',
+		'newVersionSnapshot'
+	],
+	#category : #'Clio-Controllers'
 }
 
-{ #category : #private }
-ClioDataCollector >> extractCommitsFromRepository: aRepository between: oldCommitId and: newCommitId [
-	| oldCommit newCommit commitWalk collectionOfCommits |
+{ #category : #accessing }
+ClioDataCollector >> baselineName: anObject [
+
+	baselineName := anObject
+]
+
+{ #category : #'repository loading' }
+ClioDataCollector >> cloneRepository [
+
+	repository := ClioRepositoryLoader
+		detectOrCloneRepositoryNamed: repositoryName
+		owner: repositoryOwner.
+		
+	self revparseVersions.
+]
+
+{ #category : #accessing }
+ClioDataCollector >> commits [
+
+	^ commits
+]
+
+{ #category : #executing }
+ClioDataCollector >> extractCommits [
+	| commitWalk collectionOfCommits |
 	
-	oldCommit := aRepository revparse: oldCommitId.
-	newCommit := aRepository revparse: newCommitId.
-	
-	commitWalk := (IceLibgitCommitWalk forRepository: aRepository)
-		fromCommit: newCommit;
-		uptoCommit: oldCommit;
+	commitWalk := (IceLibgitCommitWalk forRepository: repository)
+		fromCommit: newIceCommit;
+		uptoCommit: oldIceCommit;
 		yourself.
 		
 	collectionOfCommits := OrderedCollection new.
@@ -21,12 +53,13 @@ ClioDataCollector >> extractCommitsFromRepository: aRepository between: oldCommi
 	commitWalk commitsDo: [ :commit |
 		collectionOfCommits add: commit asClioCommit ].
 	
-	collectionOfCommits add: oldCommit asClioCommit.
+	collectionOfCommits add: oldIceCommit asClioCommit.
 
-	^ collectionOfCommits reversed.
+	commits := collectionOfCommits reversed.
+	self extractDataFromDiffs.
 ]
 
-{ #category : #executing }
+{ #category : #private }
 ClioDataCollector >> extractDataFromDiffToParentOf: aCommit [
 	| visitor |
 	visitor := ClioIceTreeVisitor new.
@@ -44,22 +77,27 @@ ClioDataCollector >> extractDataFromDiffToParentOf: aCommit [
 	aCommit removedPackages: visitor removedPackages.
 ]
 
-{ #category : #executing }
-ClioDataCollector >> extractDataFromDiffsInCommits: aCollectionOfCommits [
-	aCollectionOfCommits do: [ :commit |
-			[
-				self extractDataFromDiffToParentOf: commit.
-				Transcript show: commit id; cr.
-			]
+{ #category : #private }
+ClioDataCollector >> extractDataFromDiffs [
+
+	commits
+		do: [ :commit | 
+			[ 
+			self extractDataFromDiffToParentOf: commit.
+			Transcript
+				show: commit id;
+				cr ]
 				on: Exception
-				do: [ Transcript show: 'Error in commit ', commit id; cr ] ]
-		displayingProgress: [ :commit |
-			'Calculating diffs from ',
-			aCollectionOfCommits size asString,
-			' commits' ].
+				do: [ 
+					Transcript
+						show: 'Error in commit ' , commit id;
+						cr ] ]
+		displayingProgress: [ :commit | 
+			'Calculating diffs from ' , commits size asString
+			, ' commits' ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ClioDataCollector >> extractDeprecationFromMethod: aMethod [
 	| visitor |
 	visitor := ClioDeprecationVisitor new.
@@ -70,7 +108,7 @@ ClioDataCollector >> extractDeprecationFromMethod: aMethod [
 		ifNotEmpty: [ visitor deprecations first ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #private }
 ClioDataCollector >> extractMethodCallsFromMethod: aMethod [
 	| visitor |
 	visitor := ClioMethodCallVisitor new.
@@ -78,38 +116,32 @@ ClioDataCollector >> extractMethodCallsFromMethod: aMethod [
 	^ visitor methodCalls
 ]
 
-{ #category : #'as yet unclassified' }
-ClioDataCollector >> loadCommitHistoryFromRepository: aRepository fromCommit: anOldCommitId toCommit: aNewCommitId [
-	| history |
-	
-	history := ClioHistory new
-		repositoryName: aRepository name;
-		yourself.
-		
-	history commits: (self
-		extractCommitsFromRepository: aRepository
-		between: anOldCommitId
-		and: aNewCommitId).
-		
-	self extractDataFromDiffsInCommits: history commits.
-	^ history
+{ #category : #'repository loading' }
+ClioDataCollector >> installBaselineOnCommit: aCommitId [
+
+	ClioRepositoryLoader
+		installBaseline: baselineName
+		forRepository: repository
+		onCommit: aCommitId.
 ]
 
-{ #category : #'as yet unclassified' }
-ClioDataCollector >> loadCommitHistoryFromRepositoryNamed: aRepositoryName fromCommit: anOldCommitId toCommit: aNewCommitId [
+{ #category : #executing }
+ClioDataCollector >> loadNewSnapshot [
 	
-	| repository |
-	repository := self repositoryNamed: aRepositoryName.
-	
-	^ self
-		loadCommitHistoryFromRepository: repository
-		fromCommit: anOldCommitId
-		toCommit: aNewCommitId.
+	newVersionSnapshot := self loadSnapshotAtCommit: commits last.
 ]
 
-{ #category : #accessing }
-ClioDataCollector >> loadSnapshotAt: aCommit [
+{ #category : #executing }
+ClioDataCollector >> loadOldSnapshot [
+	
+	oldVersionSnapshot := self loadSnapshotAtCommit: commits first.
+]
+
+{ #category : #executing }
+ClioDataCollector >> loadSnapshotAtCommit: aCommit [
 	| snapshot classDictionary package aClass definitions classDefinitions method |
+	
+	self installBaselineOnCommit: aCommit id.
 	
 	snapshot := ClioSnapshot new
 		repositoryName: aCommit repositoryName;
@@ -132,6 +164,9 @@ ClioDataCollector >> loadSnapshotAt: aCommit [
 					package: package;
 					yourself.
 					
+				aClass allInstanceSideSelectors: (self class environment at: aClass name) allSelectors.
+				aClass allClassSideSelectors: (self class environment at: aClass name) class allSelectors.
+					
 				package classes add: aClass.
 				classDictionary at: aClass name put: aClass ].
 	
@@ -149,8 +184,43 @@ ClioDataCollector >> loadSnapshotAt: aCommit [
 	^ snapshot
 ]
 
-{ #category : #'accessing - repository' }
-ClioDataCollector >> repositoryNamed: aString [
-	^ IceRepository registry detect: [ :repo |
-		repo isValid and: [ repo name = aString ] ]
+{ #category : #executing }
+ClioDataCollector >> loadSnapshots [
+	
+	self loadOldSnapshot.
+	self loadNewSnapshot.
+]
+
+{ #category : #accessing }
+ClioDataCollector >> newVersion: aVersionString [
+	"A version string can be a full commit id, a short commit id (first 7 characters), or a semantic version tag (e.g., 'v5.0', 'firstRelease')"
+	
+	newVersion := aVersionString
+]
+
+{ #category : #accessing }
+ClioDataCollector >> oldVersion: aVersionString [
+	"A version string can be a full commit id, a short commit id (first 7 characters), or a semantic version tag (e.g., 'v5.0', 'firstRelease')"
+
+	oldVersion := aVersionString
+]
+
+{ #category : #accessing }
+ClioDataCollector >> repositoryName: anObject [
+
+	repositoryName := anObject
+]
+
+{ #category : #accessing }
+ClioDataCollector >> repositoryOwner: anObject [
+
+	repositoryOwner := anObject
+]
+
+{ #category : #'repository loading' }
+ClioDataCollector >> revparseVersions [
+	"Find actual commits that match the version names"
+	
+	oldIceCommit := repository revparse: oldVersion.
+	newIceCommit := repository revparse: newVersion.
 ]

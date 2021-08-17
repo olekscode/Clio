@@ -194,7 +194,7 @@ ClioCommit >> initialize [
 	modifiedMethods := OrderedCollection new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'API - loading' }
 ClioCommit >> loadBaseline: aBaselineName [
 	"Load a specified baseline of the project on this commit"
 	
@@ -315,5 +315,5 @@ ClioCommit >> repositoryName: anObject [
 
 { #category : #accessing }
 ClioCommit >> snapshot [
-	^ ClioDataCollector new loadSnapshotAt: self
+	^ ClioDataCollector new loadSnapshotAtCommit: self
 ]

@@ -4,6 +4,8 @@ Class {
 	#instVars : [
 		'package',
 		'methods',
+		'allInstanceSideSelectors',
+		'allClassSideSelectors',
 		'superclassName',
 		'isTrait',
 		'isExtension'
@@ -28,6 +30,32 @@ ClioClass class >> fromDictionary: aDictionary [
 			yourself ]).
 			
 	^ aClass
+]
+
+{ #category : #accessing }
+ClioClass >> allClassSideSelectors [
+	"All class-side selectors that are understood by this class (including those implemented by superclasses)"
+
+	^ allClassSideSelectors
+]
+
+{ #category : #accessing }
+ClioClass >> allClassSideSelectors: anObject [
+
+	allClassSideSelectors := anObject
+]
+
+{ #category : #accessing }
+ClioClass >> allInstanceSideSelectors [
+	"All selectors that are understood by the instances of this class (including those implemented by superclasses)"
+
+	^ allInstanceSideSelectors
+]
+
+{ #category : #accessing }
+ClioClass >> allInstanceSideSelectors: anObject [
+
+	allInstanceSideSelectors := anObject
 ]
 
 { #category : #converting }
