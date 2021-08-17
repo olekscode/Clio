@@ -4,8 +4,7 @@ Class {
 	#instVars : [
 		'package',
 		'methods',
-		'allInstanceSideSelectors',
-		'allClassSideSelectors',
+		'understoodSelectors',
 		'superclassName',
 		'isTrait',
 		'isExtension'
@@ -16,14 +15,16 @@ Class {
 { #category : #'instance creation' }
 ClioClass class >> fromJsonDictionary: aDictionary [
 	
-	| aClass |
+	| understoodSelectors aClass |
+	
+	understoodSelectors := (aDictionary at: 'understoodSelectors') collect: [ :each |
+		ClioUnderstoodSelector fromJsonDictionary: each ].
 	
 	aClass := self new
 		name: (aDictionary at: 'name');
 		superclassName: (aDictionary at: 'superclassName');
 		isTrait: (aDictionary at: 'isTrait');
-		allInstanceSideSelectors: (aDictionary at: 'allInstanceSideSelectors') asOrderedCollection;
-		allClassSideSelectors: (aDictionary at: 'allClassSideSelectors') asOrderedCollection;
+		understoodSelectors: understoodSelectors asOrderedCollection;
 		yourself.
 		
 	aClass methods addAll: ((aDictionary at: 'methods') collect: [ :methodDictionary |
@@ -34,41 +35,14 @@ ClioClass class >> fromJsonDictionary: aDictionary [
 	^ aClass
 ]
 
-{ #category : #accessing }
-ClioClass >> allClassSideSelectors [
-	"All class-side selectors that are understood by this class (including those implemented by superclasses)"
-
-	^ allClassSideSelectors
-]
-
-{ #category : #accessing }
-ClioClass >> allClassSideSelectors: anObject [
-
-	allClassSideSelectors := anObject
-]
-
-{ #category : #accessing }
-ClioClass >> allInstanceSideSelectors [
-	"All selectors that are understood by the instances of this class (including those implemented by superclasses)"
-
-	^ allInstanceSideSelectors
-]
-
-{ #category : #accessing }
-ClioClass >> allInstanceSideSelectors: anObject [
-
-	allInstanceSideSelectors := anObject
-]
-
 { #category : #converting }
 ClioClass >> asJsonDictionary [
 	^ { 
 		'name' -> self name .
 		'superclassName' -> self superclassName .
 		'isTrait' -> self isTrait .
-		'methods' -> (self methods collect: [ :method | method asJsonDictionary ]) asArray .
-		'allInstanceSideSelectors' -> self allInstanceSideSelectors asArray .
-		'allClassSideSelectors' -> self allClassSideSelectors asArray
+		'methods' -> (methods collect: [ :each | each asJsonDictionary ]) asArray .
+		'understoodSelectors' -> (understoodSelectors collect: [ :each | each asJsonDictionary ]) asArray
 	} asDictionary
 ]
 
@@ -88,8 +62,7 @@ ClioClass >> inheritsFrom: aClass [
 ClioClass >> initialize [
 	super initialize.
 	methods := OrderedCollection new.
-	allInstanceSideSelectors := OrderedCollection new.
-	allClassSideSelectors := OrderedCollection new.
+	understoodSelectors := OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -154,4 +127,16 @@ ClioClass >> superclassName [
 ClioClass >> superclassName: anObject [
 
 	superclassName := anObject
+]
+
+{ #category : #accessing }
+ClioClass >> understoodSelectors [
+
+	^ understoodSelectors
+]
+
+{ #category : #accessing }
+ClioClass >> understoodSelectors: anObject [
+
+	understoodSelectors := anObject
 ]

@@ -177,8 +177,24 @@ ClioDataCollector >> loadPackagesAtCommit: anIceCommit [
 					yourself.
 					
 				self class environment at: aClass name ifPresent: [ :aSystemClass |
-					aClass allInstanceSideSelectors: aSystemClass allSelectors.
-					aClass allClassSideSelectors: aSystemClass class allSelectors ].
+					"Instance side selectors"
+					aClass understoodSelectors addAll:
+						(aSystemClass allMethods collect: [ :aMethod |
+							ClioUnderstoodSelector new
+								name: aMethod selector;
+								understoodByClassName: aSystemClass name;
+								implementorClassName: aMethod methodClass name;
+								yourself ]).
+							
+					"Class side selectors"
+					aClass understoodSelectors addAll:
+						(aSystemClass class allMethods collect: [ :aMethod |
+							ClioUnderstoodSelector new
+								name: aMethod selector;
+								understoodByClassName: aSystemClass name;
+								implementorClassName: aMethod methodClass name;
+								isClassSide: true;
+								yourself ]). ].
 					
 				package classes add: aClass.
 				classDictionary at: aClass name put: aClass ].
