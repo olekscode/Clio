@@ -111,6 +111,31 @@ ClioDataCollector >> extractMethodCallsFromMethod: aMethod [
 	^ visitor methodCalls
 ]
 
+{ #category : #executing }
+ClioDataCollector >> extractSelectorsUnderstoodByClass: aClass [
+	"Locate aClass in the image (the version of a project that is currently loaded) and find all instance side and class side methods that are understood by this class (implemented by it or by its superclasses)"
+	
+	self class environment at: aClass name ifPresent: [ :aSystemClass |
+		"Instance side selectors"
+		aClass understoodSelectors addAll:
+			(aSystemClass allMethods collect: [ :aMethod |
+				ClioUnderstoodSelector new
+					name: aMethod selector;
+					understoodByClassName: aSystemClass name;
+					implementorClassName: aMethod methodClass name;
+					yourself ]).
+							
+		"Class side selectors"
+		aClass understoodSelectors addAll:
+			(aSystemClass class allMethods collect: [ :aMethod |
+				ClioUnderstoodSelector new
+					name: aMethod selector;
+					understoodByClassName: aSystemClass name;
+					implementorClassName: aMethod methodClass name;
+					isClassSide: true;
+					yourself ]) ].
+]
+
 { #category : #initialization }
 ClioDataCollector >> initialize [ 
 	super initialize.
@@ -176,25 +201,7 @@ ClioDataCollector >> loadPackagesAtCommit: anIceCommit [
 					package: package;
 					yourself.
 					
-				self class environment at: aClass name ifPresent: [ :aSystemClass |
-					"Instance side selectors"
-					aClass understoodSelectors addAll:
-						(aSystemClass allMethods collect: [ :aMethod |
-							ClioUnderstoodSelector new
-								name: aMethod selector;
-								understoodByClassName: aSystemClass name;
-								implementorClassName: aMethod methodClass name;
-								yourself ]).
-							
-					"Class side selectors"
-					aClass understoodSelectors addAll:
-						(aSystemClass class allMethods collect: [ :aMethod |
-							ClioUnderstoodSelector new
-								name: aMethod selector;
-								understoodByClassName: aSystemClass name;
-								implementorClassName: aMethod methodClass name;
-								isClassSide: true;
-								yourself ]). ].
+				self extractSelectorsUnderstoodByClass: aClass.
 					
 				package classes add: aClass.
 				classDictionary at: aClass name put: aClass ].
