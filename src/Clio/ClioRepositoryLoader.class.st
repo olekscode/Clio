@@ -32,6 +32,15 @@ ClioRepositoryLoader class >> detectOrCloneRepositoryNamed: aRepositoryName owne
 ]
 
 { #category : #'accessing - repository' }
+ClioRepositoryLoader class >> detectRepositoryNamed: aRepositoryName owner: anOwnerName [
+
+	^ self
+		detectRepositoryNamed: aRepositoryName
+		owner: anOwnerName
+		ifNone: [ self error: 'Repository not found' ].
+]
+
+{ #category : #'accessing - repository' }
 ClioRepositoryLoader class >> detectRepositoryNamed: aRepositoryName owner: anOwnerName ifNone: aBlock [
 
 	^ IceRepository registry

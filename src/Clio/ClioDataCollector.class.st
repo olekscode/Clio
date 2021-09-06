@@ -214,6 +214,17 @@ ClioDataCollector >> loadPackagesAtCommit: anIceCommit [
 	^ packages
 ]
 
+{ #category : #'repository loading' }
+ClioDataCollector >> locateRepository [
+	"Locate repository that was already cloned"
+
+	repository := ClioRepositoryLoader
+		detectRepositoryNamed: data repositoryName
+		owner: data repositoryOwner.
+		
+	self revparseVersions.
+]
+
 { #category : #accessing }
 ClioDataCollector >> newVersion: aVersionString [
 	"A version string can be a full commit id, a short commit id (first 7 characters), or a semantic version tag (e.g., 'v5.0', 'firstRelease')"
