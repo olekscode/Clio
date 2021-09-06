@@ -4,8 +4,6 @@ Class {
 	#instVars : [
 		'oldVersion',
 		'newVersion',
-		'oldIceCommit',
-		'newIceCommit',
 		'repository',
 		'data',
 		'shouldExtractUnderstoodSelectors'
@@ -25,8 +23,6 @@ ClioDataCollector >> cloneRepository [
 	repository := ClioRepositoryLoader
 		detectOrCloneRepositoryNamed: data repositoryName
 		owner: data repositoryOwner.
-		
-	self revparseVersions.
 ]
 
 { #category : #accessing }
@@ -43,7 +39,10 @@ ClioDataCollector >> doNotExtractUnderstoodSelectors [
 
 { #category : #executing }
 ClioDataCollector >> extractCommits [
-	| commitWalk collectionOfCommits |
+	| oldIceCommit newIceCommit commitWalk collectionOfCommits |
+	
+	oldIceCommit := repository revparse: oldVersion.
+	newIceCommit := repository revparse: newVersion.
 	
 	commitWalk := (IceLibgitCommitWalk forRepository: repository)
 		fromCommit: newIceCommit;
@@ -168,7 +167,7 @@ ClioDataCollector >> loadNewPackages [
 	UIManager default 
 		informUser: 'Loading packages from the new version'
 		during: [
-			data newPackages: (self loadPackagesAtCommit: newIceCommit) ].
+			data newPackages: (self loadPackagesAtCommit: newVersion) ].
 ]
 
 { #category : #executing }
@@ -177,7 +176,7 @@ ClioDataCollector >> loadOldPackages [
 	UIManager default 
 		informUser: 'Loading packages from the old version'
 		during: [
-			data oldPackages: (self loadPackagesAtCommit: oldIceCommit) ].
+			data oldPackages: (self loadPackagesAtCommit: oldVersion) ].
 ]
 
 { #category : #executing }
@@ -188,20 +187,22 @@ ClioDataCollector >> loadPackages [
 ]
 
 { #category : #executing }
-ClioDataCollector >> loadPackagesAtCommit: anIceCommit [
-	| packages classDictionary package aClass definitions classDefinitions method |
+ClioDataCollector >> loadPackagesAtCommit: aCommitId [
+	| iceCommit packages classDictionary package aClass definitions classDefinitions method |
+	
+	iceCommit := repository revparse: aCommitId.
 	
 	shouldExtractUnderstoodSelectors ifTrue: [
-		self installBaselineOnCommit: anIceCommit id ].
+		self installBaselineOnCommit: aCommitId ].
 	
 	packages := OrderedCollection new.
 	classDictionary := Dictionary new.
 	
-	anIceCommit packages do: [ :icePackage |
+	iceCommit packages do: [ :icePackage |
 		package := icePackage asClioPackage.
 		
 		packages add: package.
-		definitions := (anIceCommit snapshotFor: icePackage) definitions asSet.
+		definitions := (iceCommit snapshotFor: icePackage) definitions asSet.
 	
 		classDefinitions := definitions
 			select: [ :definition | definition isClassDefinition ]
@@ -238,8 +239,6 @@ ClioDataCollector >> locateRepository [
 	repository := ClioRepositoryLoader
 		detectRepositoryNamed: data repositoryName
 		owner: data repositoryOwner.
-		
-	self revparseVersions.
 ]
 
 { #category : #accessing }
@@ -266,12 +265,4 @@ ClioDataCollector >> repositoryName: aString [
 ClioDataCollector >> repositoryOwner: aString [
 
 	data repositoryOwner: aString.
-]
-
-{ #category : #'repository loading' }
-ClioDataCollector >> revparseVersions [
-	"Find actual commits that match the version names"
-	
-	oldIceCommit := repository revparse: oldVersion.
-	newIceCommit := repository revparse: newVersion.
 ]
