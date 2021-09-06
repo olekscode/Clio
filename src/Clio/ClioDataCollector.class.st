@@ -7,7 +7,8 @@ Class {
 		'oldIceCommit',
 		'newIceCommit',
 		'repository',
-		'data'
+		'data',
+		'shouldExtractUnderstoodSelectors'
 	],
 	#category : #'Clio-Controllers'
 }
@@ -32,6 +33,12 @@ ClioDataCollector >> cloneRepository [
 ClioDataCollector >> data [
 
 	^ data
+]
+
+{ #category : #accessing }
+ClioDataCollector >> doNotExtractUnderstoodSelectors [
+
+	shouldExtractUnderstoodSelectors := false
 ]
 
 { #category : #executing }
@@ -139,6 +146,7 @@ ClioDataCollector >> extractSelectorsUnderstoodByClass: aClass [
 { #category : #initialization }
 ClioDataCollector >> initialize [ 
 	super initialize.
+	shouldExtractUnderstoodSelectors := true.
 	data := ClioData new.
 ]
 
@@ -183,7 +191,8 @@ ClioDataCollector >> loadPackages [
 ClioDataCollector >> loadPackagesAtCommit: anIceCommit [
 	| packages classDictionary package aClass definitions classDefinitions method |
 	
-	self installBaselineOnCommit: anIceCommit id.
+	shouldExtractUnderstoodSelectors ifTrue: [
+		self installBaselineOnCommit: anIceCommit id ].
 	
 	packages := OrderedCollection new.
 	classDictionary := Dictionary new.
@@ -201,7 +210,8 @@ ClioDataCollector >> loadPackagesAtCommit: anIceCommit [
 					package: package;
 					yourself.
 					
-				self extractSelectorsUnderstoodByClass: aClass.
+				shouldExtractUnderstoodSelectors ifTrue: [
+					self extractSelectorsUnderstoodByClass: aClass ].
 					
 				package classes add: aClass.
 				classDictionary at: aClass name put: aClass ].
