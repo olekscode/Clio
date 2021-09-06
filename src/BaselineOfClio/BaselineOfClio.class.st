@@ -10,11 +10,11 @@ BaselineOfClio >> baseline: spec [
 	spec for: #common do: [	
 		"External dependencies"
 		spec
-			baseline: 'TransformationRule'
-			with: [ spec repository: 'github://olekscode/TransformationRule/src' ].
+			baseline: 'DeprecationVisitor'
+			with: [ spec repository: 'github://olekscode/DeprecationVisitor/src' ].
 			
 		"Packages"
 		spec 
-			package: 'Clio' with: [ spec requires: #(TransformationRule) ];
+			package: 'Clio' with: [ spec requires: #(DeprecationVisitor) ];
 			package: 'Clio-Tests' with: [ spec requires: #(#Clio) ] ]
 ]

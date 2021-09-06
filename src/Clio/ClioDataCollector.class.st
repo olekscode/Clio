@@ -95,7 +95,7 @@ ClioDataCollector >> extractDataFromDiffs [
 { #category : #private }
 ClioDataCollector >> extractDeprecationFromMethod: aMethod [
 	| visitor |
-	visitor := ClioDeprecationVisitor new.
+	visitor := DeprecationVisitor new.
 	aMethod ast acceptVisitor: visitor.
 	
 	^ visitor deprecations

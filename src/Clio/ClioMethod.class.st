@@ -34,7 +34,7 @@ ClioMethod class >> fromJsonDictionary: aDictionary [
 	deprecation := aDictionary at: 'deprecation'.
 	
 	deprecation ifNotNil: [ 
-		method deprecation: (ClioDeprecation fromJsonDictionary: deprecation) ].
+		method deprecation: (DeprecationModel fromJsonDictionary: deprecation) ].
 		
 	^ method
 ]
