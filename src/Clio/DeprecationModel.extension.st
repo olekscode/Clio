@@ -15,12 +15,15 @@ DeprecationModel >> asJsonDictionary [
 { #category : #'*Clio' }
 DeprecationModel class >> fromJsonDictionary: aDictionary [
 
-	| deprecation transformationRule |
+	| date deprecation transformationRule |
+	
+	date := (aDictionary at: 'date') ifNotNil: [ :str |
+		[ str asDate ] onErrorDo: [ str ] ].
 	
 	deprecation := self new
 		message: (aDictionary at: 'message');
 		version: (aDictionary at: 'version');
-		date: ((aDictionary at: 'date') ifNotNil: [ :str | str asDate ]);
+		date: date;
 		condition: (aDictionary at: 'condition');
 		yourself.
 		
