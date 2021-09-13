@@ -16,5 +16,10 @@ BaselineOfClio >> baseline: spec [
 		"Packages"
 		spec 
 			package: 'Clio' with: [ spec requires: #(DeprecationVisitor) ];
-			package: 'Clio-Tests' with: [ spec requires: #(#Clio) ] ]
+			package: 'Clio-Tests' with: [ spec requires: #(#Clio) ] ].
+		
+	spec for: #(#'pharo5.x' #'pharo6.x' #'pharo7.x' #'pharo8.x') do: [
+		spec package: 'Clio-OldPharo' ].
+	
+	
 ]
