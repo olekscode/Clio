@@ -7,7 +7,7 @@ Class {
 		'implementorClassName',
 		'isClassSide'
 	],
-	#category : #'Clio-Models'
+	#category : #'Clio-Metamodel'
 }
 
 { #category : #'instance creation' }

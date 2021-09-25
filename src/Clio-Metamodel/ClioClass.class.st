@@ -9,7 +9,7 @@ Class {
 		'isTrait',
 		'isExtension'
 	],
-	#category : #'Clio-Models'
+	#category : #'Clio-Metamodel'
 }
 
 { #category : #'instance creation' }

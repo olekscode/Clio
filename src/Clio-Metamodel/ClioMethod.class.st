@@ -11,7 +11,7 @@ Class {
 		'methodCalls',
 		'deprecation'
 	],
-	#category : #'Clio-Models'
+	#category : #'Clio-Metamodel'
 }
 
 { #category : #'instance creation' }

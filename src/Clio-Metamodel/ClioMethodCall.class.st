@@ -6,7 +6,7 @@ Class {
 		'receiver',
 		'arguments'
 	],
-	#category : #'Clio-Models'
+	#category : #'Clio-Metamodel'
 }
 
 { #category : #'instance creation' }
