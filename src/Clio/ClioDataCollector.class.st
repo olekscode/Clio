@@ -127,7 +127,9 @@ ClioDataCollector >> extractMethodCallsFromMethod: aMethod [
 ClioDataCollector >> extractSelectorsUnderstoodByClass: aClass [
 	"Locate aClass in the image (the version of a project that is currently loaded) and find all instance side and class side methods that are understood by this class (implemented by it or by its superclasses)"
 	
-	self class environment at: aClass name ifPresent: [ :aSystemClass |
+	self class environment at: aClass name asSymbol ifPresent: [ :aSystemClass |
+		aClass understoodSelectors removeAll.
+		
 		"Instance side selectors"
 		aClass understoodSelectors addAll:
 			(aSystemClass allMethods collect: [ :aMethod |
