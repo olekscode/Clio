@@ -32,6 +32,12 @@ ClioDataCollector >> data [
 ]
 
 { #category : #accessing }
+ClioDataCollector >> data: anObject [
+
+	data := anObject
+]
+
+{ #category : #accessing }
 ClioDataCollector >> doNotExtractUnderstoodSelectors [
 
 	shouldExtractUnderstoodSelectors := false

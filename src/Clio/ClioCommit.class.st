@@ -161,6 +161,47 @@ ClioCommit >> datetime: anObject [
 	datetime := anObject
 ]
 
+{ #category : #testing }
+ClioCommit >> hadEffectOnClasses [
+	"Answer true if commit has added, removed, or modified any classes"
+	
+	addedClasses ifNotEmpty: [ ^ true ].
+	removedClasses ifNotEmpty: [ ^ true ].
+	modifiedClasses ifNotEmpty: [ ^ true ].
+	
+	^ false
+]
+
+{ #category : #testing }
+ClioCommit >> hadEffectOnMethods [
+	"Answer true if commit has added, removed, or modified any methods"
+	
+	addedMethods ifNotEmpty: [ ^ true ].
+	removedMethods ifNotEmpty: [ ^ true ].
+	modifiedMethods ifNotEmpty: [ ^ true ].
+	
+	^ false
+]
+
+{ #category : #testing }
+ClioCommit >> hadEffectOnPackages [
+	"Answer true if commit has added or removed any packages"
+	
+	addedPackages ifNotEmpty: [ ^ true ].
+	removedPackages ifNotEmpty: [ ^ true ].
+	
+	^ false
+]
+
+{ #category : #testing }
+ClioCommit >> hadEffectOnSourceCode [
+	"Answer true if commit has added, removed, or modified any packages, classes, or methods"
+	
+	^ self hadEffectOnPackages or: [
+		self hadEffectOnClasses or: [
+			self hadEffectOnMethods ] ]
+]
+
 { #category : #accessing }
 ClioCommit >> iceCommit [
 	^ self repository revparse: id
