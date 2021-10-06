@@ -91,7 +91,9 @@ ClioMethod >> fullClassName [
 { #category : #initialization }
 ClioMethod >> initialize [
 	super initialize.
+	
 	methodCalls := OrderedCollection new.
+	isClassSide := false.
 ]
 
 { #category : #testing }
