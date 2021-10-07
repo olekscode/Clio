@@ -28,8 +28,7 @@ ClioMethod class >> fromJsonDictionary: aDictionary [
 		sourceCode: (aDictionary at: 'sourceCode');
 		yourself.
 		
-	method methodCalls addAll: ((aDictionary at: 'methodCalls') collect: [ :callDictionary |
-		ClioMethodCall fromJsonDictionary: callDictionary ]).
+	method methodCalls: (aDictionary at: 'methodCalls') asOrderedCollection.
 	
 	deprecation := aDictionary at: 'deprecation'.
 	
@@ -48,7 +47,7 @@ ClioMethod >> asJsonDictionary [
 		'isExtension' -> isExtension .
 		'isClassSide' -> isClassSide .
 		'sourceCode' -> sourceCode .
-		'methodCalls' -> (methodCalls collect: [ :call | call asJsonDictionary ]) asArray .
+		'methodCalls' -> methodCalls asArray .
 		'deprecation' -> (deprecation ifNotNil: [ deprecation asJsonDictionary ])
 	} asDictionary
 ]
@@ -98,7 +97,7 @@ ClioMethod >> initialize [
 
 { #category : #testing }
 ClioMethod >> isAbstract [
-	^ methodCalls anySatisfy: [ :methodCall | methodCall selector = 'subclassResponsibility' ]
+	^ methodCalls anySatisfy: [ :methodCall | methodCall = #subclassResponsibility ]
 ]
 
 { #category : #accessing }
