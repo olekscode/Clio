@@ -5,7 +5,7 @@ Class {
 		'oldDefinition',
 		'newDefinition'
 	],
-	#category : #'Clio-Models'
+	#category : #'Clio-Metamodel'
 }
 
 { #category : #'as yet unclassified' }

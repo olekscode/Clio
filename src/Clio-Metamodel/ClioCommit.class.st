@@ -16,7 +16,7 @@ Class {
 		'addedPackages',
 		'removedPackages'
 	],
-	#category : #'Clio-Models'
+	#category : #'Clio-Metamodel'
 }
 
 { #category : #'instance creation' }

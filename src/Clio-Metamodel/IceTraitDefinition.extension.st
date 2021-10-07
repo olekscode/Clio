@@ -1,6 +1,6 @@
 Extension { #name : #IceTraitDefinition }
 
-{ #category : #'*Clio' }
+{ #category : #'*Clio-Metamodel' }
 IceTraitDefinition >> asClioClass [
 	^ ClioClass new
 		name: name;

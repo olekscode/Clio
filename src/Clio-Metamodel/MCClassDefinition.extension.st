@@ -1,6 +1,6 @@
 Extension { #name : #MCClassDefinition }
 
-{ #category : #'*Clio' }
+{ #category : #'*Clio-Metamodel' }
 MCClassDefinition >> asClioClass [
 	^ ClioClass new
 		name: name;

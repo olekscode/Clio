@@ -34,8 +34,8 @@ ClioMethodCallVisitor >> visitMessageNode: aNode [
 	
 	methodCall := ClioMethodCall new
 		selector: aNode selector;
-		receiver: (self variableOrExpressionAsString: aNode receiver);
-		arguments: (aNode arguments collect: [ :arg | self variableOrExpressionAsString: arg ]);
+		"receiver: (self variableOrExpressionAsString: aNode receiver);
+		arguments: (aNode arguments collect: [ :arg | self variableOrExpressionAsString: arg ]);"
 		yourself.
 		
 	methodCalls add: methodCall.

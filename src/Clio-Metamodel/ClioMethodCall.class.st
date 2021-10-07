@@ -2,9 +2,7 @@ Class {
 	#name : #ClioMethodCall,
 	#superclass : #Object,
 	#instVars : [
-		'selector',
-		'receiver',
-		'arguments'
+		'selector'
 	],
 	#category : #'Clio-Metamodel'
 }
@@ -16,10 +14,10 @@ ClioMethodCall class >> fromJsonDictionary: aDictionary [
 
 	methodCall := self new
 		selector: (aDictionary at: 'selector');
-		receiver: (aDictionary at: 'receiver');
+		"receiver: (aDictionary at: 'receiver');"
 		yourself.
 		
-	methodCall arguments addAll: (aDictionary at: 'arguments').
+	"methodCall arguments addAll: (aDictionary at: 'arguments')."
 	^ methodCall
 ]
 
@@ -29,43 +27,31 @@ ClioMethodCall >> = anObject [
 	self class = anObject class
 		ifFalse: [ ^ false ].
 		
-	^ self selector = anObject selector and: [ 
+	^ self selector = anObject selector "and: [ 
 		self receiver = anObject receiver and: [ 
-			self arguments = anObject arguments ] ]
-]
-
-{ #category : #accessing }
-ClioMethodCall >> arguments [
-
-	^ arguments
-]
-
-{ #category : #accessing }
-ClioMethodCall >> arguments: anObject [
-
-	arguments := anObject
+			self arguments = anObject arguments ] ]"
 ]
 
 { #category : #converting }
 ClioMethodCall >> asJsonDictionary [
 
 	^ { 
-		'selector' -> selector .
+		'selector' -> selector ".
 		'receiver' -> receiver .
-		'arguments' -> arguments asArray
+		'arguments' -> arguments asArray"
 	} asDictionary
 ]
 
 { #category : #comparing }
 ClioMethodCall >> hash [
 
-	^ selector hash bitXor: (receiver hash bitXor: arguments hash)
+	^ selector hash "bitXor: (receiver hash bitXor: arguments hash)"
 ]
 
 { #category : #initialization }
 ClioMethodCall >> initialize [
 	super initialize.
-	arguments := OrderedCollection new.
+	"arguments := OrderedCollection new."
 ]
 
 { #category : #printing }
@@ -75,18 +61,6 @@ ClioMethodCall >> printOn: aStream [
 		nextPut: $(;
 		nextPutAll: selector;
 		nextPut: $)
-]
-
-{ #category : #accessing }
-ClioMethodCall >> receiver [
-
-	^ receiver
-]
-
-{ #category : #accessing }
-ClioMethodCall >> receiver: anObject [
-
-	receiver := anObject
 ]
 
 { #category : #accessing }

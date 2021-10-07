@@ -1,16 +1,16 @@
-Extension { #name : #IceMethodDefinition }
+Extension { #name : #MCMethodDefinition }
 
-{ #category : #'*Clio' }
-IceMethodDefinition >> asClioMethod [
+{ #category : #'*Clio-Metamodel' }
+MCMethodDefinition >> asClioMethod [
 	| method |
 	
 	method := ClioMethod new
 		className: className;
-		selector: name;
-		protocol: protocol;
-		sourceCode: sourceCode withInternalLineEndings;
+		selector: selector;
+		protocol: self protocol;
+		sourceCode: source withInternalLineEndings;
 		isClassSide: classIsMeta;
-		isExtension: (protocol beginsWith: '*');
+		isExtension: (self protocol beginsWith: '*');
 		yourself.
 		
 	method sourceCode ifNotNil: [

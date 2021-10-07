@@ -1,6 +1,6 @@
 Extension { #name : #IcePackageDefinition }
 
-{ #category : #'*Clio' }
+{ #category : #'*Clio-Metamodel' }
 IcePackageDefinition >> asClioPackage [
 	^ ClioPackage named: name
 ]

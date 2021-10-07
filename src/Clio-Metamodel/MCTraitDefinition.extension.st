@@ -1,6 +1,6 @@
 Extension { #name : #MCTraitDefinition }
 
-{ #category : #'*Clio' }
+{ #category : #'*Clio-Metamodel' }
 MCTraitDefinition >> asClioClass [
 	^ ClioClass new
 		name: name;
