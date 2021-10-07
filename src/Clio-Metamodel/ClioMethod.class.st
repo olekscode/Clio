@@ -38,6 +38,22 @@ ClioMethod class >> fromJsonDictionary: aDictionary [
 	^ method
 ]
 
+{ #category : #comparing }
+ClioMethod >> = anObject [
+
+	self class = anObject class
+		ifFalse: [ ^ false ].
+		
+	^ name = anObject name and: [ 
+		className = anObject className and: [ 
+			isClassSide = anObject isClassSide and: [ 
+				isExtension = anObject isExtension and: [ 
+					methodCalls = anObject methodCalls and: [ 
+						protocol = anObject protocol and: [ 
+							sourceCode = anObject sourceCode and: [ 
+								deprecation = anObject deprecation ] ] ] ] ] ] ].
+]
+
 { #category : #converting }
 ClioMethod >> asJsonDictionary [
 	^ { 
@@ -85,6 +101,19 @@ ClioMethod >> fullClassName [
 	^ isClassSide
 		ifTrue: [ className, ' class' ]
 		ifFalse: [ className ]
+]
+
+{ #category : #comparing }
+ClioMethod >> hash [
+
+	^ name hash
+		bitXor: (className hash
+		bitXor: (isClassSide hash
+		bitXor: (isExtension hash
+		bitXor: (methodCalls hash
+		bitXor: (protocol hash
+		bitXor: (sourceCode hash
+		bitXor: deprecation hash)))))).
 ]
 
 { #category : #initialization }
