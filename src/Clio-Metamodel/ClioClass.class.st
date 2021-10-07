@@ -27,10 +27,10 @@ ClioClass class >> fromJsonDictionary: aDictionary [
 		understoodSelectors: understoodSelectors asOrderedCollection;
 		yourself.
 		
-	aClass methods addAll: ((aDictionary at: 'methods') collect: [ :methodDictionary |
+	aClass methods: ((aDictionary at: 'methods') collect: [ :methodDictionary |
 		(ClioMethod fromJsonDictionary: methodDictionary)
 			methodClass: aClass;
-			yourself ]).
+			yourself ]) asOrderedCollection.
 			
 	^ aClass
 ]
@@ -98,6 +98,12 @@ ClioClass >> methodNamed: aSelector [
 ClioClass >> methods [
 
 	^ methods
+]
+
+{ #category : #accessing }
+ClioClass >> methods: anObject [
+
+	methods := anObject
 ]
 
 { #category : #accessing }
