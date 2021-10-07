@@ -93,6 +93,7 @@ ClioMethod >> initialize [
 	
 	methodCalls := OrderedCollection new.
 	isClassSide := false.
+	isExtension := false.
 ]
 
 { #category : #testing }
