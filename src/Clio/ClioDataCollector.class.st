@@ -59,8 +59,6 @@ ClioDataCollector >> extractCommits [
 	
 	commitWalk commitsDo: [ :commit |
 		collectionOfCommits add: commit asClioCommit ].
-	
-	collectionOfCommits add: oldIceCommit asClioCommit.
 
 	data commits: collectionOfCommits reversed.
 	self extractDataFromDiffs.
