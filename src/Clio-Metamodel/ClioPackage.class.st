@@ -16,10 +16,10 @@ ClioPackage class >> fromJsonDictionary: aDictionary [
 		name: (aDictionary at: 'name');
 		yourself.
 		
-	package classes addAll: ((aDictionary at: 'classes') collect: [ :classDictionary |
+	package classes: ((aDictionary at: 'classes') collect: [ :classDictionary |
 		(ClioClass fromJsonDictionary: classDictionary)
 			package: package;
-			yourself ]).
+			yourself ]) asOrderedCollection.
 			
 	^ package
 ]
@@ -44,6 +44,12 @@ ClioPackage >> asJsonDictionary [
 ClioPackage >> classes [
 
 	^ classes
+]
+
+{ #category : #accessing }
+ClioPackage >> classes: anObject [
+
+	classes := anObject
 ]
 
 { #category : #initialization }
