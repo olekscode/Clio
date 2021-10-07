@@ -134,7 +134,7 @@ ClioDataCollector >> extractSelectorsUnderstoodByClass: aClass [
 				ClioUnderstoodSelector new
 					name: aMethod selector;
 					understoodByClassName: aSystemClass name;
-					implementorClassName: aMethod methodClass name;
+					implementorClassName: aMethod origin name;
 					yourself ]).
 							
 		"Class side selectors"
@@ -143,7 +143,7 @@ ClioDataCollector >> extractSelectorsUnderstoodByClass: aClass [
 				ClioUnderstoodSelector new
 					name: aMethod selector;
 					understoodByClassName: aSystemClass name;
-					implementorClassName: aMethod methodClass name;
+					implementorClassName: aMethod origin name;
 					isClassSide: true;
 					yourself ]) ].
 ]
