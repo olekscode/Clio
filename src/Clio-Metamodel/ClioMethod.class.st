@@ -44,14 +44,14 @@ ClioMethod >> = anObject [
 	self class = anObject class
 		ifFalse: [ ^ false ].
 		
-	^ name = anObject name and: [ 
-		className = anObject className and: [ 
-			isClassSide = anObject isClassSide and: [ 
-				isExtension = anObject isExtension and: [ 
-					methodCalls = anObject methodCalls and: [ 
-						protocol = anObject protocol and: [ 
-							sourceCode = anObject sourceCode and: [ 
-								deprecation = anObject deprecation ] ] ] ] ] ] ].
+	^ name = anObject name
+		and: [ className = anObject className
+		and: [ isClassSide = anObject isClassSide
+		and: [ isExtension = anObject isExtension
+		and: [ methodCalls = anObject methodCalls
+		and: [ protocol = anObject protocol
+		and: [ sourceCode = anObject sourceCode
+		and: [ deprecation = anObject deprecation ] ] ] ] ] ] ].
 ]
 
 { #category : #converting }
