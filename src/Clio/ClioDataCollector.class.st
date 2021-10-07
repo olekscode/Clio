@@ -5,8 +5,7 @@ Class {
 		'oldVersion',
 		'newVersion',
 		'repository',
-		'data',
-		'shouldExtractUnderstoodSelectors'
+		'data'
 	],
 	#category : #'Clio-Controllers'
 }
@@ -35,12 +34,6 @@ ClioDataCollector >> data [
 ClioDataCollector >> data: anObject [
 
 	data := anObject
-]
-
-{ #category : #accessing }
-ClioDataCollector >> doNotExtractUnderstoodSelectors [
-
-	shouldExtractUnderstoodSelectors := false
 ]
 
 { #category : #executing }
@@ -121,37 +114,9 @@ ClioDataCollector >> extractMethodCallsFromMethod: aMethod [
 	^ visitor methodCalls
 ]
 
-{ #category : #executing }
-ClioDataCollector >> extractSelectorsUnderstoodByClass: aClass [
-	"Locate aClass in the image (the version of a project that is currently loaded) and find all instance side and class side methods that are understood by this class (implemented by it or by its superclasses)"
-	
-	self class environment at: aClass name asSymbol ifPresent: [ :aSystemClass |
-		aClass understoodSelectors removeAll.
-		
-		"Instance side selectors"
-		aClass understoodSelectors addAll:
-			(aSystemClass allMethods collect: [ :aMethod |
-				ClioUnderstoodSelector new
-					name: aMethod selector;
-					understoodByClassName: aSystemClass name;
-					implementorClassName: aMethod origin name;
-					yourself ]).
-							
-		"Class side selectors"
-		aClass understoodSelectors addAll:
-			(aSystemClass class allMethods collect: [ :aMethod |
-				ClioUnderstoodSelector new
-					name: aMethod selector;
-					understoodByClassName: aSystemClass name;
-					implementorClassName: aMethod origin name;
-					isClassSide: true;
-					yourself ]) ].
-]
-
 { #category : #initialization }
 ClioDataCollector >> initialize [ 
 	super initialize.
-	shouldExtractUnderstoodSelectors := true.
 	data := ClioData new.
 ]
 
@@ -198,9 +163,6 @@ ClioDataCollector >> loadPackagesAtCommit: aCommitId [
 	
 	iceCommit := repository revparse: aCommitId.
 	
-	shouldExtractUnderstoodSelectors ifTrue: [
-		self installBaselineOnCommit: aCommitId ].
-	
 	packages := OrderedCollection new.
 	classDictionary := Dictionary new.
 	
@@ -216,9 +178,6 @@ ClioDataCollector >> loadPackagesAtCommit: aCommitId [
 				aClass := definition asClioClass
 					package: package;
 					yourself.
-					
-				shouldExtractUnderstoodSelectors ifTrue: [
-					self extractSelectorsUnderstoodByClass: aClass ].
 					
 				package classes add: aClass.
 				classDictionary at: aClass name put: aClass ].

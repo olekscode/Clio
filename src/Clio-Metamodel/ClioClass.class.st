@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'package',
 		'methods',
-		'understoodSelectors',
 		'superclassName',
 		'isTrait',
 		'isExtension'
@@ -15,17 +14,13 @@ Class {
 { #category : #'instance creation' }
 ClioClass class >> fromJsonDictionary: aDictionary [
 	
-	| understoodSelectors aClass |
-	
-	understoodSelectors := (aDictionary at: 'understoodSelectors') collect: [ :each |
-		ClioUnderstoodSelector fromJsonDictionary: each ].
+	| aClass |
 	
 	aClass := self new
 		name: (aDictionary at: 'name');
 		superclassName: (aDictionary at: 'superclassName');
 		isTrait: (aDictionary at: 'isTrait');
 		isExtension: (aDictionary at: 'isExtension');
-		understoodSelectors: understoodSelectors asOrderedCollection;
 		yourself.
 		
 	aClass methods: ((aDictionary at: 'methods') collect: [ :methodDictionary |
@@ -43,8 +38,7 @@ ClioClass >> asJsonDictionary [
 		'superclassName' -> self superclassName .
 		'isTrait' -> self isTrait .
 		'isExtension' -> self isExtension .
-		'methods' -> (methods collect: [ :each | each asJsonDictionary ]) asArray .
-		'understoodSelectors' -> (understoodSelectors collect: [ :each | each asJsonDictionary ]) asArray
+		'methods' -> (methods collect: [ :each | each asJsonDictionary ]) asArray
 	} asDictionary
 ]
 
@@ -64,7 +58,6 @@ ClioClass >> inheritsFrom: aClass [
 ClioClass >> initialize [
 	super initialize.
 	methods := OrderedCollection new.
-	understoodSelectors := OrderedCollection new.
 	
 	isTrait := false.
 	isExtension := false.
@@ -138,16 +131,4 @@ ClioClass >> superclassName [
 ClioClass >> superclassName: anObject [
 
 	superclassName := anObject
-]
-
-{ #category : #accessing }
-ClioClass >> understoodSelectors [
-
-	^ understoodSelectors
-]
-
-{ #category : #accessing }
-ClioClass >> understoodSelectors: anObject [
-
-	understoodSelectors := anObject
 ]
