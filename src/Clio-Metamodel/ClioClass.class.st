@@ -63,6 +63,9 @@ ClioClass >> initialize [
 	super initialize.
 	methods := OrderedCollection new.
 	understoodSelectors := OrderedCollection new.
+	
+	isTrait := false.
+	isExtension := false.
 ]
 
 { #category : #accessing }
