@@ -24,6 +24,14 @@ ClioPackage class >> fromJsonDictionary: aDictionary [
 	^ package
 ]
 
+{ #category : #'instance creation' }
+ClioPackage class >> named: aString [
+
+	^ self new
+		name: aString;
+		yourself
+]
+
 { #category : #converting }
 ClioPackage >> asJsonDictionary [
 	^ { 
