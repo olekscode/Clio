@@ -67,7 +67,7 @@ ContainersProjectFixture >> oldClassBaselineOfContainers [
 	
 	aClass methods: {
 		self oldMethodBaselineOfContainersBaseline
-	} asOrderedCollection.
+	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
 	^ aClass
@@ -90,7 +90,7 @@ ContainersProjectFixture >> oldClassCTArray [
 		self oldMethodCTArraySize .
 		self oldMethodCTArrayAsArray .
 		self oldMethodCTArrayInitialize
-	} asOrderedCollection.
+	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
 	^ aClass
@@ -108,7 +108,7 @@ ContainersProjectFixture >> oldClassCTArrayTest [
 	
 	aClass methods: {
 		self oldMethodCTArrayTestSetUp
-	} asOrderedCollection.
+	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
 	^ aClass
@@ -131,7 +131,7 @@ ContainersProjectFixture >> oldClassCTContainer [
 		self oldMethodCTContainerAdd .
 		self oldMethodCTContainerSize .
 		self oldMethodCTContainerRemove
-	} asOrderedCollection.
+	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
 	^ aClass
@@ -152,7 +152,7 @@ ContainersProjectFixture >> oldClassCTLink [
 		self oldMethodCTLinkSetValue .
 		self oldMethodCTLinkNextLink .
 		self oldMethodCTLinkSetNextLink
-	} asOrderedCollection.
+	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
 	^ aClass
@@ -175,7 +175,7 @@ ContainersProjectFixture >> oldClassCTLinkedList [
 		self oldMethodCTLinkedListInitialize .
 		self oldMethodCTLinkedListAsArray .
 		self oldMethodCTLinkedListRemove
-	} asOrderedCollection.
+	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
 	^ aClass
@@ -193,7 +193,7 @@ ContainersProjectFixture >> oldClassCTLinkedListTest [
 	
 	aClass methods: {
 		self oldMethodCTLinkedListTestSetUp
-	} asOrderedCollection.
+	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
 	^ aClass
@@ -217,7 +217,7 @@ ContainersProjectFixture >> oldClassTContainerTests [
 		self oldMethodTContainerTestTestAddAll .
 		self oldMethodTContainerTestTestAt .
 		self oldMethodTContainerTestTestSize
-	} asOrderedCollection.
+	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
 	^ aClass
@@ -768,7 +768,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestAdd [
 	
 	method := ClioMethod new
 		name: 'testAdd';
-		className: 'TContainerTest';
+		className: 'TContainerTests';
 		protocol: 'tests';
 		yourself.
 		
@@ -790,7 +790,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestAddAll [
 	
 	method := ClioMethod new
 		name: 'testAddAll';
-		className: 'TContainerTest';
+		className: 'TContainerTests';
 		protocol: 'tests';
 		yourself.
 		
@@ -810,7 +810,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestAt [
 	
 	method := ClioMethod new
 		name: 'testAt';
-		className: 'TContainerTest';
+		className: 'TContainerTests';
 		protocol: 'tests';
 		yourself.
 		
@@ -832,7 +832,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestIsEmpty [
 	
 	method := ClioMethod new
 		name: 'testIsEmpty';
-		className: 'TContainerTest';
+		className: 'TContainerTests';
 		protocol: 'tests';
 		yourself.
 		
@@ -853,7 +853,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestRemove [
 	
 	method := ClioMethod new
 		name: 'testRemove';
-		className: 'TContainerTest';
+		className: 'TContainerTests';
 		protocol: 'tests';
 		yourself.
 		
@@ -874,7 +874,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestSize [
 	
 	method := ClioMethod new
 		name: 'testSize';
-		className: 'TContainerTest';
+		className: 'TContainerTests';
 		protocol: 'tests';
 		yourself.
 		
@@ -894,7 +894,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestSizeOfEmpty [
 	
 	method := ClioMethod new
 		name: 'testSizeOfEmpty';
-		className: 'TContainerTest';
+		className: 'TContainerTests';
 		protocol: 'tests';
 		yourself.
 		
@@ -914,7 +914,7 @@ ContainersProjectFixture >> oldPackageBaselineOfContainers [
 	
 	package classes: {
 		self oldClassBaselineOfContainers
-	} asOrderedCollection.
+	} asSet.
 	
 	package classes do: [ :aClass | aClass package: package ].
 	^ package
@@ -931,7 +931,7 @@ ContainersProjectFixture >> oldPackageContainers [
 		self oldClassCTArray .
 		self oldClassCTLinkedList .
 		self oldClassCTLink
-	} asOrderedCollection.
+	} asSet.
 	
 	package classes do: [ :aClass | aClass package: package ].
 	^ package
@@ -947,7 +947,7 @@ ContainersProjectFixture >> oldPackageContainersTests [
 		self oldClassTContainerTests .
 		self oldClassCTArrayTest .
 		self oldClassCTLinkedListTest
-	} asOrderedCollection.
+	} asSet.
 	
 	package classes do: [ :aClass | aClass package: package ].
 	^ package

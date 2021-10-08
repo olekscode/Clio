@@ -19,7 +19,7 @@ ClioPackage class >> fromJsonDictionary: aDictionary [
 	package classes: ((aDictionary at: 'classes') collect: [ :classDictionary |
 		(ClioClass fromJsonDictionary: classDictionary)
 			package: package;
-			yourself ]) asOrderedCollection.
+			yourself ]) asSet.
 			
 	^ package
 ]
@@ -30,6 +30,17 @@ ClioPackage class >> named: aString [
 	^ self new
 		name: aString;
 		yourself
+]
+
+{ #category : #comparing }
+ClioPackage >> = anObject [
+
+	"Answer whether the receiver and anObject represent the same object."
+
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	
+	^ name = anObject name and: [ classes = anObject classes ]
 ]
 
 { #category : #converting }
@@ -52,10 +63,18 @@ ClioPackage >> classes: anObject [
 	classes := anObject
 ]
 
+{ #category : #comparing }
+ClioPackage >> hash [
+
+	"Answer an integer value that is related to the identity of the receiver."
+
+	^ name hash bitXor: classes hash
+]
+
 { #category : #initialization }
 ClioPackage >> initialize [
 	super initialize.
-	classes := OrderedCollection new.
+	classes := Set new.
 ]
 
 { #category : #printing }

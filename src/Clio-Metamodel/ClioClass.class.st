@@ -26,9 +26,24 @@ ClioClass class >> fromJsonDictionary: aDictionary [
 	aClass methods: ((aDictionary at: 'methods') collect: [ :methodDictionary |
 		(ClioMethod fromJsonDictionary: methodDictionary)
 			methodClass: aClass;
-			yourself ]) asOrderedCollection.
+			yourself ]) asSet.
 			
 	^ aClass
+]
+
+{ #category : #comparing }
+ClioClass >> = anObject [
+
+	"Answer whether the receiver and anObject represent the same object."
+
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	
+	^ superclassName = anObject superclassName and: [ 
+		  name = anObject name and: [ 
+			  methods = anObject methods and: [ 
+				  isTrait = anObject isTrait and: [ 
+					  isExtension = anObject isExtension ] ] ] ]
 ]
 
 { #category : #converting }
@@ -40,6 +55,15 @@ ClioClass >> asJsonDictionary [
 		'isExtension' -> self isExtension .
 		'methods' -> (methods collect: [ :each | each asJsonDictionary ]) asArray
 	} asDictionary
+]
+
+{ #category : #comparing }
+ClioClass >> hash [
+
+	"Answer an integer value that is related to the identity of the receiver."
+
+	^ superclassName hash bitXor: (name hash bitXor:
+			   (methods hash bitXor: (isTrait hash bitXor: isExtension hash)))
 ]
 
 { #category : #accessing }
@@ -57,7 +81,7 @@ ClioClass >> inheritsFrom: aClass [
 { #category : #initialization }
 ClioClass >> initialize [
 	super initialize.
-	methods := OrderedCollection new.
+	methods := Set new.
 	
 	isTrait := false.
 	isExtension := false.
