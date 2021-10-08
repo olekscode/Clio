@@ -130,7 +130,10 @@ ContainersProjectFixture >> newClassMyLink [
 		yourself.
 	
 	aClass methods: {
-		
+		self newMethodMyLinkNextLink .
+		self newMethodMyLinkSetValue .
+		self newMethodMyLinkSetNextLink .
+		self newMethodMyLinkValue
 	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
@@ -257,6 +260,78 @@ ContainersProjectFixture >> newMethodMyArrayTestSetUp [
 	container := MyVector new.'.
 		
 	method methodCalls: #(setUp new) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyLinkNextLink [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'nextLink';
+		className: 'MyLink';
+		protocol: 'accessing';
+		yourself.
+		
+	method sourceCode: 'nextLink
+
+	^ nextLink'.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyLinkSetNextLink [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'nextLink:';
+		className: 'MyLink';
+		protocol: 'accessing';
+		yourself.
+		
+	method sourceCode: 'nextLink: anObject
+
+	nextLink := anObject'.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyLinkSetValue [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'value:';
+		className: 'MyLink';
+		protocol: 'accessing';
+		yourself.
+		
+	method sourceCode: 'value: anObject
+
+	value := anObject'.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyLinkValue [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'value';
+		className: 'MyLink';
+		protocol: 'accessing';
+		yourself.
+		
+	method sourceCode: 'value
+	
+	^ value'.
 	
 	^ method
 ]
