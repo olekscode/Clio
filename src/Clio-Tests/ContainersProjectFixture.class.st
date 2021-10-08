@@ -7,6 +7,12 @@ Class {
 	#category : #'Clio-Tests'
 }
 
+{ #category : #examples }
+ContainersProjectFixture class >> inspect [
+	<example>
+	self new data inspect
+]
+
 { #category : #accessing }
 ContainersProjectFixture >> data [
 	
@@ -70,7 +76,7 @@ ContainersProjectFixture >> newClassBaselineOfContainers [
 		yourself.
 	
 	aClass methods: {
-		
+		self newMethodBaselineOfContainersBaseline
 	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
@@ -88,7 +94,7 @@ ContainersProjectFixture >> newClassMyArrayTest [
 		yourself.
 	
 	aClass methods: {
-		
+		self newMethodMyArrayTestSetUp 
 	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
@@ -160,7 +166,7 @@ ContainersProjectFixture >> newClassMyLinkedListTest [
 		yourself.
 	
 	aClass methods: {
-		
+		self newMethodMyLinkedListTestSetUp 
 	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
@@ -196,11 +202,259 @@ ContainersProjectFixture >> newClassTContainerTests [
 		yourself.
 	
 	aClass methods: {
-		
+		self newMethodTContainerTestsTestIsEmpty .
+		self newMethodTContainerTestsTestAdd .
+		self newMethodTContainerTestsTestAt .
+		self newMethodTContainerTestsTestSize .
+		self newMethodTContainerTestsTestSizeOfEmpty .
+		self newMethodTContainerTestsTestAddAll .
+		self newMethodTContainerTestsTestDo .
+		self newMethodTContainerTestsTestCollect
 	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
 	^ aClass
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodBaselineOfContainersBaseline [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'baseline:';
+		className: 'BaselineOfContainers';
+		protocol: 'baselines';
+		yourself.
+		
+	method sourceCode: 'baseline: spec
+	<baseline>
+	spec for: #common do: [	
+		"Packages"
+		spec 
+			package: ''Containers'';
+			package: ''Containers-Tests'' with: [ spec requires: #(Containers) ] ].'.
+		
+	method methodCalls: #(for:do: package: package:with: requires:) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyArrayTestSetUp [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'setUp';
+		className: 'MyArrayTest';
+		protocol: 'initialization';
+		yourself.
+		
+	method sourceCode: 'setUp
+
+	super setUp.
+	container := MyVector new.'.
+		
+	method methodCalls: #(setUp new) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyLinkedListTestSetUp [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'setUp';
+		className: 'MyLinkedListTest';
+		protocol: 'initialization';
+		yourself.
+		
+	method sourceCode: 'setUp
+
+	super setUp.
+	container := MyLinkedList new.'.
+		
+	method methodCalls: #(setUp new) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodTContainerTestsTestAdd [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'testAdd';
+		className: 'TContainerTests';
+		protocol: 'tests';
+		yourself.
+		
+	method sourceCode: 'testAdd
+	container insertElement: 1.
+	container insertElement: #hello.
+	
+	self assert: container asArray equals: #(1 hello).'.
+		
+	method methodCalls: #(insertElement: insertElement: assert:equals: asArray) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodTContainerTestsTestAddAll [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'testAddAll';
+		className: 'TContainerTests';
+		protocol: 'tests';
+		yourself.
+		
+	method sourceCode: 'testAddAll
+	container insertAllElements: #(1 hello).
+	self assert: container asArray equals: #(1 hello).'.
+		
+	method methodCalls: #(insertAllElements: assert:equals: asArray) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodTContainerTestsTestAt [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'testAt';
+		className: 'TContainerTests';
+		protocol: 'tests';
+		yourself.
+		
+	method sourceCode: 'testAt
+	container insertAllElements: #(1 hello).
+	
+	self assert: (container at: 1) equals: 1.
+	self assert: (container at: 2) equals: #hello.'.
+		
+	method methodCalls: #(insertAllElements: assert:equals: at: assert:equals: at:) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodTContainerTestsTestCollect [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'testCollect';
+		className: 'TContainerTests';
+		protocol: 'tests';
+		yourself.
+		
+	method sourceCode: 'testCollect
+
+	| result |
+	container insertAllElements: #(a b c d e).
+	
+	result := container collect: [ :each | each asUppercase ].
+	
+	self assert: result asArray equals: #(A B C D E).'.
+		
+	method methodCalls: #(insertAllElements: collect: asUppercase assert:equals: asArray) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodTContainerTestsTestDo [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'testDo';
+		className: 'TContainerTests';
+		protocol: 'tests';
+		yourself.
+		
+	method sourceCode: 'testDo
+
+	| string |
+	container insertAllElements: #(a b c d e).
+	
+	string := ''''.
+	container do: [ :each | string := string, each ].
+	
+	self assert: string equals: ''abcde''.'.
+		
+	method methodCalls: #(insertAllElements: do: , assert:equals:) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodTContainerTestsTestIsEmpty [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'testIsEmpty';
+		className: 'TContainerTests';
+		protocol: 'tests';
+		yourself.
+		
+	method sourceCode: 'testIsEmpty
+	self assert: container isEmpty.
+	container insertElement: 1.
+	self deny: container isEmpty.'.
+		
+	method methodCalls: #(assert: isEmpty add: deny: isEmpty) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodTContainerTestsTestSize [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'testSize';
+		className: 'TContainerTests';
+		protocol: 'tests';
+		yourself.
+		
+	method sourceCode: 'testSize
+	container insertAllElements: #(1 hello world).
+	self assert: container size equals: 3.'.
+		
+	method methodCalls: #(insertAllElements: assert:equals: size) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodTContainerTestsTestSizeOfEmpty [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'testSizeOfEmpty';
+		className: 'TContainerTests';
+		protocol: 'tests';
+		yourself.
+		
+	method sourceCode: 'testSizeOfEmpty
+	self assert: container size equals: 0'.
+		
+	method methodCalls: #(assert:equals: size) asOrderedCollection.
+	
+	^ method
 ]
 
 { #category : #'new source code - packages' }
@@ -405,13 +659,13 @@ ContainersProjectFixture >> oldClassTContainerTests [
 		yourself.
 	
 	aClass methods: {
-		self oldMethodTContainerTestTestIsEmpty .
-		self oldMethodTContainerTestTestRemove .
-		self oldMethodTContainerTestTestSizeOfEmpty .
-		self oldMethodTContainerTestTestAdd .
-		self oldMethodTContainerTestTestAddAll .
-		self oldMethodTContainerTestTestAt .
-		self oldMethodTContainerTestTestSize
+		self oldMethodTContainerTestsTestIsEmpty .
+		self oldMethodTContainerTestsTestRemove .
+		self oldMethodTContainerTestsTestSizeOfEmpty .
+		self oldMethodTContainerTestsTestAdd .
+		self oldMethodTContainerTestsTestAddAll .
+		self oldMethodTContainerTestsTestAt .
+		self oldMethodTContainerTestsTestSize
 	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
@@ -957,7 +1211,7 @@ ContainersProjectFixture >> oldMethodCTLinkedListTestSetUp [
 ]
 
 { #category : #'old source code - methods' }
-ContainersProjectFixture >> oldMethodTContainerTestTestAdd [
+ContainersProjectFixture >> oldMethodTContainerTestsTestAdd [
 
 	| method |
 	
@@ -979,7 +1233,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestAdd [
 ]
 
 { #category : #'old source code - methods' }
-ContainersProjectFixture >> oldMethodTContainerTestTestAddAll [
+ContainersProjectFixture >> oldMethodTContainerTestsTestAddAll [
 
 	| method |
 	
@@ -999,7 +1253,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestAddAll [
 ]
 
 { #category : #'old source code - methods' }
-ContainersProjectFixture >> oldMethodTContainerTestTestAt [
+ContainersProjectFixture >> oldMethodTContainerTestsTestAt [
 
 	| method |
 	
@@ -1021,7 +1275,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestAt [
 ]
 
 { #category : #'old source code - methods' }
-ContainersProjectFixture >> oldMethodTContainerTestTestIsEmpty [
+ContainersProjectFixture >> oldMethodTContainerTestsTestIsEmpty [
 
 	| method |
 	
@@ -1042,7 +1296,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestIsEmpty [
 ]
 
 { #category : #'old source code - methods' }
-ContainersProjectFixture >> oldMethodTContainerTestTestRemove [
+ContainersProjectFixture >> oldMethodTContainerTestsTestRemove [
 
 	| method |
 	
@@ -1063,7 +1317,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestRemove [
 ]
 
 { #category : #'old source code - methods' }
-ContainersProjectFixture >> oldMethodTContainerTestTestSize [
+ContainersProjectFixture >> oldMethodTContainerTestsTestSize [
 
 	| method |
 	
@@ -1083,7 +1337,7 @@ ContainersProjectFixture >> oldMethodTContainerTestTestSize [
 ]
 
 { #category : #'old source code - methods' }
-ContainersProjectFixture >> oldMethodTContainerTestTestSizeOfEmpty [
+ContainersProjectFixture >> oldMethodTContainerTestsTestSizeOfEmpty [
 
 	| method |
 	
