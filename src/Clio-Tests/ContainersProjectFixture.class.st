@@ -42,7 +42,11 @@ ContainersProjectFixture >> initializeCommits [
 { #category : #initialization }
 ContainersProjectFixture >> initializeNewPackages [
 
-	^ #()
+	^ { 
+		self newPackageBaselineOfContainers .
+		self newPackageContainers .
+		self newPackageContainersTests 
+	} asOrderedCollection
 ]
 
 { #category : #initialization }
@@ -53,6 +57,197 @@ ContainersProjectFixture >> initializeOldPackages [
 		self oldPackageContainers .
 		self oldPackageContainersTests
 	} asOrderedCollection
+]
+
+{ #category : #'new source code - classes' }
+ContainersProjectFixture >> newClassBaselineOfContainers [
+
+	| aClass |
+	
+	aClass := ClioClass new
+		name: 'BaselineOfContainers';
+		superclassName: 'BaselineOf';
+		yourself.
+	
+	aClass methods: {
+		
+	} asSet.
+	
+	aClass methods do: [ :method | method methodClass: aClass ].
+	^ aClass
+]
+
+{ #category : #'new source code - classes' }
+ContainersProjectFixture >> newClassMyArrayTest [
+
+	| aClass |
+	
+	aClass := ClioClass new
+		name: 'MyArrayTest';
+		superclassName: 'TestCase';
+		yourself.
+	
+	aClass methods: {
+		
+	} asSet.
+	
+	aClass methods do: [ :method | method methodClass: aClass ].
+	^ aClass
+]
+
+{ #category : #'new source code - classes' }
+ContainersProjectFixture >> newClassMyContainer [ 
+
+	| aClass |
+	
+	aClass := ClioClass new
+		name: 'MyContainer';
+		superclassName: 'Object';
+		yourself.
+	
+	aClass methods: {
+		
+	} asSet.
+	
+	aClass methods do: [ :method | method methodClass: aClass ].
+	^ aClass
+]
+
+{ #category : #'new source code - classes' }
+ContainersProjectFixture >> newClassMyLink [
+
+	| aClass |
+	
+	aClass := ClioClass new
+		name: 'MyLink';
+		superclassName: 'Object';
+		yourself.
+	
+	aClass methods: {
+		
+	} asSet.
+	
+	aClass methods do: [ :method | method methodClass: aClass ].
+	^ aClass
+]
+
+{ #category : #'new source code - classes' }
+ContainersProjectFixture >> newClassMyLinkedList [
+
+	| aClass |
+	
+	aClass := ClioClass new
+		name: 'MyLinkedList';
+		superclassName: 'MyContainer';
+		yourself.
+	
+	aClass methods: {
+		
+	} asSet.
+	
+	aClass methods do: [ :method | method methodClass: aClass ].
+	^ aClass
+]
+
+{ #category : #'new source code - classes' }
+ContainersProjectFixture >> newClassMyLinkedListTest [
+
+	| aClass |
+	
+	aClass := ClioClass new
+		name: 'MyLinkedListTest';
+		superclassName: 'TestCase';
+		yourself.
+	
+	aClass methods: {
+		
+	} asSet.
+	
+	aClass methods do: [ :method | method methodClass: aClass ].
+	^ aClass
+]
+
+{ #category : #'new source code - classes' }
+ContainersProjectFixture >> newClassMyVector [
+
+	| aClass |
+	
+	aClass := ClioClass new
+		name: 'MyVector';
+		superclassName: 'MyContainer';
+		yourself.
+	
+	aClass methods: {
+		
+	} asSet.
+	
+	aClass methods do: [ :method | method methodClass: aClass ].
+	^ aClass
+]
+
+{ #category : #'new source code - classes' }
+ContainersProjectFixture >> newClassTContainerTests [
+
+	| aClass |
+	
+	aClass := ClioClass new
+		name: 'TContainerTests';
+		isTrait: true;
+		yourself.
+	
+	aClass methods: {
+		
+	} asSet.
+	
+	aClass methods do: [ :method | method methodClass: aClass ].
+	^ aClass
+]
+
+{ #category : #'new source code - packages' }
+ContainersProjectFixture >> newPackageBaselineOfContainers [
+
+	| package |
+	package := ClioPackage named: 'BaselineOfContainers'.
+	
+	package classes: {
+		self newClassBaselineOfContainers
+	} asSet.
+	
+	package classes do: [ :aClass | aClass package: package ].
+	^ package
+]
+
+{ #category : #'new source code - packages' }
+ContainersProjectFixture >> newPackageContainers [
+
+	| package |
+	package := ClioPackage named: 'Containers'.
+	
+	package classes: {
+		self newClassMyContainer .
+		self newClassMyVector .
+		self newClassMyLinkedList .
+		self newClassMyLink
+	} asSet.
+	
+	package classes do: [ :aClass | aClass package: package ].
+	^ package
+]
+
+{ #category : #'new source code - packages' }
+ContainersProjectFixture >> newPackageContainersTests [
+
+	| package |
+	package := ClioPackage named: 'Containers-Tests'.
+	
+	package classes: {
+		self newClassTContainerTests .
+		self newClassMyArrayTest .
+		self newClassMyLinkedListTest
+	} asSet.
+	
+	package classes do: [ :aClass | aClass package: package ].
+	^ package
 ]
 
 { #category : #'old source code - classes' }
