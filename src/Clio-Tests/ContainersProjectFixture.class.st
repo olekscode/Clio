@@ -1439,26 +1439,6 @@ ContainersProjectFixture >> oldMethodCTLinkedListTestSetUp [
 ]
 
 { #category : #'old source code - methods' }
-ContainersProjectFixture >> oldMethodMyContainerSize [
-
-	| method |
-	
-	method := ClioMethod new
-		name: 'size';
-		className: 'MyContainer';
-		protocol: 'adding';
-		yourself.
-		
-	method sourceCode: 'size
-
-	self subclassResponsibility'.
-		
-	method methodCalls: #(subclassResponsibility) asOrderedCollection.
-	
-	^ method
-]
-
-{ #category : #'old source code - methods' }
 ContainersProjectFixture >> oldMethodTContainerTestsTestAdd [
 
 	| method |
