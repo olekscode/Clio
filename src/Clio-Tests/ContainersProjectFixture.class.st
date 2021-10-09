@@ -112,7 +112,13 @@ ContainersProjectFixture >> newClassMyContainer [
 		yourself.
 	
 	aClass methods: {
-		
+		self newMethodMyContainerDo .
+		self newMethodMyContainerCollect .
+		self newMethodMyContainerInsertAllElements .
+		self newMethodMyContainerIsEmpty .
+		self newMethodMyContainerInsertElement .
+		self newMethodMyContainerSize .
+		self newMethodMyContainerAt
 	} asSet.
 	
 	aClass methods do: [ :method | method methodClass: aClass ].
@@ -260,6 +266,153 @@ ContainersProjectFixture >> newMethodMyArrayTestSetUp [
 	container := MyVector new.'.
 		
 	method methodCalls: #(setUp new) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyContainerAt [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'at:';
+		className: 'MyContainer';
+		protocol: 'adding';
+		yourself.
+		
+	method sourceCode: 'at: aNumber
+
+	self subclassResponsibility'.
+		
+	method methodCalls: #(subclassResponsibility) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyContainerCollect [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'collect:';
+		className: 'MyContainer';
+		protocol: 'enumerating';
+		yourself.
+		
+	method sourceCode: 'collect: aBlock
+
+	| newContainer |
+	newContainer := self class new.
+
+	self do: [ :each |
+		newContainer insertElement: (aBlock value: each) ].
+	
+	^ newContainer'.
+		
+	method methodCalls: #(new class do: insertElement: value:) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyContainerDo [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'do:';
+		className: 'MyContainer';
+		protocol: 'enumerating';
+		yourself.
+		
+	method sourceCode: 'do: aBlock
+
+	1 to: self size do: [ :i |
+		aBlock value: (self at: i) ]'.
+		
+	method methodCalls: #(to:do: size value: at:) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyContainerInsertAllElements [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'insertAllElements:';
+		className: 'MyContainer';
+		protocol: 'adding';
+		yourself.
+		
+	method sourceCode: 'insertAllElements: aCollection
+
+	aCollection do: [ :each | self insertElement: each ]'.
+		
+	method methodCalls: #(do: insert:) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyContainerInsertElement [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'insertElement:';
+		className: 'MyContainer';
+		protocol: 'adding';
+		yourself.
+		
+	method sourceCode: 'insertElement: anObject
+
+	self subclassResponsibility'.
+		
+	method methodCalls: #(subclassResponsibility) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyContainerIsEmpty [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'isEmpty';
+		className: 'MyContainer';
+		protocol: 'adding';
+		yourself.
+		
+	method sourceCode: 'isEmpty
+
+	self subclassResponsibility'.
+		
+	method methodCalls: #(subclassResponsibility) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'new source code - methods' }
+ContainersProjectFixture >> newMethodMyContainerSize [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'size';
+		className: 'MyContainer';
+		protocol: 'adding';
+		yourself.
+		
+	method sourceCode: 'size
+
+	self subclassResponsibility'.
+		
+	method methodCalls: #(subclassResponsibility) asOrderedCollection.
 	
 	^ method
 ]
@@ -1281,6 +1434,26 @@ ContainersProjectFixture >> oldMethodCTLinkedListTestSetUp [
 	container := CTLinkedList new.'.
 		
 	method methodCalls: #(setUp new) asOrderedCollection.
+	
+	^ method
+]
+
+{ #category : #'old source code - methods' }
+ContainersProjectFixture >> oldMethodMyContainerSize [
+
+	| method |
+	
+	method := ClioMethod new
+		name: 'size';
+		className: 'MyContainer';
+		protocol: 'adding';
+		yourself.
+		
+	method sourceCode: 'size
+
+	self subclassResponsibility'.
+		
+	method methodCalls: #(subclassResponsibility) asOrderedCollection.
 	
 	^ method
 ]
