@@ -70,6 +70,28 @@ ClioCommit class >> fromJsonDictionary: aDictionary [
 	^ commit
 ]
 
+{ #category : #comparing }
+ClioCommit >> = anObject [
+
+	"Answer whether the receiver and anObject represent the same object."
+
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ addedClasses = anObject addedClasses and: [ 
+		  addedMethods = anObject addedMethods and: [ 
+			  addedPackages = anObject addedPackages and: [ 
+				  author = anObject author and: [ 
+					  comment = anObject comment and: [ 
+						  datetime = anObject datetime and: [ 
+							  id = anObject id and: [ 
+								  modifiedClasses = anObject modifiedClasses and: [ 
+									  modifiedMethods = anObject modifiedMethods and: [ 
+										  removedClasses = anObject removedClasses and: [ 
+											  removedMethods = anObject removedMethods and: [ 
+												  removedPackages = anObject removedPackages and: [ 
+													  repositoryName = anObject repositoryName ] ] ] ] ] ] ] ] ] ] ] ]
+]
+
 { #category : #accessing }
 ClioCommit >> addedClasses [
 
@@ -202,6 +224,23 @@ ClioCommit >> hadEffectOnSourceCode [
 			self hadEffectOnMethods ] ]
 ]
 
+{ #category : #comparing }
+ClioCommit >> hash [
+
+	"Answer an integer value that is related to the identity of the receiver."
+
+	^ addedClasses hash bitXor: (addedMethods hash bitXor:
+			   (addedPackages hash bitXor: (author hash bitXor:
+					     (comment hash bitXor:
+						      (datetime hash bitXor: (id hash bitXor:
+								        (modifiedClasses hash bitXor:
+									         (modifiedMethods hash bitXor:
+										          (removedClasses hash bitXor:
+											           (removedMethods hash bitXor:
+												            (removedPackages hash bitXor:
+													             repositoryName hash)))))))))))
+]
+
 { #category : #accessing }
 ClioCommit >> iceCommit [
 	^ self repository revparse: id
@@ -223,16 +262,16 @@ ClioCommit >> id: anObject [
 ClioCommit >> initialize [
 	super initialize.
 	
-	addedPackages := OrderedCollection new.
-	removedPackages := OrderedCollection new.
+	addedPackages := Set new.
+	removedPackages := Set new.
 	
-	addedClasses := OrderedCollection new.
-	removedClasses := OrderedCollection new.
-	modifiedClasses := OrderedCollection new.
+	addedClasses := Set new.
+	removedClasses := Set new.
+	modifiedClasses := Set new.
 	
-	addedMethods := OrderedCollection new.
-	removedMethods := OrderedCollection new.
-	modifiedMethods := OrderedCollection new.
+	addedMethods := Set new.
+	removedMethods := Set new.
+	modifiedMethods := Set new.
 ]
 
 { #category : #'API - loading' }

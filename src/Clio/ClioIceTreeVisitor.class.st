@@ -36,16 +36,16 @@ ClioIceTreeVisitor >> addedPackages [
 ClioIceTreeVisitor >> initialize [
 	super initialize.
 	
-	addedPackages := OrderedCollection new.
-	removedPackages := OrderedCollection new.
+	addedPackages := Set new.
+	removedPackages := Set new.
 	
-	addedClasses := OrderedCollection new.
-	removedClasses := OrderedCollection new.
-	modifiedClasses := OrderedCollection new.
+	addedClasses := Set new.
+	removedClasses := Set new.
+	modifiedClasses := Set new.
 	
-	addedMethods := OrderedCollection new.
-	removedMethods := OrderedCollection new.
-	modifiedMethods := OrderedCollection new.
+	addedMethods := Set new.
+	removedMethods := Set new.
+	modifiedMethods := Set new.
 	
 ]
 

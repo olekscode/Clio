@@ -26,6 +26,17 @@ ClioModification class >> methodModificationFromDictionary: aDictionary [
 		yourself.
 ]
 
+{ #category : #comparing }
+ClioModification >> = anObject [
+
+	"Answer whether the receiver and anObject represent the same object."
+
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ oldDefinition = anObject oldDefinition and: [ 
+		  newDefinition = anObject newDefinition ]
+]
+
 { #category : #converting }
 ClioModification >> asJsonDictionary [
 	
@@ -33,6 +44,14 @@ ClioModification >> asJsonDictionary [
 		'oldDefinition' -> oldDefinition asJsonDictionary .
 		'newDefinition' -> newDefinition asJsonDictionary
 	} asDictionary.
+]
+
+{ #category : #comparing }
+ClioModification >> hash [
+
+	"Answer an integer value that is related to the identity of the receiver."
+
+	^ oldDefinition hash bitXor: newDefinition hash
 ]
 
 { #category : #accessing }
