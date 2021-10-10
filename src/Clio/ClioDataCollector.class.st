@@ -207,6 +207,12 @@ ClioDataCollector >> locateRepository [
 ]
 
 { #category : #accessing }
+ClioDataCollector >> newVersion [
+
+	^ newVersion
+]
+
+{ #category : #accessing }
 ClioDataCollector >> newVersion: aVersionString [
 	"A version string can be a full commit id, a short commit id (first 7 characters), or a semantic version tag (e.g., 'v5.0', 'firstRelease')"
 	
@@ -214,10 +220,22 @@ ClioDataCollector >> newVersion: aVersionString [
 ]
 
 { #category : #accessing }
+ClioDataCollector >> oldVersion [
+
+	^ oldVersion
+]
+
+{ #category : #accessing }
 ClioDataCollector >> oldVersion: aVersionString [
 	"A version string can be a full commit id, a short commit id (first 7 characters), or a semantic version tag (e.g., 'v5.0', 'firstRelease')"
 
 	oldVersion := aVersionString
+]
+
+{ #category : #accessing }
+ClioDataCollector >> repository [
+
+	^ repository
 ]
 
 { #category : #accessing }
