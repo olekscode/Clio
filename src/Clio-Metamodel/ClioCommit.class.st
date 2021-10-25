@@ -394,6 +394,12 @@ ClioCommit >> repositoryName: anObject [
 ]
 
 { #category : #accessing }
+ClioCommit >> shortId [
+
+	^ id first: 7
+]
+
+{ #category : #accessing }
 ClioCommit >> snapshot [
 	^ ClioDataCollector new loadPackagesAtCommit: self
 ]
