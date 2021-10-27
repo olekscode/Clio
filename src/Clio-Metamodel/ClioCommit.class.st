@@ -3,6 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'repositoryName',
+		'repositoryOwner',
 		'id',
 		'datetime',
 		'author',
@@ -27,6 +28,7 @@ ClioCommit class >> fromIceGitCommit: anIceGitCommit [
 		datetime: anIceGitCommit datetime;
 		comment: anIceGitCommit comment;
 		repositoryName: anIceGitCommit repository name;
+		repositoryOwner: anIceGitCommit repository owner;
 		yourself.
 ]
 
@@ -41,6 +43,7 @@ ClioCommit class >> fromJsonDictionary: aDictionary [
 		comment: (aDictionary at: 'comment');
 		datetime: (aDictionary at: 'datetime') asDateAndTime;
 		repositoryName: (aDictionary at: 'repositoryName');
+		repositoryOwner: (aDictionary at: 'repositoryOwner');
 		yourself.
 		
 	commit addedMethods addAll: ((aDictionary at: 'addedMethods') collect: [ :methodDictionary |
@@ -136,6 +139,7 @@ ClioCommit >> asJsonDictionary [
 		'comment' -> comment .
 		'datetime' -> datetime asString .
 		'repositoryName' -> repositoryName .
+		'repositoryOwner' -> repositoryOwner .
 		'addedMethods' -> (addedMethods collect: [ :method | method asJsonDictionary ]) asArray .
 		'removedMethods' -> (removedMethods collect: [ :method | method asJsonDictionary ]) asArray .
 		'modifiedMethods' -> (modifiedMethods collect: [ :method | method asJsonDictionary ]) asArray .
@@ -391,6 +395,18 @@ ClioCommit >> repositoryName [
 ClioCommit >> repositoryName: anObject [
 
 	repositoryName := anObject
+]
+
+{ #category : #accessing }
+ClioCommit >> repositoryOwner [
+
+	^ repositoryOwner
+]
+
+{ #category : #accessing }
+ClioCommit >> repositoryOwner: anObject [
+
+	repositoryOwner := anObject
 ]
 
 { #category : #accessing }
