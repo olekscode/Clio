@@ -212,3 +212,9 @@ ClioData >> saveToJsonFile: aFileReference [
 	aFileReference writeStreamDo: [ :stream |
 		STONJSON put: self asJsonDictionary onStreamPretty: stream ].
 ]
+
+{ #category : #calculating }
+ClioData >> uniqueContributors [
+
+	^ (self commits collect: [ :each | each author ]) asSet
+]
