@@ -90,6 +90,14 @@ ClioData >> commits: anObject [
 	commits := anObject
 ]
 
+{ #category : #calculating }
+ClioData >> commitsPerDay [
+
+	| days |
+	days := (self commits last datetime - self commits first datetime) days.
+	^ days / commits size asFloat
+]
+
 { #category : #accessing }
 ClioData >> datetime [
 
