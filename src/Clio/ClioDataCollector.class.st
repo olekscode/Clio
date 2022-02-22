@@ -170,7 +170,7 @@ ClioDataCollector >> loadPackagesAtCommit: aCommitId [
 		package := icePackage asClioPackage.
 		
 		packages add: package.
-		definitions := (iceCommit snapshotFor: icePackage) definitions asSet.
+		definitions := [ (iceCommit snapshotFor: icePackage) definitions asSet ] onErrorDo: [ Set new ].
 	
 		classDefinitions := definitions
 			select: [ :definition | definition isClassDefinition ]
