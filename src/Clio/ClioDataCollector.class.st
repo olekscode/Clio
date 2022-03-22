@@ -80,16 +80,9 @@ ClioDataCollector >> extractDataFromDiffs [
 
 	data commits
 		do: [ :commit | 
-			[ 
-			self extractDataFromDiffToParentOf: commit.
-			Transcript
-				show: commit id;
-				cr ]
+			[ self extractDataFromDiffToParentOf: commit. ]
 				on: Exception
-				do: [ 
-					Transcript
-						show: 'Error in commit ' , commit id;
-						cr ] ]
+				do: [ self logErrorIn: commit ] ]
 		displayingProgress: [ :commit | 
 			'Calculating diffs between ' , data commits size asString
 			, ' commits' ]
@@ -204,6 +197,15 @@ ClioDataCollector >> locateRepository [
 	repository := ClioRepositoryLoader
 		detectRepositoryNamed: data repositoryName
 		owner: data repositoryOwner.
+]
+
+{ #category : #'as yet unclassified' }
+ClioDataCollector >> logErrorIn: aCommit [
+
+	Transcript
+		show: 'Error in commit ';
+		show: aCommit id;
+		cr.
 ]
 
 { #category : #accessing }
