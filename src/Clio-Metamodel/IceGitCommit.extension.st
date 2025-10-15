@@ -1,6 +1,6 @@
-Extension { #name : #IceGitCommit }
+Extension { #name : 'IceGitCommit' }
 
-{ #category : #'*Clio-Metamodel' }
+{ #category : '*Clio-Metamodel' }
 IceGitCommit >> asClioCommit [
 	^ ClioCommit fromIceGitCommit: self
 ]

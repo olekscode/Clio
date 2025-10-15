@@ -1,1 +1,1 @@
-Package { #name : #'Clio-Metamodel' }
+Package { #name : 'Clio-Metamodel' }

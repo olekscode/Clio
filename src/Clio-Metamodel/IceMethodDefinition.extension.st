@@ -1,6 +1,6 @@
-Extension { #name : #IceMethodDefinition }
+Extension { #name : 'IceMethodDefinition' }
 
-{ #category : #'*Clio-Metamodel' }
+{ #category : '*Clio-Metamodel' }
 IceMethodDefinition >> asClioMethod [
 	| method |
 	

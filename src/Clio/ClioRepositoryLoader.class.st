@@ -1,10 +1,12 @@
 Class {
-	#name : #ClioRepositoryLoader,
-	#superclass : #Object,
-	#category : #'Clio-Controllers'
+	#name : 'ClioRepositoryLoader',
+	#superclass : 'Object',
+	#category : 'Clio-Controllers',
+	#package : 'Clio',
+	#tag : 'Controllers'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioRepositoryLoader class >> cloneRepositoryNamed: aRepositoryName owner: anOwnerName [
 
 	| location remoteUrl repository |
@@ -24,14 +26,14 @@ ClioRepositoryLoader class >> cloneRepositoryNamed: aRepositoryName owner: anOwn
 	^ repository
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioRepositoryLoader class >> detectOrCloneRepositoryNamed: aRepositoryName owner: anOwnerName [
 
 	^ self detectRepositoryNamed: aRepositoryName owner: anOwnerName ifNone: [ 
 		self cloneRepositoryNamed: aRepositoryName owner: anOwnerName ]. 
 ]
 
-{ #category : #'accessing - repository' }
+{ #category : 'accessing - repository' }
 ClioRepositoryLoader class >> detectRepositoryNamed: aRepositoryName owner: anOwnerName [
 
 	^ self
@@ -40,7 +42,7 @@ ClioRepositoryLoader class >> detectRepositoryNamed: aRepositoryName owner: anOw
 		ifNone: [ self error: 'Repository not found' ].
 ]
 
-{ #category : #'accessing - repository' }
+{ #category : 'accessing - repository' }
 ClioRepositoryLoader class >> detectRepositoryNamed: aRepositoryName owner: anOwnerName ifNone: aBlock [
 
 	^ IceRepository registry
@@ -51,7 +53,7 @@ ClioRepositoryLoader class >> detectRepositoryNamed: aRepositoryName owner: anOw
 		ifNone: aBlock
 ]
 
-{ #category : #'API - loading' }
+{ #category : 'API - loading' }
 ClioRepositoryLoader class >> installBaseline: aBaselineName forRepository: anIceRepository onCommit: aCommitId [
 	"Install a specified baseline of the project on a given commit"
 	

@@ -1,19 +1,20 @@
 Class {
-	#name : #ClioDefinition,
-	#superclass : #Object,
+	#name : 'ClioDefinition',
+	#superclass : 'Object',
 	#instVars : [
 		'name'
 	],
-	#category : #'Clio-Metamodel'
+	#category : 'Clio-Metamodel',
+	#package : 'Clio-Metamodel'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDefinition >> name [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDefinition >> name: anObject [
 
 	name := anObject

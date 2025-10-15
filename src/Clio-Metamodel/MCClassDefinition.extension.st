@@ -1,10 +1,10 @@
-Extension { #name : #MCClassDefinition }
+Extension { #name : 'MCClassDefinition' }
 
-{ #category : #'*Clio-Metamodel' }
+{ #category : '*Clio-Metamodel' }
 MCClassDefinition >> asClioClass [
 	^ ClioClass new
 		name: name;
-		package: category;
+		package: packageName;
 		superclassName: superclassName;
 		isTrait: false;
 		yourself.

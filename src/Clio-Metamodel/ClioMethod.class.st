@@ -1,6 +1,6 @@
 Class {
-	#name : #ClioMethod,
-	#superclass : #ClioDefinition,
+	#name : 'ClioMethod',
+	#superclass : 'ClioDefinition',
 	#instVars : [
 		'methodClass',
 		'className',
@@ -11,10 +11,11 @@ Class {
 		'methodCalls',
 		'deprecation'
 	],
-	#category : #'Clio-Metamodel'
+	#category : 'Clio-Metamodel',
+	#package : 'Clio-Metamodel'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 ClioMethod class >> fromJsonDictionary: aDictionary [
 
 	| method deprecation |
@@ -38,7 +39,7 @@ ClioMethod class >> fromJsonDictionary: aDictionary [
 	^ method
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 ClioMethod >> = anObject [
 
 	self class = anObject class
@@ -54,7 +55,7 @@ ClioMethod >> = anObject [
 		and: [ deprecation = anObject deprecation ] ] ] ] ] ] ].
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 ClioMethod >> asJsonDictionary [
 	^ { 
 		'selector' -> name .
@@ -68,42 +69,42 @@ ClioMethod >> asJsonDictionary [
 	} asDictionary
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> ast [
 	^ RBParser parseMethod: sourceCode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> className [
 	^ className
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> className: anObject [
 
 	className := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> deprecation [
 
 	^ deprecation
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> deprecation: anObject [
 
 	deprecation := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> fullClassName [
 	^ isClassSide
 		ifTrue: [ className, ' class' ]
 		ifFalse: [ className ]
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 ClioMethod >> hash [
 
 	^ name hash
@@ -116,7 +117,7 @@ ClioMethod >> hash [
 		bitXor: deprecation hash)))))).
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ClioMethod >> initialize [
 	super initialize.
 	
@@ -125,69 +126,69 @@ ClioMethod >> initialize [
 	isExtension := false.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 ClioMethod >> isAbstract [
 	^ methodCalls anySatisfy: [ :methodCall | methodCall = #subclassResponsibility ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> isClassSide [
 
 	^ isClassSide
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> isClassSide: anObject [
 
 	isClassSide := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> isDeprecated [
 
 	^ deprecation isNotNil
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 ClioMethod >> isEmpty [
 	^ sourceCode trimBoth lines size < 2
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> isExtension [
 	^ isExtension
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> isExtension: anObject [
 	isExtension := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> methodCalls [
 
 	^ methodCalls
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> methodCalls: anObject [
 
 	methodCalls := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> methodClass [
 
 	^ methodClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> methodClass: anObject [
 
 	methodClass := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ClioMethod >> numberOfArguments [
 	
 	^ (name anySatisfy: [ :char | char isAlphaNumeric or: [ char = $: ] ])
@@ -195,51 +196,51 @@ ClioMethod >> numberOfArguments [
 		ifTrue: [ name occurrencesOf: $: ]. "not an operator"
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> packageName [
 	^ self methodClass package name
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 ClioMethod >> printOn: aStream [
 	aStream nextPutAll: self signature.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> protocol [
 
 	^ protocol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> protocol: anObject [
 
 	protocol := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> selector [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> selector: anObject [
 	
 	self name: anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioMethod >> signature [
 	^ self fullClassName, '>>', name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> sourceCode [
 	^ sourceCode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethod >> sourceCode: anObject [
 	sourceCode := anObject
 ]

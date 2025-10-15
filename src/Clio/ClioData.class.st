@@ -1,6 +1,6 @@
 Class {
-	#name : #ClioData,
-	#superclass : #Object,
+	#name : 'ClioData',
+	#superclass : 'Object',
 	#instVars : [
 		'repositoryName',
 		'repositoryOwner',
@@ -11,10 +11,12 @@ Class {
 		'oldPackages',
 		'newPackages'
 	],
-	#category : #'Clio-Models'
+	#category : 'Clio-Models',
+	#package : 'Clio',
+	#tag : 'Models'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 ClioData class >> fromJsonDictionary: aDictionary [
 
 	| commits oldPackages newPackages |
@@ -40,7 +42,7 @@ ClioData class >> fromJsonDictionary: aDictionary [
 		yourself.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioData class >> readFromJsonFile: aFileReference [
 
 	| dataDictionary |
@@ -51,7 +53,7 @@ ClioData class >> readFromJsonFile: aFileReference [
 	^ self fromJsonDictionary: dataDictionary.
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 ClioData >> asJsonDictionary [
 	
 	^ {
@@ -66,31 +68,31 @@ ClioData >> asJsonDictionary [
 	} asDictionary.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> baselineName [
 
 	^ baselineName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> baselineName: anObject [
 
 	baselineName := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> commits [
 
 	^ commits
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> commits: anObject [
 
 	commits := anObject
 ]
 
-{ #category : #calculating }
+{ #category : 'calculating' }
 ClioData >> commitsPerDay [
 
 	| days |
@@ -98,31 +100,31 @@ ClioData >> commitsPerDay [
 	^ days / commits size asFloat
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> datetime [
 
 	^ datetime
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> datetime: anObject [
 
 	datetime := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> imageVersion [
 
 	^ imageVersion
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> imageVersion: anObject [
 
 	imageVersion := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ClioData >> initialize [
 	super initialize.
 	commits := OrderedCollection new.
@@ -132,88 +134,88 @@ ClioData >> initialize [
 	datetime := DateAndTime now.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioData >> newClasses [
 	
 	^ newPackages flatCollect: [ :each | each classes ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioData >> newImplementedMethods [
 	"Methods that are implemented in the packages of the new version of the project"
 	
 	^ self newClasses flatCollect: [ :each | each methods ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> newPackages [
 
 	^ newPackages
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> newPackages: anObject [
 
 	newPackages := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioData >> oldClasses [
 	
 	^ oldPackages flatCollect: [ :each | each classes ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioData >> oldImplementedMethods [
 	"Methods that were implemented in the packages of the old version of the project"
 	
 	^ self oldClasses flatCollect: [ :each | each methods ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> oldPackages [
 
 	^ oldPackages
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> oldPackages: anObject [
 
 	oldPackages := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> repositoryName [
 
 	^ repositoryName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> repositoryName: anObject [
 
 	repositoryName := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> repositoryOwner [
 
 	^ repositoryOwner
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioData >> repositoryOwner: anObject [
 
 	repositoryOwner := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioData >> saveToJsonFile: aFileReference [
 
 	aFileReference writeStreamDo: [ :stream |
 		STONJSON put: self asJsonDictionary onStreamPretty: stream ].
 ]
 
-{ #category : #calculating }
+{ #category : 'calculating' }
 ClioData >> uniqueContributors [
 
 	^ (self commits collect: [ :each | each author ]) asSet

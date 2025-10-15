@@ -1,6 +1,6 @@
 Class {
-	#name : #ClioClass,
-	#superclass : #ClioDefinition,
+	#name : 'ClioClass',
+	#superclass : 'ClioDefinition',
 	#instVars : [
 		'package',
 		'methods',
@@ -8,10 +8,11 @@ Class {
 		'isTrait',
 		'isExtension'
 	],
-	#category : #'Clio-Metamodel'
+	#category : 'Clio-Metamodel',
+	#package : 'Clio-Metamodel'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 ClioClass class >> fromJsonDictionary: aDictionary [
 	
 	| aClass |
@@ -31,7 +32,7 @@ ClioClass class >> fromJsonDictionary: aDictionary [
 	^ aClass
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 ClioClass >> = anObject [
 
 	"Answer whether the receiver and anObject represent the same object."
@@ -46,7 +47,7 @@ ClioClass >> = anObject [
 					  isExtension = anObject isExtension ] ] ] ]
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 ClioClass >> asJsonDictionary [
 	^ { 
 		'name' -> self name .
@@ -57,7 +58,7 @@ ClioClass >> asJsonDictionary [
 	} asDictionary
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 ClioClass >> hash [
 
 	"Answer an integer value that is related to the identity of the receiver."
@@ -66,7 +67,7 @@ ClioClass >> hash [
 			   (methods hash bitXor: (isTrait hash bitXor: isExtension hash)))
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> inheritsFrom: aClass [
 	"We may not have the access to the whole inheritance tree. So in this case, we consider that a class A inherits from a class B only if B is a direct superclass of A. In other words, it A inherits from C and C inherits from B, then this method will say that A does not inherit from B.
 	
@@ -78,7 +79,7 @@ ClioClass >> inheritsFrom: aClass [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ClioClass >> initialize [
 	super initialize.
 	methods := Set new.
@@ -87,71 +88,71 @@ ClioClass >> initialize [
 	isExtension := false.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> isExtension [
 
 	^ isExtension
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> isExtension: anObject [
 
 	isExtension := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> isTrait [
 	
 	^ isTrait
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> isTrait: anObject [
 
 	isTrait := anObject
 ]
 
-{ #category : #'accessing - methods' }
+{ #category : 'accessing - methods' }
 ClioClass >> methodNamed: aSelector [
 	^ methods detect: [ :method | method name = aSelector ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> methods [
 
 	^ methods
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> methods: anObject [
 
 	methods := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> package [
 
 	^ package
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> package: anObject [
 
 	package := anObject
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 ClioClass >> printOn: aStream [
 	aStream nextPutAll: name.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> superclassName [
 
 	^ superclassName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioClass >> superclassName: anObject [
 
 	superclassName := anObject

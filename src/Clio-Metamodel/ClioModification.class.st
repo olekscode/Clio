@@ -1,14 +1,15 @@
 Class {
-	#name : #ClioModification,
-	#superclass : #Object,
+	#name : 'ClioModification',
+	#superclass : 'Object',
 	#instVars : [
 		'oldDefinition',
 		'newDefinition'
 	],
-	#category : #'Clio-Metamodel'
+	#category : 'Clio-Metamodel',
+	#package : 'Clio-Metamodel'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioModification class >> classModificationFromDictionary: aDictionary [
 	
 	^ self new
@@ -17,7 +18,7 @@ ClioModification class >> classModificationFromDictionary: aDictionary [
 		yourself.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioModification class >> methodModificationFromDictionary: aDictionary [
 	
 	^ self new
@@ -26,7 +27,7 @@ ClioModification class >> methodModificationFromDictionary: aDictionary [
 		yourself.
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 ClioModification >> = anObject [
 
 	"Answer whether the receiver and anObject represent the same object."
@@ -37,7 +38,7 @@ ClioModification >> = anObject [
 		  newDefinition = anObject newDefinition ]
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 ClioModification >> asJsonDictionary [
 	
 	^ { 
@@ -46,7 +47,7 @@ ClioModification >> asJsonDictionary [
 	} asDictionary.
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 ClioModification >> hash [
 
 	"Answer an integer value that is related to the identity of the receiver."
@@ -54,25 +55,25 @@ ClioModification >> hash [
 	^ oldDefinition hash bitXor: newDefinition hash
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioModification >> newDefinition [
 
 	^ newDefinition
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioModification >> newDefinition: anObject [
 
 	newDefinition := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioModification >> oldDefinition [
 
 	^ oldDefinition
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioModification >> oldDefinition: anObject [
 
 	oldDefinition := anObject

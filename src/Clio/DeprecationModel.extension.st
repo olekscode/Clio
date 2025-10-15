@@ -1,6 +1,6 @@
-Extension { #name : #DeprecationModel }
+Extension { #name : 'DeprecationModel' }
 
-{ #category : #'*Clio' }
+{ #category : '*Clio' }
 DeprecationModel >> asJsonDictionary [
 	
 	^ { 
@@ -12,7 +12,7 @@ DeprecationModel >> asJsonDictionary [
 	} asDictionary.
 ]
 
-{ #category : #'*Clio' }
+{ #category : '*Clio' }
 DeprecationModel class >> fromJsonDictionary: aDictionary [
 
 	| date deprecation transformationRule |

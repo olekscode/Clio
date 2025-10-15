@@ -1,22 +1,24 @@
 Class {
-	#name : #ClioDataCollector,
-	#superclass : #Object,
+	#name : 'ClioDataCollector',
+	#superclass : 'Object',
 	#instVars : [
 		'oldVersion',
 		'newVersion',
 		'repository',
 		'data'
 	],
-	#category : #'Clio-Controllers'
+	#category : 'Clio-Controllers',
+	#package : 'Clio',
+	#tag : 'Controllers'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDataCollector >> baselineName: aString [
 
 	data baselineName: aString
 ]
 
-{ #category : #'repository loading' }
+{ #category : 'repository loading' }
 ClioDataCollector >> cloneRepository [
 
 	repository := ClioRepositoryLoader
@@ -24,19 +26,19 @@ ClioDataCollector >> cloneRepository [
 		owner: data repositoryOwner.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDataCollector >> data [
 
 	^ data
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDataCollector >> data: anObject [
 
 	data := anObject
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 ClioDataCollector >> extractCommits [
 	| oldIceCommit newIceCommit commitWalk collectionOfCommits |
 	
@@ -57,7 +59,7 @@ ClioDataCollector >> extractCommits [
 	self extractDataFromDiffs.
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ClioDataCollector >> extractDataFromDiffToParentOf: aCommit [
 	| visitor |
 	visitor := ClioIceTreeVisitor new.
@@ -75,7 +77,7 @@ ClioDataCollector >> extractDataFromDiffToParentOf: aCommit [
 	aCommit removedPackages: visitor removedPackages.
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ClioDataCollector >> extractDataFromDiffs [
 
 	data commits
@@ -88,7 +90,7 @@ ClioDataCollector >> extractDataFromDiffs [
 			, ' commits' ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ClioDataCollector >> extractDeprecationFromMethod: aMethod [
 	| visitor |
 	visitor := DeprecationVisitor new.
@@ -99,7 +101,7 @@ ClioDataCollector >> extractDeprecationFromMethod: aMethod [
 		ifNotEmpty: [ visitor deprecations first ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 ClioDataCollector >> extractMethodCallsFromMethod: aMethod [
 	| visitor |
 	visitor := ClioMethodCallVisitor new.
@@ -107,13 +109,13 @@ ClioDataCollector >> extractMethodCallsFromMethod: aMethod [
 	^ visitor methodCalls
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ClioDataCollector >> initialize [ 
 	super initialize.
 	data := ClioData new.
 ]
 
-{ #category : #'repository loading' }
+{ #category : 'repository loading' }
 ClioDataCollector >> installBaselineOnCommit: aCommitId [
 
 	UIManager default 
@@ -125,7 +127,7 @@ ClioDataCollector >> installBaselineOnCommit: aCommitId [
 				onCommit: aCommitId ].
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 ClioDataCollector >> loadNewPackages [
 	
 	UIManager default 
@@ -134,7 +136,7 @@ ClioDataCollector >> loadNewPackages [
 			data newPackages: (self loadPackagesAtCommit: newVersion) ].
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 ClioDataCollector >> loadOldPackages [
 	
 	UIManager default 
@@ -143,14 +145,14 @@ ClioDataCollector >> loadOldPackages [
 			data oldPackages: (self loadPackagesAtCommit: oldVersion) ].
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 ClioDataCollector >> loadPackages [
 	
 	self loadOldPackages.
 	self loadNewPackages.
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 ClioDataCollector >> loadPackagesAtCommit: aCommitId [
 	| iceCommit packages classDictionary package aClass definitions classDefinitions method |
 	
@@ -190,7 +192,7 @@ ClioDataCollector >> loadPackagesAtCommit: aCommitId [
 	^ packages
 ]
 
-{ #category : #'repository loading' }
+{ #category : 'repository loading' }
 ClioDataCollector >> locateRepository [
 	"Locate repository that was already cloned"
 
@@ -199,7 +201,7 @@ ClioDataCollector >> locateRepository [
 		owner: data repositoryOwner.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 ClioDataCollector >> logErrorIn: aCommit [
 
 	Transcript
@@ -208,45 +210,45 @@ ClioDataCollector >> logErrorIn: aCommit [
 		cr.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDataCollector >> newVersion [
 
 	^ newVersion
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDataCollector >> newVersion: aVersionString [
 	"A version string can be a full commit id, a short commit id (first 7 characters), or a semantic version tag (e.g., 'v5.0', 'firstRelease')"
 	
 	newVersion := aVersionString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDataCollector >> oldVersion [
 
 	^ oldVersion
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDataCollector >> oldVersion: aVersionString [
 	"A version string can be a full commit id, a short commit id (first 7 characters), or a semantic version tag (e.g., 'v5.0', 'firstRelease')"
 
 	oldVersion := aVersionString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDataCollector >> repository [
 
 	^ repository
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDataCollector >> repositoryName: aString [
 
 	data repositoryName: aString.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioDataCollector >> repositoryOwner: aString [
 
 	data repositoryOwner: aString.

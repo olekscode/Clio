@@ -1,25 +1,27 @@
 Class {
-	#name : #ClioMethodCallVisitor,
-	#superclass : #RBProgramNodeVisitor,
+	#name : 'ClioMethodCallVisitor',
+	#superclass : 'OCProgramNodeVisitor',
 	#instVars : [
 		'methodCalls'
 	],
-	#category : #'Clio-Visitors'
+	#category : 'Clio-Visitors',
+	#package : 'Clio',
+	#tag : 'Visitors'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ClioMethodCallVisitor >> initialize [
 	super initialize.
 	methodCalls := OrderedCollection new.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioMethodCallVisitor >> methodCalls [
 
 	^ methodCalls
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 ClioMethodCallVisitor >> visitMessageNode: aNode [
 		
 	methodCalls add: aNode selector.

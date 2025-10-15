@@ -1,6 +1,6 @@
-Extension { #name : #MCMethodDefinition }
+Extension { #name : 'MCMethodDefinition' }
 
-{ #category : #'*Clio-Metamodel' }
+{ #category : '*Clio-Metamodel' }
 MCMethodDefinition >> asClioMethod [
 	| method |
 	

@@ -1,6 +1,6 @@
 Class {
-	#name : #ClioIceTreeVisitor,
-	#superclass : #IceTreeVisitor,
+	#name : 'ClioIceTreeVisitor',
+	#superclass : 'IceTreeVisitor',
 	#instVars : [
 		'addedPackages',
 		'removedPackages',
@@ -11,28 +11,30 @@ Class {
 		'removedMethods',
 		'modifiedMethods'
 	],
-	#category : #'Clio-Visitors'
+	#category : 'Clio-Visitors',
+	#package : 'Clio',
+	#tag : 'Visitors'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioIceTreeVisitor >> addedClasses [
 
 	^ addedClasses
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioIceTreeVisitor >> addedMethods [
 
 	^ addedMethods
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioIceTreeVisitor >> addedPackages [
 
 	^ addedPackages
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ClioIceTreeVisitor >> initialize [
 	super initialize.
 	
@@ -49,37 +51,37 @@ ClioIceTreeVisitor >> initialize [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioIceTreeVisitor >> modifiedClasses [
 
 	^ modifiedClasses
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioIceTreeVisitor >> modifiedMethods [
 
 	^ modifiedMethods
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioIceTreeVisitor >> removedClasses [
 
 	^ removedClasses
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioIceTreeVisitor >> removedMethods [
 
 	^ removedMethods
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioIceTreeVisitor >> removedPackages [
 
 	^ removedPackages
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 ClioIceTreeVisitor >> visitAddition: aNode [
 	| definition |
 	definition := aNode definition.
@@ -96,7 +98,7 @@ ClioIceTreeVisitor >> visitAddition: aNode [
 	self visitChildrenOf: currentNode.
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 ClioIceTreeVisitor >> visitModification: aNode [
 	| oldDefinition newDefinition |
 	
@@ -121,12 +123,12 @@ ClioIceTreeVisitor >> visitModification: aNode [
 	self visitChildrenOf: currentNode.
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 ClioIceTreeVisitor >> visitNoModification: aNode [
 	self visitChildrenOf: currentNode.
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 ClioIceTreeVisitor >> visitRemoval: aNode [
 	| definition |
 	definition := aNode definition.

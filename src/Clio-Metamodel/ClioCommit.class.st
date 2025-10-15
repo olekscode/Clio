@@ -1,6 +1,6 @@
 Class {
-	#name : #ClioCommit,
-	#superclass : #Object,
+	#name : 'ClioCommit',
+	#superclass : 'Object',
 	#instVars : [
 		'repositoryName',
 		'repositoryOwner',
@@ -17,10 +17,11 @@ Class {
 		'addedPackages',
 		'removedPackages'
 	],
-	#category : #'Clio-Metamodel'
+	#category : 'Clio-Metamodel',
+	#package : 'Clio-Metamodel'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 ClioCommit class >> fromIceGitCommit: anIceGitCommit [
 	^ self new
 		id: anIceGitCommit id;
@@ -32,7 +33,7 @@ ClioCommit class >> fromIceGitCommit: anIceGitCommit [
 		yourself.
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 ClioCommit class >> fromJsonDictionary: aDictionary [
 
 	| commit |
@@ -73,7 +74,7 @@ ClioCommit class >> fromJsonDictionary: aDictionary [
 	^ commit
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 ClioCommit >> = anObject [
 
 	"Answer whether the receiver and anObject represent the same object."
@@ -95,43 +96,43 @@ ClioCommit >> = anObject [
 													  repositoryName = anObject repositoryName ] ] ] ] ] ] ] ] ] ] ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> addedClasses [
 
 	^ addedClasses
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> addedClasses: anObject [
 
 	addedClasses := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> addedMethods [
 
 	^ addedMethods
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> addedMethods: anObject [
 
 	addedMethods := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> addedPackages [
 
 	^ addedPackages
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> addedPackages: anObject [
 
 	addedPackages := anObject
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 ClioCommit >> asJsonDictionary [
 	^ { 
 		'id' -> id .
@@ -151,43 +152,43 @@ ClioCommit >> asJsonDictionary [
 	} asDictionary.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> author [
 
 	^ author
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> author: anObject [
 
 	author := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> comment [
 
 	^ comment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> comment: anObject [
 
 	comment := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> datetime [
 
 	^ datetime
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> datetime: anObject [
 
 	datetime := anObject
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 ClioCommit >> hadEffectOnClasses [
 	"Answer true if commit has added, removed, or modified any classes"
 	
@@ -198,7 +199,7 @@ ClioCommit >> hadEffectOnClasses [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 ClioCommit >> hadEffectOnMethods [
 	"Answer true if commit has added, removed, or modified any methods"
 	
@@ -209,7 +210,7 @@ ClioCommit >> hadEffectOnMethods [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 ClioCommit >> hadEffectOnPackages [
 	"Answer true if commit has added or removed any packages"
 	
@@ -219,7 +220,7 @@ ClioCommit >> hadEffectOnPackages [
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 ClioCommit >> hadEffectOnSourceCode [
 	"Answer true if commit has added, removed, or modified any packages, classes, or methods"
 	
@@ -228,7 +229,7 @@ ClioCommit >> hadEffectOnSourceCode [
 			self hadEffectOnMethods ] ]
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 ClioCommit >> hash [
 
 	"Answer an integer value that is related to the identity of the receiver."
@@ -245,24 +246,24 @@ ClioCommit >> hash [
 													             repositoryName hash)))))))))))
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> iceCommit [
 	^ self repository revparse: id
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> id [
 
 	^ id
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> id: anObject [
 
 	id := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 ClioCommit >> initialize [
 	super initialize.
 	
@@ -278,7 +279,7 @@ ClioCommit >> initialize [
 	modifiedMethods := Set new.
 ]
 
-{ #category : #'API - loading' }
+{ #category : 'API - loading' }
 ClioCommit >> loadBaseline: aBaselineName [
 	"Load a specified baseline of the project on this commit"
 	
@@ -309,31 +310,31 @@ ClioCommit >> loadBaseline: aBaselineName [
 		load.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> modifiedClasses [
 
 	^ modifiedClasses
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> modifiedClasses: anObject [
 
 	modifiedClasses := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> modifiedMethods [
 
 	^ modifiedMethods
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> modifiedMethods: anObject [
 
 	modifiedMethods := anObject
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 ClioCommit >> printOn: aStream [
 	
 	aStream
@@ -343,79 +344,79 @@ ClioCommit >> printOn: aStream [
 		nextPut: $)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> removedClasses [
 
 	^ removedClasses
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> removedClasses: anObject [
 
 	removedClasses := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> removedMethods [
 
 	^ removedMethods
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> removedMethods: anObject [
 
 	removedMethods := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> removedPackages [
 
 	^ removedPackages
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> removedPackages: anObject [
 
 	removedPackages := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> repository [
 	^ IceRepository registry detect: [ :repo |
 		repo isValid and: [ repo name = repositoryName ] ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> repositoryName [
 
 	^ repositoryName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> repositoryName: anObject [
 
 	repositoryName := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> repositoryOwner [
 
 	^ repositoryOwner
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> repositoryOwner: anObject [
 
 	repositoryOwner := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> shortId [
 
 	^ id first: 7
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 ClioCommit >> snapshot [
 	^ ClioDataCollector new loadPackagesAtCommit: self
 ]
