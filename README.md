@@ -33,7 +33,7 @@ If you are new to baselines and Metacello, check out the [Baselines](https://git
 
 ## How to use it?
 
-```Smalltalk
+```st
 collector := ClioDataCollector new
 	repositoryName: 'PolyMath';
 	repositoryOwner: 'PolyMathOrg';
@@ -46,7 +46,11 @@ collector
 	cloneRepository;
 	loadPackages;
 	extractCommits.
-	
+```
+
+Then you can inspect `colector > data` or export it to the JSON file:
+
+```st
 dir := '/Users/oleks/Documents/Research/Experiments/DepMiner2' asFileReference.
 file := dir / (collector data repositoryName, '.json').
 
